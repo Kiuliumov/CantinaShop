@@ -6,7 +6,9 @@ class UserModel(AbstractUser):
     pass
 
 
+
 class Account(models.Model):
     user = models.OneToOneField(UserModel, on_delete=models.CASCADE)
+    address = models.CharField(max_length=100, )
     subscription_status = models.CharField(max_length=20)
     profile_picture = models.ImageField(upload_to='profiles/', blank=True)
