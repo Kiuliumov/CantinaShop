@@ -6,11 +6,25 @@ from django import forms
 
 
 class RegistrationForm(UserCreationForm):
+    username = forms.CharField(label='Username', widget=forms.TextInput())
     email = forms.EmailField(required=True)
+    password1 = forms.CharField(
+        label="Password",
+        strip=False,
+        widget=forms.PasswordInput(attrs={'id': 'password', 'class': 'your-css-classes-if-needed'}),
+    )
+    password2 = forms.CharField(
+        label="Password confirmation",
+        strip=False,
+        widget=forms.PasswordInput(attrs={'class': 'your-css-classes-if-needed'}),
+    )
+
+    field_order = ['username', 'email', 'password1', 'password2']
 
     class Meta:
         model = UserModel
         fields = ('username', 'email', 'password1', 'password2')
+
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(label="Username or Email")
