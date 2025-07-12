@@ -1,0 +1,38 @@
+from django.contrib.auth import authenticate
+
+from .models import UserModel
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django import forms
+
+
+class RegistrationForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+
+    class Meta:
+        model = UserModel
+        fields = ('username', 'email', 'password1', 'password2')
+
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(label="Username or Email")
+
+    def clean(self):
+        username_or_email = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+
+        if username_or_email and password:
+            user = authenticate(self.request, username=username_or_email, password=password)
+            if user is None:
+                try:
+                    user_obj = UserModel.objects.get(email=username_or_email)
+                    user = authenticate(self.request, username=user_obj.username, password=password)
+                except UserModel.DoesNotExist:
+                    user = None
+
+            if user is None:
+                raise forms.ValidationError("Invalid username/email or password")
+            else:
+                self.confirm_login_allowed(user)
+
+            self.user_cache = user
+
+        return self.cleaned_data
