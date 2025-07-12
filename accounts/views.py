@@ -1,11 +1,17 @@
 from django.contrib.auth import login
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic.edit import FormView
 from .forms import RegistrationForm, LoginForm
 
 
-class RegisterView(FormView):
+class ProfileProhibitedMixin:
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('index')
+        return super().dispatch(request, *args, **kwargs)
+class RegisterView(ProfileProhibitedMixin, FormView):
     template_name = 'accounts/register.html'
     form_class = RegistrationForm
     success_url = reverse_lazy('index')
@@ -16,7 +22,7 @@ class RegisterView(FormView):
         return super().form_valid(form)
 
 
-class Login(LoginView):
+class Login(ProfileProhibitedMixin, LoginView):
     template_name = 'accounts/login.html'
     authentication_form = LoginForm
     redirect_authenticated_user = True
@@ -24,3 +30,7 @@ class Login(LoginView):
 
     def get_success_url(self):
         return self.success_url
+
+
+class Logout(LogoutView):
+    next_page = reverse_lazy('index')
