@@ -32,7 +32,7 @@ class RegistrationForm(UserCreationForm):
             if not user.is_active:
                 user.delete()
             else:
-                raise forms.ValidationError("This email is already registered and active.")
+                raise forms.ValidationError("This email is already taken.")
         return email
 
     def clean_username(self):
@@ -42,7 +42,7 @@ class RegistrationForm(UserCreationForm):
             if not user.is_active:
                 user.delete()
             else:
-                raise forms.ValidationError("This username is already taken by an active user.")
+                raise forms.ValidationError("This username is already taken.")
         return username
 
 class LoginForm(AuthenticationForm):

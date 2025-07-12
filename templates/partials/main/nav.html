@@ -1,0 +1,49 @@
+<nav class="bg-gray-900 shadow-lg">
+  <div class="container mx-auto px-12 py-8 flex items-center justify-between">
+    <a href="{% url 'index' %}" class="flex items-center space-x-6 transform transition-transform duration-300 hover:scale-110">
+      <img
+        src="https://kiuliumov.github.io/Cantina/images/The%20cantina%20logo.png"
+        alt="CantinaShop Logo"
+        class="h-28 w-auto"
+      />
+      <span class="text-5xl font-extrabold text-indigo-500 tracking-wide select-none">CantinaShop</span>
+    </a>
+
+    <ul class="flex items-center space-x-10">
+      <li>
+        <a href="{% url 'index' %}" class="text-xl text-gray-300 hover:text-indigo-400 transition-colors duration-300 ease-in-out font-semibold">
+          Home
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'index' %}" class="text-xl text-gray-300 hover:text-indigo-400 transition-colors duration-300 ease-in-out font-semibold">
+          Glasses
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'index' %}" class="text-xl text-gray-300 hover:text-indigo-400 transition-colors duration-300 ease-in-out font-semibold">
+          Rings
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'index' %}" class="text-xl text-gray-300 hover:text-indigo-400 transition-colors duration-300 ease-in-out font-semibold">
+          Necklaces
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'index' %}" class="text-xl text-gray-300 hover:text-indigo-400 transition-colors duration-300 ease-in-out font-semibold">
+          Bracelets
+        </a>
+      </li>
+
+      <li>
+        <a
+          href="{% url 'login' %}"
+          class="ml-8 inline-block px-8 py-4 bg-indigo-600 text-white font-bold text-xl rounded-lg shadow-lg hover:bg-indigo-700 active:bg-indigo-800 transition-colors duration-300"
+        >
+          Login
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>

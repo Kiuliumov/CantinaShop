@@ -1,10 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block content %}
+  <section class="bg-gray-900 text-white">
+    <div class="container mx-auto px-8 py-20 flex flex-col md:flex-row items-center md:space-x-16">
+
+      <div class="md:w-1/2 mb-12 md:mb-0">
+        <h1 class="text-5xl font-extrabold mb-6 leading-tight">
+          Welcome to CantinaShop ✨
+        </h1>
+        <p class="text-xl text-gray-300 mb-8 max-w-lg">
+          We are a company from Bulgaria 🇧🇬 specializing in high-quality accessories like <span class="inline-block">💍 rings</span>, <span class="inline-block">🕶️ glasses</span>, <span class="inline-block">📿 necklaces</span>, and <span class="inline-block">⌚ bracelets</span>. Discover your unique style with us!
+        </p>
+        <a href="{% url 'register' %}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-4 rounded-lg shadow-lg transition duration-300">
+          Shop Now 🛒
+        </a>
+      </div>
+
+      <div class="md:w-1/2 flex justify-center">
+        <img
+          src="https://kiuliumov.github.io/Cantina/images/cantina.png"
+          alt="CantinaShop Accessories"
+          class="w-full max-w-md rounded-lg shadow-2xl"
+        />
+      </div>
+
+    </div>
+  </section>
+{% endblock %}
