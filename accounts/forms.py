@@ -25,6 +25,25 @@ class RegistrationForm(UserCreationForm):
         model = UserModel
         fields = ('username', 'email', 'password1', 'password2')
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        existing_users = UserModel.objects.filter(email=email)
+        for user in existing_users:
+            if not user.is_active:
+                user.delete()
+            else:
+                raise forms.ValidationError("This email is already registered and active.")
+        return email
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        existing_users = UserModel.objects.filter(username=username)
+        for user in existing_users:
+            if not user.is_active:
+                user.delete()
+            else:
+                raise forms.ValidationError("This username is already taken by an active user.")
+        return username
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(label="Username or Email")
