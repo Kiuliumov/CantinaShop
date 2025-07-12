@@ -11,12 +11,12 @@ class RegistrationForm(UserCreationForm):
     password1 = forms.CharField(
         label="Password",
         strip=False,
-        widget=forms.PasswordInput(attrs={'id': 'password', 'class': 'your-css-classes-if-needed'}),
+        widget=forms.PasswordInput(attrs={'id': 'password'}),
     )
     password2 = forms.CharField(
         label="Password confirmation",
         strip=False,
-        widget=forms.PasswordInput(attrs={'class': 'your-css-classes-if-needed'}),
+        widget=forms.PasswordInput(),
     )
 
     field_order = ['username', 'email', 'password1', 'password2']

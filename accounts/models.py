@@ -3,6 +3,8 @@ from django.db import models
 
 
 class UserModel(AbstractUser):
+    is_active = models.BooleanField(default=False)
+    email = models.EmailField(unique=True, error_messages={'unique': 'A user with that email already exists.'})
     def __str__(self):
         return self.username
 
