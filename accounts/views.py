@@ -1,17 +1,15 @@
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMultiAlternatives
-from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, render
-from django.template.loader import render_to_string
-from django.urls import reverse, reverse_lazy
-from django.utils.encoding import force_bytes, force_str
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 from django.views import View
 from django.views.generic.edit import FormView
 from django.contrib import messages
+
+from common.email_service import EmailService
 from .forms import RegistrationForm, LoginForm
 
 User = get_user_model()
@@ -32,29 +30,10 @@ class RegisterView(ProfileProhibitedMixin, FormView):
         user = form.save(commit=False)
         user.is_active = False
         user.save()
-        self.send_confirmation_email(user)
+        EmailService.send_confirmation_email(self.request, user)
         messages.success(self.request, "Registration successful. Please check your email to activate your account.")
         return super().form_valid(form)
 
-    def send_confirmation_email(self, user):
-        current_site = get_current_site(self.request)
-        uid = urlsafe_base64_encode(force_bytes(user.pk))
-        token = default_token_generator.make_token(user)
-        activation_link = self.request.build_absolute_uri(
-            reverse('activate', kwargs={'uidb64': uid, 'token': token})
-        )
-        subject = 'Activate your CantinaShop account'
-        context = {
-            'user': user,
-            'domain': current_site.domain,
-            'activation_link': activation_link,
-        }
-
-        html_content = render_to_string('accounts/email_for_confirmation.html', context)
-
-        email = EmailMultiAlternatives(subject, '', EMAIL_SENDER, [user.email])
-        email.attach_alternative(html_content, "text/html")
-        email.send(fail_silently=False)
 
 class ActivateAccount(View):
     def get(self, request, uidb64: str, token: str):
