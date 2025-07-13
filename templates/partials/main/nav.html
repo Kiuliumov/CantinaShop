@@ -1,59 +1,61 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 
 <nav class="bg-gray-900 shadow-lg">
-  <div class="container mx-auto px-6 py-6 flex items-center justify-between">
-    <a href="{% url 'index' %}" class="flex items-center space-x-4 transform transition-transform duration-300 hover:scale-110">
+  <div class="container mx-auto px-4 sm:px-6 py-4 sm:py-6 flex items-center justify-between">
+    <a href="{% url 'index' %}" class="flex items-center space-x-3 transform transition-transform duration-300 hover:scale-105">
       <img
         src="https://kiuliumov.github.io/Cantina/images/The%20cantina%20logo.png"
         alt="CantinaShop Logo"
-        class="h-20 w-auto"
+        class="h-12 sm:h-16 md:h-20 w-auto"
       />
-      <span class="text-3xl font-extrabold text-indigo-500 tracking-wide select-none">CantinaShop</span>
+      <span class="text-xl sm:text-2xl md:text-3xl font-extrabold text-indigo-500 tracking-wide select-none">
+        CantinaShop
+      </span>
     </a>
 
-    <ul class="hidden md:flex items-center space-x-8">
-      <li><a href="{% url 'index' %}" class="text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Home</a></li>
-      <li><a href="{% url 'index' %}" class="text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">All Products</a></li>
-      <li><a href="{% url 'index' %}" class="text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Glasses</a></li>
-      <li><a href="{% url 'index' %}" class="text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Rings</a></li>
-      <li><a href="{% url 'index' %}" class="text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Necklaces</a></li>
-      <li><a href="{% url 'index' %}" class="text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Bracelets</a></li>
+    <ul class="hidden md:flex items-center space-x-6 lg:space-x-8">
+      <li><a href="{% url 'index' %}" class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Home</a></li>
+      <li><a href="{% url 'index' %}" class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">All Products</a></li>
+      <li><a href="{% url 'index' %}" class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Glasses</a></li>
+      <li><a href="{% url 'index' %}" class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Rings</a></li>
+      <li><a href="{% url 'index' %}" class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Necklaces</a></li>
+      <li><a href="{% url 'index' %}" class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Bracelets</a></li>
 
       {% if user.is_authenticated %}
         <li>
           <a href="{% url 'index' %}" class="text-gray-300 hover:text-indigo-400">
-            <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+            <i data-lucide="shopping-cart" class="w-5 h-5 sm:w-6 sm:h-6"></i>
           </a>
         </li>
         <li>
           <a href="{% url 'index' %}" class="text-gray-300 hover:text-indigo-400">
-            <i data-lucide="user" class="w-6 h-6"></i>
+            <i data-lucide="user" class="w-5 h-5 sm:w-6 sm:h-6"></i>
           </a>
         </li>
         <li>
           <form method="POST" action="{% url 'logout' %}">
             {% csrf_token %}
-            <button type="submit" class="px-6 py-2 bg-red-600 text-white font-bold text-lg rounded-lg shadow hover:bg-red-700 transition">
+            <button type="submit" class="px-4 py-2 bg-red-600 text-white font-bold text-sm sm:text-base rounded-lg shadow hover:bg-red-700 transition">
               Logout
             </button>
           </form>
         </li>
       {% else %}
         <li>
-          <a href="{% url 'login' %}" class="px-6 py-2 bg-indigo-600 text-white font-bold text-lg rounded-lg shadow hover:bg-indigo-700 transition">
+          <a href="{% url 'login' %}" class="px-4 py-2 bg-indigo-600 text-white font-bold text-sm sm:text-base rounded-lg shadow hover:bg-indigo-700 transition">
             Login
           </a>
         </li>
       {% endif %}
     </ul>
 
-    <button id="menu-btn" class="block md:hidden text-gray-300 focus:outline-none">
-      <i data-lucide="menu" class="w-8 h-8"></i>
+    <button id="menu-btn" class="block md:hidden text-gray-300 focus:outline-none" aria-label="Toggle menu">
+      <i data-lucide="menu" class="w-7 h-7"></i>
     </button>
   </div>
 
-  <div id="mobile-menu" class="md:hidden hidden px-6 pb-4">
-    <ul class="space-y-4 text-lg text-gray-300">
+  <div id="mobile-menu" class="md:hidden hidden px-4 pb-4">
+    <ul class="space-y-4 text-base text-gray-300">
       <li><a href="{% url 'index' %}" class="block hover:text-indigo-400">Home</a></li>
       <li><a href="{% url 'index' %}" class="block hover:text-indigo-400">All Products</a></li>
       <li><a href="{% url 'index' %}" class="block hover:text-indigo-400">Glasses</a></li>

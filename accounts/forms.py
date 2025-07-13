@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate
 
-from .models import UserModel
+from .models import UserModel, Account
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
 
