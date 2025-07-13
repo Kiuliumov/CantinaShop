@@ -3,7 +3,6 @@
 {% block content %}
 <section class="bg-gray-900 text-white py-20">
   <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-
     <div class="space-y-6">
       <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight tracking-tight">
         Discover Timeless Accessories <i class="fas fa-star text-yellow-400"></i>
@@ -13,11 +12,10 @@
         Welcome to <span class="text-indigo-500 font-semibold">CantinaShop</span> — a proudly Bulgarian
         <img src="https://flagcdn.com/16x12/bg.png" alt="Bulgarian Flag" class="inline-block w-5 h-auto ml-1 rounded-sm align-middle" />
         company crafting high-quality
-        <i class="fas fa-ring text-indigo-400"></i> <span class="font-semibold">rings</span>,
-        <i class="fas fa-glasses text-indigo-400"></i> <span class="font-semibold">glasses</span>,
-        <i class="fas fa-bezier-curve text-indigo-400"></i> <span class="font-semibold">necklaces</span>, and
-        <i class="fas fa-clock text-indigo-400"></i> <span class="font-semibold">bracelets</span>.
-        Unleash your unique style today.
+        <span class="font-semibold">rings</span>,
+        <span class="font-semibold">glasses</span>,
+        <span class="font-semibold">necklaces</span>, and
+        <span class="font-semibold">bracelets</span>. Unleash your unique style today.
       </p>
 
       <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
@@ -29,7 +27,7 @@
         </a>
       </div>
 
-      <div class="pt-2 text-sm text-gray-400 flex flex-wrap gap-x-4 gap-y-2 items-center">
+      <div class="pt-4 text-sm text-gray-400 flex flex-wrap gap-x-4 gap-y-2 items-center">
         <span><i class="fas fa-users text-green-400 mr-1"></i> Trusted in Europe</span>
         <span><i class="fas fa-lock text-blue-400 mr-1"></i> Secure Payments</span>
         <span><i class="fas fa-undo text-yellow-400 mr-1"></i> Free Returns</span>
@@ -43,7 +41,28 @@
         class="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg rounded-2xl shadow-2xl"
       />
     </div>
-
   </div>
 </section>
+
+<section class="bg-gray-800 py-16 text-white">
+  <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
+    <div>
+      <i class="fas fa-gem text-indigo-400 text-4xl mb-4"></i>
+      <h3 class="text-xl font-semibold mb-2">Premium Quality</h3>
+      <p class="text-gray-300 text-sm">Every piece is handcrafted using durable and elegant materials.</p>
+    </div>
+    <div>
+      <i class="fas fa-leaf text-green-400 text-4xl mb-4"></i>
+      <h3 class="text-xl font-semibold mb-2">Eco-Friendly</h3>
+      <p class="text-gray-300 text-sm">Sustainability is at the heart of every CantinaShop design.</p>
+    </div>
+    <div>
+      <i class="fas fa-gift text-yellow-300 text-4xl mb-4"></i>
+      <h3 class="text-xl font-semibold mb-2">Perfect Gifts</h3>
+      <p class="text-gray-300 text-sm">Gift-ready packaging makes our items perfect for any occasion.</p>
+    </div>
+  </div>
+</section>
+
+
 {% endblock %}
