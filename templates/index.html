@@ -1,29 +1,42 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <section class="bg-gray-900 text-white">
-    <div class="container mx-auto px-8 py-20 flex flex-col md:flex-row items-center md:space-x-16">
+<section class="bg-gray-900 text-white py-24">
+  <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
 
-      <div class="md:w-1/2 mb-12 md:mb-0">
-        <h1 class="text-5xl font-extrabold mb-6 leading-tight">
-          Welcome to CantinaShop ✨
-        </h1>
-        <p class="text-xl text-gray-300 mb-8 max-w-lg">
-          We are a company from Bulgaria 🇧🇬 specializing in high-quality accessories like <span class="inline-block">💍 rings</span>, <span class="inline-block">🕶️ glasses</span>, <span class="inline-block">📿 necklaces</span>, and <span class="inline-block">⌚ bracelets</span>. Discover your unique style with us!
-        </p>
-        <a href="{% url 'register' %}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-4 rounded-lg shadow-lg transition duration-300">
+    <div class="space-y-8">
+      <h1 class="text-5xl font-extrabold leading-tight tracking-tight">
+        Discover Timeless Accessories ✨
+      </h1>
+      <p class="text-xl text-gray-300 max-w-xl">
+        Welcome to <span class="text-indigo-500 font-semibold">CantinaShop</span> — a proudly Bulgarian
+        <img src="https://flagcdn.com/16x12/bg.png" alt="Bulgarian Flag" class="inline-block w-5 h-auto ml-1 rounded-sm align-middle" />
+        company crafting high-quality <span class="font-semibold">rings</span>, <span class="font-semibold">glasses</span>,
+        <span class="font-semibold">necklaces</span>, and <span class="font-semibold">bracelets</span>. Unleash your unique style today.
+      </p>
+
+      <div class="flex flex-col sm:flex-row sm:space-x-6 space-y-4 sm:space-y-0">
+        <a href="{% url 'register' %}" class="inline-block bg-indigo-600 hover:bg-indigo-700 px-8 py-4 text-lg font-bold rounded-lg shadow-lg transition">
           Shop Now 🛒
+        </a>
+        <a href="{% url 'index' %}" class="inline-block px-8 py-4 border-2 border-indigo-500 text-lg font-bold text-indigo-500 rounded-lg hover:bg-indigo-600 hover:text-white transition">
+          Browse Collection
         </a>
       </div>
 
-      <div class="md:w-1/2 flex justify-center">
-        <img
-          src="https://kiuliumov.github.io/Cantina/images/cantina.png"
-          alt="CantinaShop Accessories"
-          class="w-full max-w-md rounded-lg shadow-2xl"
-        />
+      <div class="pt-4 text-sm text-gray-400">
+        Trusted by customers across Europe • Secure Payments • Free Returns
       </div>
-
     </div>
-  </section>
+
+    <div class="flex justify-center">
+      <img
+        src="https://kiuliumov.github.io/Cantina/images/cantina.png"
+        alt="CantinaShop Accessories"
+        class="w-full max-w-md rounded-2xl shadow-2xl"
+      />
+    </div>
+
+  </div>
+</section>
 {% endblock %}
