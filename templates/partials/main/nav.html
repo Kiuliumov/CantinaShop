@@ -1,49 +1,66 @@
+<!-- Add Lucide CDN or use your preferred icon library -->
+<script src="https://unpkg.com/lucide@latest"></script>
+
 <nav class="bg-gray-900 shadow-lg">
-  <div class="container mx-auto px-12 py-8 flex items-center justify-between">
-    <a href="{% url 'index' %}" class="flex items-center space-x-6 transform transition-transform duration-300 hover:scale-110">
+  <div class="container mx-auto px-6 py-6 flex items-center justify-between">
+    <a href="{% url 'index' %}" class="flex items-center space-x-4 transform transition-transform duration-300 hover:scale-110">
       <img
         src="https://kiuliumov.github.io/Cantina/images/The%20cantina%20logo.png"
         alt="CantinaShop Logo"
-        class="h-28 w-auto"
+        class="h-20 w-auto"
       />
-      <span class="text-5xl font-extrabold text-indigo-500 tracking-wide select-none">CantinaShop</span>
+      <span class="text-3xl font-extrabold text-indigo-500 tracking-wide select-none">CantinaShop</span>
     </a>
 
-    <ul class="flex items-center space-x-10">
+    <ul class="hidden md:flex items-center space-x-8">
+      <li><a href="{% url 'index' %}" class="text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Home</a></li>
+      <li><a href="{% url 'index' %}" class="text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Glasses</a></li>
+      <li><a href="{% url 'index' %}" class="text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Rings</a></li>
+      <li><a href="{% url 'index' %}" class="text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Necklaces</a></li>
+      <li><a href="{% url 'index' %}" class="text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Bracelets</a></li>
       <li>
-        <a href="{% url 'index' %}" class="text-xl text-gray-300 hover:text-indigo-400 transition-colors duration-300 ease-in-out font-semibold">
-          Home
-        </a>
-      </li>
-      <li>
-        <a href="{% url 'index' %}" class="text-xl text-gray-300 hover:text-indigo-400 transition-colors duration-300 ease-in-out font-semibold">
-          Glasses
-        </a>
-      </li>
-      <li>
-        <a href="{% url 'index' %}" class="text-xl text-gray-300 hover:text-indigo-400 transition-colors duration-300 ease-in-out font-semibold">
-          Rings
-        </a>
-      </li>
-      <li>
-        <a href="{% url 'index' %}" class="text-xl text-gray-300 hover:text-indigo-400 transition-colors duration-300 ease-in-out font-semibold">
-          Necklaces
-        </a>
-      </li>
-      <li>
-        <a href="{% url 'index' %}" class="text-xl text-gray-300 hover:text-indigo-400 transition-colors duration-300 ease-in-out font-semibold">
-          Bracelets
-        </a>
-      </li>
-
-      <li>
-        <a
-          href="{% url 'login' %}"
-          class="ml-8 inline-block px-8 py-4 bg-indigo-600 text-white font-bold text-xl rounded-lg shadow-lg hover:bg-indigo-700 active:bg-indigo-800 transition-colors duration-300"
-        >
+        <a href="{% url 'login' %}" class="px-6 py-2 bg-indigo-600 text-white font-bold text-lg rounded-lg shadow hover:bg-indigo-700 transition">
           Login
         </a>
       </li>
+      <li>
+        <a href="{% url 'index' %}" class="text-gray-300 hover:text-indigo-400">
+          <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'index' %}" class="text-gray-300 hover:text-indigo-400">
+          <i data-lucide="user" class="w-6 h-6"></i>
+        </a>
+      </li>
+    </ul>
+
+    <button id="menu-btn" class="block md:hidden text-gray-300 focus:outline-none">
+      <i data-lucide="menu" class="w-8 h-8"></i>
+    </button>
+  </div>
+
+  <div id="mobile-menu" class="md:hidden hidden px-6 pb-4">
+    <ul class="space-y-4 text-lg text-gray-300">
+      <li><a href="{% url 'index' %}" class="block hover:text-indigo-400">Home</a></li>
+      <li><a href="{% url 'index' %}" class="block hover:text-indigo-400">Glasses</a></li>
+      <li><a href="{% url 'index' %}" class="block hover:text-indigo-400">Rings</a></li>
+      <li><a href="{% url 'index' %}" class="block hover:text-indigo-400">Necklaces</a></li>
+      <li><a href="{% url 'index' %}" class="block hover:text-indigo-400">Bracelets</a></li>
+      <li><a href="{% url 'login' %}" class="block text-indigo-500 font-bold">Login</a></li>
+      <li><a href="{% url 'index' %}" class="block hover:text-indigo-400">Cart</a></li>
+      <li><a href="{% url 'index' %}" class="block hover:text-indigo-400">Account</a></li>
     </ul>
   </div>
 </nav>
+
+<script>
+  lucide.createIcons();
+
+  const menuBtn = document.getElementById('menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  menuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+  });
+</script>
