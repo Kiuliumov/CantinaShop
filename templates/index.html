@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 <section class="bg-gray-900 text-white py-20">
@@ -7,7 +8,6 @@
       <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight tracking-tight">
         Discover Timeless Accessories <i class="fas fa-star text-yellow-400"></i>
       </h1>
-
       <p class="text-base sm:text-lg md:text-xl text-gray-300 max-w-xl">
         Welcome to <span class="text-indigo-500 font-semibold">CantinaShop</span> — a proudly Bulgarian
         <img src="https://flagcdn.com/16x12/bg.png" alt="Bulgarian Flag" class="inline-block w-5 h-auto ml-1 rounded-sm align-middle" />
@@ -17,7 +17,6 @@
         <span class="font-semibold">necklaces</span>, and
         <span class="font-semibold">bracelets</span>. Unleash your unique style today.
       </p>
-
       <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
         <a href="{% url 'register' %}" class="inline-block bg-indigo-600 hover:bg-indigo-700 px-6 py-3 text-base sm:text-lg font-bold rounded-lg shadow-lg transition">
           <i class="fas fa-shopping-cart mr-2"></i> Shop Now
@@ -26,14 +25,12 @@
           <i class="fas fa-search mr-2"></i> Browse Collection
         </a>
       </div>
-
       <div class="pt-4 text-sm text-gray-400 flex flex-wrap gap-x-4 gap-y-2 items-center">
         <span><i class="fas fa-users text-green-400 mr-1"></i> Trusted in Europe</span>
         <span><i class="fas fa-lock text-blue-400 mr-1"></i> Secure Payments</span>
         <span><i class="fas fa-undo text-yellow-400 mr-1"></i> Free Returns</span>
       </div>
     </div>
-
     <div class="flex justify-center">
       <img
         src="https://kiuliumov.github.io/Cantina/images/cantina.png"
@@ -64,5 +61,28 @@
   </div>
 </section>
 
+<button id="chat-toggle" class="fixed bottom-6 right-6 bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-full shadow-lg z-50 transition">
+  <i class="fas fa-comment text-xl"></i>
+</button>
+
+<div id="chat-box" class="fixed bottom-20 right-6 w-80 max-w-sm bg-white text-gray-800 rounded-xl shadow-lg hidden z-50">
+  <div class="flex items-center justify-between px-4 py-2 bg-indigo-600 text-white rounded-t-xl">
+    <h4 class="font-semibold">Live Chat</h4>
+    <button id="chat-close" class="text-white hover:text-gray-200">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div id="chat-messages" class="p-4 h-64 overflow-y-auto space-y-2 bg-gray-100 text-sm">
+    <div class="text-center text-gray-500">Welcome to CantinaShop chat</div>
+  </div>
+  <form id="chat-form" class="flex items-center border-t px-4 py-2 bg-white">
+    <input id="chat-input" type="text" placeholder="Type a message..." class="flex-1 text-sm border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+    <button type="submit" class="ml-2 text-indigo-600 hover:text-indigo-800">
+      <i class="fas fa-paper-plane"></i>
+    </button>
+  </form>
+</div>
+
+<script src="{% static 'js/chatFrontEnd.js' %}"></script>
 
 {% endblock %}
