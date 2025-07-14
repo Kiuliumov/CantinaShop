@@ -7,7 +7,9 @@ SECRET_KEY = 'django-insecure-f_&8fjh6u@(1-=8rs&8t5zn!lw)1jq#$ufx6s+vjkt6hlm$h-r
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+THIRD_PARTY_APPS = [
+    'channels'
+]
 DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -16,7 +18,7 @@ DJANGO_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-]
+] + THIRD_PARTY_APPS
 
 INSTALLED_APPS = [
     'accounts',
@@ -44,6 +46,14 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'CantinaShop.urls'
+
+ASGI_APPLICATION = 'CantinaShop.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 AUTH_USER_MODEL = 'accounts.UserModel'
 

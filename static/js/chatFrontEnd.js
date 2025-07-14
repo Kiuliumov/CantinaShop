@@ -6,6 +6,12 @@ const chatInput = document.getElementById('chat-input');
 const chatMessages = document.getElementById('chat-messages');
 const adminAvatarUrl = "/static/images/admin.jpg";
 
+const chatSocket = new WebSocket(
+  (window.location.protocol === "https:" ? "wss://" : "ws://") +
+  window.location.host +
+  '/ws/chat/'
+);
+
 chatToggle.addEventListener('click', () => {
   chatBox.classList.toggle('hidden');
 });
@@ -14,30 +20,45 @@ chatClose.addEventListener('click', () => {
   chatBox.classList.add('hidden');
 });
 
+chatSocket.onmessage = function(e) {
+  const data = JSON.parse(e.data);
+  const message = data.message;
+  const username = data.username;
+  const avatarUrl = data.avatar_url || adminAvatarUrl;
+  if(username === "{{ user.username }}"){
+    addUserMessage(message, avatarUrl);
+  } else {
+    addAdminMessage(message, avatarUrl);
+  }
+};
+
+chatSocket.onclose = function(e) {
+  console.error('Chat socket closed unexpectedly');
+};
+
 chatForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const message = chatInput.value.trim();
-  if (message === '') return;
-  addUserMessage(message, userAvatarUrl);
+  if (!message) return;
+  chatSocket.send(JSON.stringify({
+    'message': message,
+    'avatar_url': "{{ user.account.image_url|default:'/static/images/avatar.png' }}"
+  }));
   chatInput.value = '';
-
-  setTimeout(() => {
-    addAdminMessage("Thanks for reaching out! We'll assist you shortly.", adminAvatarUrl);
-  }, 1000);
 });
 
 function addUserMessage(text, avatarUrl) {
   const bubble = document.createElement('div');
   bubble.className = 'flex items-start max-w-xs ml-auto self-end space-x-2';
 
-  const msgDiv = document.createElement('div');
-  msgDiv.className = 'bg-indigo-100 text-gray-800 px-3 py-2 rounded-lg';
-  msgDiv.textContent = text;
-
   const avatar = document.createElement('img');
   avatar.src = avatarUrl;
   avatar.alt = "User avatar";
   avatar.className = 'w-8 h-8 rounded-full object-cover';
+
+  const msgDiv = document.createElement('div');
+  msgDiv.className = 'bg-indigo-100 text-gray-800 px-3 py-2 rounded-lg';
+  msgDiv.textContent = text;
 
   bubble.appendChild(avatar);
   bubble.appendChild(msgDiv);
@@ -59,8 +80,8 @@ function addAdminMessage(text, avatarUrl) {
   msgDiv.className = 'bg-gray-200 text-gray-900 px-3 py-2 rounded-lg';
   msgDiv.textContent = text;
 
-  bubble.appendChild(msgDiv);
   bubble.appendChild(avatar);
+  bubble.appendChild(msgDiv);
 
   chatMessages.appendChild(bubble);
   chatMessages.scrollTop = chatMessages.scrollHeight;
