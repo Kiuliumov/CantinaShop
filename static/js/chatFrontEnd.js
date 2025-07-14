@@ -4,6 +4,7 @@ const chatClose = document.getElementById('chat-close');
 const chatForm = document.getElementById('chat-form');
 const chatInput = document.getElementById('chat-input');
 const chatMessages = document.getElementById('chat-messages');
+const adminAvatarUrl = "/static/images/admin.jpg";
 
 chatToggle.addEventListener('click', () => {
   chatBox.classList.toggle('hidden');
@@ -17,10 +18,50 @@ chatForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const message = chatInput.value.trim();
   if (message === '') return;
+  addUserMessage(message, userAvatarUrl);
+  chatInput.value = '';
+
+  setTimeout(() => {
+    addAdminMessage("Thanks for reaching out! We'll assist you shortly.", adminAvatarUrl);
+  }, 1000);
+});
+
+function addUserMessage(text, avatarUrl) {
   const bubble = document.createElement('div');
-  bubble.className = 'bg-indigo-100 text-gray-800 px-3 py-2 rounded-lg max-w-xs self-end ml-auto';
-  bubble.textContent = message;
+  bubble.className = 'flex items-start max-w-xs ml-auto self-end space-x-2';
+
+  const msgDiv = document.createElement('div');
+  msgDiv.className = 'bg-indigo-100 text-gray-800 px-3 py-2 rounded-lg';
+  msgDiv.textContent = text;
+
+  const avatar = document.createElement('img');
+  avatar.src = avatarUrl;
+  avatar.alt = "User avatar";
+  avatar.className = 'w-8 h-8 rounded-full object-cover';
+
+  bubble.appendChild(avatar);
+  bubble.appendChild(msgDiv);
+
   chatMessages.appendChild(bubble);
   chatMessages.scrollTop = chatMessages.scrollHeight;
-  chatInput.value = '';
-});
+}
+
+function addAdminMessage(text, avatarUrl) {
+  const bubble = document.createElement('div');
+  bubble.className = 'flex items-start max-w-xs mr-auto self-start space-x-2';
+
+  const avatar = document.createElement('img');
+  avatar.src = avatarUrl;
+  avatar.alt = "Admin avatar";
+  avatar.className = 'w-8 h-8 rounded-full object-cover';
+
+  const msgDiv = document.createElement('div');
+  msgDiv.className = 'bg-gray-200 text-gray-900 px-3 py-2 rounded-lg';
+  msgDiv.textContent = text;
+
+  bubble.appendChild(msgDiv);
+  bubble.appendChild(avatar);
+
+  chatMessages.appendChild(bubble);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}

@@ -82,7 +82,9 @@
     </button>
   </form>
 </div>
-
+<script>
+    const userAvatarUrl = "{{ user.account.image_url|default:'static/images/avatar.png' }}";
+</script>
 <script src="{% static 'js/chatFrontEnd.js' %}"></script>
 
 {% endblock %}
