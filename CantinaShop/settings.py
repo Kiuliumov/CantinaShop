@@ -13,6 +13,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 ALLOWED_HOSTS = []
 THIRD_PARTY_APPS = [
+    'rest_framework'
 ]
 
 DJANGO_APPS = [
@@ -24,6 +25,7 @@ DJANGO_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+
 ] + THIRD_PARTY_APPS
 
 INSTALLED_APPS = [
