@@ -8,6 +8,8 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import TemplateView
 from django.contrib.auth import get_user_model
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 
 from accounts.models import Account, UserModel
 from chat.models import ChatMessage
@@ -30,8 +32,9 @@ class AdminChatHubView(UserPassesTestMixin, TemplateView):
         return context
 
 
-@method_decorator(login_required, name='dispatch')
-class ChatMessagesView(View):
+class ChatMessagesAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, user_id, **kwargs):
         UserModel = get_user_model()
 
@@ -58,10 +61,10 @@ class ChatMessagesView(View):
 
         messages_data = []
         for msg in messages:
-            if user.is_staff or user.is_superuser:
-                sender_username = "Admin"
-                avatar_url = static('images/admin.jpg')
-                from_admin = True
+            if request.user.is_staff or request.user.is_superuser:
+                sender_username = "Admin" if msg.sender.is_staff or msg.sender.is_superuser else msg.sender.username
+                avatar_url = static('images/admin.jpg') if msg.sender.is_staff or msg.sender.is_superuser else getattr(msg.sender.account, 'profile_picture_url', '') or '/static/images/avatar.png'
+                from_admin = msg.sender.is_staff or msg.sender.is_superuser
             else:
                 sender_username = msg.sender.username
                 avatar_url = getattr(msg.sender.account, 'profile_picture_url', '') or '/static/images/avatar.png'
@@ -77,4 +80,4 @@ class ChatMessagesView(View):
                 'from_admin': from_admin,
             })
 
-        return JsonResponse({'messages': messages_data})
+        return Response({'messages': messages_data})

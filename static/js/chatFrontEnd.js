@@ -103,43 +103,46 @@
   }
 
   function addMessage({ text, username, avatarUrl, timestamp, fromAdmin }) {
-    const bubble = document.createElement('div');
-    bubble.className = 'flex flex-col space-y-1 max-w-xs ' + (fromAdmin ? 'mr-auto items-start' : 'ml-auto items-end');
+  const bubble = document.createElement('div');
+  bubble.className = 'flex flex-col space-y-1 max-w-xs ' + (fromAdmin ? 'items-end ml-auto' : 'items-start mr-auto');
 
-    const bubbleRow = document.createElement('div');
-    bubbleRow.className = 'flex items-start space-x-2';
+  const bubbleRow = document.createElement('div');
+  bubbleRow.className = 'flex items-start gap-2';
 
-    const avatar = document.createElement('img');
-    avatar.src = avatarUrl;
-    avatar.alt = username;
-    avatar.className = 'w-8 h-8 rounded-full object-cover';
+  const avatar = document.createElement('img');
+  avatar.src = avatarUrl;
+  avatar.alt = username;
+  avatar.className = 'w-8 h-8 rounded-full object-cover' + (fromAdmin ? ' ml-2' : '');
 
-    const msgDiv = document.createElement('div');
-    msgDiv.className = fromAdmin
-      ? 'bg-indigo-600 text-white px-3 py-2 rounded-lg'
-      : 'bg-gray-700 text-gray-100 px-3 py-2 rounded-lg';
-    msgDiv.textContent = text;
+  const msgDiv = document.createElement('div');
+  msgDiv.className = fromAdmin
+    ? 'bg-gray-200 text-gray-900 px-3 py-2 rounded-lg break-words'
+    : 'bg-blue-600 text-white px-3 py-2 rounded-lg break-words';
 
-    if (fromAdmin) {
-      bubbleRow.appendChild(avatar);
-      bubbleRow.appendChild(msgDiv);
-    } else {
-      bubbleRow.appendChild(msgDiv);
-      bubbleRow.appendChild(avatar);
-    }
+  msgDiv.style.wordBreak = 'break-word';
+  msgDiv.textContent = text;
 
-    const timeDiv = document.createElement('div');
-    timeDiv.className = 'text-xs text-gray-400';
-    timeDiv.textContent = timestamp
-      ? new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      : '';
-
-    bubble.appendChild(bubbleRow);
-    bubble.appendChild(timeDiv);
-
-    chatMessages.appendChild(bubble);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+  if (fromAdmin) {
+    bubbleRow.appendChild(msgDiv);
+    bubbleRow.appendChild(avatar);
+  } else {
+    bubbleRow.appendChild(avatar);
+    bubbleRow.appendChild(msgDiv);
   }
+
+  const timeDiv = document.createElement('div');
+  timeDiv.className = 'text-xs text-gray-400';
+  timeDiv.textContent = timestamp
+    ? new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    : '';
+
+  bubble.appendChild(bubbleRow);
+  bubble.appendChild(timeDiv);
+
+  chatMessages.appendChild(bubble);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
 
   function onSendMessage(e) {
     e.preventDefault();
