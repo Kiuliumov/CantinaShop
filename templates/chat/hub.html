@@ -68,6 +68,16 @@
 
 <script src="{% static 'js/chatAdmin.js' %}"></script>
 <script>
+  const apiUrlWithUserId = "{% url 'chat-messages-api-base' 0 %}";
+    const messagesApiUrlBase = apiUrlWithUserId.slice(0, -2)
+  window.chatConfig = {
+    adminAvatarUrl: "{% static 'images/admin.jpg' %}",
+    defaultAvatarUrl: "{% static 'images/avatar.png' %}", 
+    messagesApiUrlBase: messagesApiUrlBase,
+    websocketBaseUrl: "{{ websocket_base_url }}",
+  };
   chatApp.init("{{ admin_avatar_url }}");
 </script>
+    
+
 {% endblock %}
