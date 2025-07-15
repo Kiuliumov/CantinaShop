@@ -23,7 +23,7 @@ chatClose.addEventListener('click', () => {
   chatBox.classList.add('opacity-0', 'invisible');
   setTimeout(() => {
     chatToggle.classList.remove('hidden');
-  }, 300);
+  }, 100);
 });
 
 chatSocket.onmessage = function(e) {
