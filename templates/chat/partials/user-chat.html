@@ -24,10 +24,10 @@
 {% endif %}
 
 <script>
-    const currentUsername = "{{ user.username|escapejs }}";
-    const userAvatarUrl = "{{ user.account.profile_picture_url|default:'/static/images/avatar.png' }}";
-    console.log("{{ user }}");
-    console.log("{{ user.account.id }}")
-    console.log("{{ user.account.profile_picture_url }}");
+    window.currentUserId = "{{ request.user.id }}";
+  document.addEventListener('DOMContentLoaded', () => {
+    chatApp.init();
+  });
 </script>
+
   <script src="{% static 'js/chatFrontEnd.js' %}"></script>

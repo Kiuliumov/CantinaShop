@@ -1,91 +1,142 @@
-const chatToggle = document.getElementById('chat-toggle');
-const chatBox = document.getElementById('chat-box');
-const chatClose = document.getElementById('chat-close');
-const chatForm = document.getElementById('chat-form');
-const chatInput = document.getElementById('chat-input');
-const chatMessages = document.getElementById('chat-messages');
+(function () {
+  let chatSocket = null;
+  let chatMessages, chatForm, chatInput, chatToggleBtn, chatBox;
 
-const adminAvatarUrl = "/static/images/admin.jpg";
-const defaultAvatarUrl = "/static/images/avatar.png";
+  let currentUserId = window.currentUserId || null;
 
-// You need to set currentUsername & currentChatUserId somehow, e.g. from your Django template context or user action
-// Example (replace these with your actual values):
-const currentUsername = "{{ request.user.username }}";  // Django template variable
-let currentChatUserId = null;  // Will be set when user selects a chat partner
+  function init() {
+    chatMessages = document.getElementById('chat-messages');
+    chatForm = document.getElementById('chat-form');
+    chatInput = document.getElementById('chat-input');
+    chatToggleBtn = document.getElementById('chat-toggle');
+    chatBox = document.getElementById('chat-box');
 
-// Clear chat messages UI
-function clearChat() {
-  chatMessages.innerHTML = '';
-}
+    if (!currentUserId || !chatMessages || !chatForm || !chatInput) {
+      console.error("Chat initialization failed: missing elements or user ID");
+      return;
+    }
 
-// Load chat messages from backend API for given userId
-function loadChatMessages(userId) {
-  clearChat();
-  if (!userId) return;
+    chatForm.addEventListener('submit', onSendMessage);
+    chatToggleBtn?.addEventListener('click', toggleChat);
+    document.getElementById('chat-close')?.addEventListener('click', toggleChat);
 
-  fetch(`/chat/messages/${userId}/`)
-    .then(res => {
-      if (!res.ok) throw new Error('Failed to fetch messages');
-      return res.json();
-    })
-    .then(data => {
-      data.messages.forEach(msg => {
-        const isFromCurrentUser = (msg.sender_username === currentUsername);
-        if (isFromCurrentUser) {
-          addUserMessage(msg.message, msg.avatar_url || defaultAvatarUrl, msg.timestamp);
-        } else {
-          addAdminMessage(msg.message, msg.avatar_url || adminAvatarUrl, msg.timestamp);
-        }
-      });
-    })
-    .catch(err => {
-      console.error('Error loading messages:', err);
-    });
-}
-
-// When you open chat with user (replace this with your own UI event)
-function openChatWithUser(userId, username) {
-  currentChatUserId = userId;
-  clearChat();
-  loadChatMessages(userId);
-  chatInput.disabled = false;
-  chatForm.querySelector('button[type="submit"]').disabled = false;
-  chatInput.focus();
-  // Update chat header, etc.
-}
-
-// Send message handler
-chatForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  if (!currentChatUserId) return; // no user selected
-
-  const message = chatInput.value.trim();
-  if (!message) return;
-  const timestamp = new Date().toISOString();
-
-  // Send message over WebSocket
-  chatSocket.send(JSON.stringify({
-    'message': message,
-    'recipient_id': currentChatUserId,  // send recipient info for backend to handle
-  }));
-
-  // Optimistically add user message to UI
-  addUserMessage(message, defaultAvatarUrl, timestamp);
-  chatInput.value = '';
-});
-
-// Your existing addUserMessage and addAdminMessage functions remain the same
-
-// WebSocket message handler — when message received, append it to chat UI
-chatSocket.onmessage = function(e) {
-  const data = JSON.parse(e.data);
-  const message = data.message;
-  const username = data.username;
-  const timestamp = data.timestamp || new Date().toISOString();
-
-  if (username === currentUsername) {
-    addUserMessage(message, data.avatar_url || defaultAvatarUrl, timestamp);
-  } else {
-    addAdminMessage(message, data.avatar_url || adminAvatarUrl, timestamp);
+    loadInitialMessages();
+    connectSocket();
   }
-};
+
+  function toggleChat() {
+    if (!chatBox) return;
+
+    const isOpen = chatBox.classList.contains('opacity-100');
+    if (isOpen) {
+      chatBox.classList.remove('opacity-100', 'visible');
+      chatBox.classList.add('opacity-0', 'invisible');
+    } else {
+      chatBox.classList.remove('opacity-0', 'invisible');
+      chatBox.classList.add('opacity-100', 'visible');
+    }
+  }
+
+  function loadInitialMessages() {
+    fetch(`/chat/messages/${currentUserId}/?limit=100`, { credentials: 'same-origin' })
+      .then(res => res.json())
+      .then(data => {
+        data.messages.forEach(msg => {
+          addMessage({
+            text: msg.message,
+            username: msg.sender_username,
+            avatarUrl: (msg.sender_id === 0 || msg.from_admin) ? '/static/images/admin.jpg' : (msg.avatar_url || '/static/images/avatar.png'),
+            timestamp: msg.timestamp,
+            fromAdmin: msg.sender_id === 0 || msg.from_admin,
+          });
+        });
+      })
+      .catch(err => console.error('Failed to load initial messages:', err));
+  }
+
+  function connectSocket() {
+    if (chatSocket) chatSocket.close();
+
+    const socketUrl =
+      (window.location.protocol === "https:" ? "wss://" : "ws://") +
+      window.location.host +
+      `/ws/chat/user/${currentUserId}/`;
+
+    chatSocket = new WebSocket(socketUrl);
+
+    chatSocket.onopen = () => {
+      chatInput.disabled = false;
+      const submitBtn = chatForm.querySelector('button[type="submit"]');
+      if (submitBtn) submitBtn.disabled = false;
+    };
+
+    chatSocket.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      addMessage({
+        text: data.message,
+        username: data.username,
+        avatarUrl: data.avatar_url || '/static/images/avatar.png',
+        timestamp: data.timestamp,
+        fromAdmin: data.from_admin,
+      });
+    };
+
+    chatSocket.onclose = () => {
+      chatInput.disabled = true;
+      const submitBtn = chatForm.querySelector('button[type="submit"]');
+      if (submitBtn) submitBtn.disabled = true;
+    };
+  }
+
+  function addMessage({ text, username, avatarUrl, timestamp, fromAdmin }) {
+    const bubble = document.createElement('div');
+    bubble.className = 'flex flex-col space-y-1 max-w-xs ' + (fromAdmin ? 'mr-auto items-start' : 'ml-auto items-end');
+
+    const bubbleRow = document.createElement('div');
+    bubbleRow.className = 'flex items-start space-x-2';
+
+    const avatar = document.createElement('img');
+    avatar.src = avatarUrl;
+    avatar.alt = username;
+    avatar.className = 'w-8 h-8 rounded-full object-cover';
+
+    const msgDiv = document.createElement('div');
+    msgDiv.className = fromAdmin
+      ? 'bg-indigo-600 text-white px-3 py-2 rounded-lg'
+      : 'bg-gray-700 text-gray-100 px-3 py-2 rounded-lg';
+    msgDiv.textContent = text;
+
+    if (fromAdmin) {
+      bubbleRow.appendChild(avatar);
+      bubbleRow.appendChild(msgDiv);
+    } else {
+      bubbleRow.appendChild(msgDiv);
+      bubbleRow.appendChild(avatar);
+    }
+
+    const timeDiv = document.createElement('div');
+    timeDiv.className = 'text-xs text-gray-400';
+    timeDiv.textContent = timestamp
+      ? new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      : '';
+
+    bubble.appendChild(bubbleRow);
+    bubble.appendChild(timeDiv);
+
+    chatMessages.appendChild(bubble);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function onSendMessage(e) {
+    e.preventDefault();
+    if (!chatSocket || chatSocket.readyState !== WebSocket.OPEN) return;
+
+    const message = chatInput.value.trim();
+    if (!message) return;
+
+    chatSocket.send(JSON.stringify({ message }));
+    chatInput.value = '';
+  }
+
+  window.chatApp = { init };
+})();

@@ -10,19 +10,16 @@ class ChatMessage(models.Model):
     recipient = models.ForeignKey(UserModel, related_name='received_messages', on_delete=models.CASCADE)
     message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+    is_from_admin = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.sender.username} → {self.recipient.username} at {self.timestamp}: {self.message}"
 
     @property
     def avatar_url(self):
-        if self.sender.is_staff or self.sender.is_superuser:
+        if self.is_from_admin:
             return "/static/images/admin.jpg"
         return self.sender.account.profile_picture_url or "/static/images/avatar.png"
-
-    @property
-    def is_from_admin(self):
-        return self.sender.is_staff or self.sender.is_superuser
 
     class Meta:
         ordering = ['timestamp']

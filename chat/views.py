@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.http import JsonResponse, Http404
 from django.shortcuts import render
+from django.template.context_processors import static
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import TemplateView
@@ -29,30 +30,54 @@ class AdminChatHubView(UserPassesTestMixin, TemplateView):
 
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(user_passes_test(login_required), name='dispatch')
 class ChatMessagesView(View):
-    def get(self, request, user_id):
+    def get(self, request, user_id, **kwargs):
+        from django.contrib.auth import get_user_model
+        UserModel = get_user_model()
+
         try:
             user = UserModel.objects.get(id=user_id)
         except UserModel.DoesNotExist:
             raise Http404("User not found")
 
+        if not (request.user.is_staff or request.user.is_superuser):
+            raise Http404("Not permitted")
 
-        messages = ChatMessage.objects.filter(
+        try:
+            limit = int(request.GET.get('limit', 100))
+            if limit <= 0:
+                limit = 100
+        except ValueError:
+            limit = 100
+
+        messages_qs = ChatMessage.objects.filter(
+            Q(sender=user, recipient__id=0) |
+            Q(sender__id=0, recipient=user) |
             Q(sender=user, recipient=request.user) |
             Q(sender=request.user, recipient=user)
-        ).order_by('timestamp')
+        ).order_by('-timestamp')[:limit]
+
+        messages = reversed(messages_qs)
 
         messages_data = []
         for msg in messages:
+            if msg.sender_id == 0:
+                sender_username = "Admin"
+                avatar_url = static('images/admin.jpg')
+                from_admin = True
+            else:
+                sender_username = msg.sender.username
+                avatar_url = getattr(msg.sender.account, 'profile_picture_url', '') or '/static/images/avatar.png'
+                from_admin = msg.sender.is_staff or msg.sender.is_superuser
+
             messages_data.append({
                 'id': msg.id,
                 'message': msg.message,
-                'sender_id': msg.sender.id,
-                'sender_username': msg.sender.username,
-                'avatar_url': getattr(msg.sender.account, 'profile_picture_url', '') or '/static/images/avatar.png',
+                'sender_id': msg.sender_id,
+                'sender_username': sender_username,
+                'avatar_url': avatar_url,
                 'timestamp': msg.timestamp.isoformat(),
-                'from_admin': msg.sender.is_staff or msg.sender.is_superuser,
+                'from_admin': from_admin,
             })
 
         return JsonResponse({'messages': messages_data})
