@@ -40,7 +40,7 @@
 
 <script>
     const currentUsername = "{{ user.username|escapejs }}";
-    const userAvatarUrl = "{{ user.profile.avatar_url|default:'/static/images/default_avatar.jpg' }}";
+    const userAvatarUrl = "{{ user.profile.avatar_url|default:'/static/images/avatar.png' }}";
 </script>
   <script src="{% static 'js/chatFrontEnd.js' %}"></script>
 </body>
