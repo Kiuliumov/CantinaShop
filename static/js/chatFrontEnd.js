@@ -31,7 +31,7 @@ chatSocket.onmessage = function(e) {
   const message = data.message;
   const username = data.username;
   const avatarUrl = data.avatar_url || adminAvatarUrl;
-  if (username === "{{ user.username }}") {
+  if (username === currentUsername) {
     addUserMessage(message, avatarUrl);
   } else {
     addAdminMessage(message, avatarUrl);

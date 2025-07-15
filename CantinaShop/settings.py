@@ -1,16 +1,22 @@
 from pathlib import Path
 
+from django.template.context_processors import static
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-f_&8fjh6u@(1-=8rs&8t5zn!lw)1jq#$ufx6s+vjkt6hlm$h-r'
 
 DEBUG = True
+STATIC_URL = 'static/'
+
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 ALLOWED_HOSTS = []
 THIRD_PARTY_APPS = [
-    'channels'
 ]
+
 DJANGO_APPS = [
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -23,6 +29,7 @@ DJANGO_APPS = [
 INSTALLED_APPS = [
     'accounts',
     'common',
+    'sockets'
 ] + DJANGO_APPS
 
 SITE_ID = 1
@@ -49,11 +56,14 @@ ROOT_URLCONF = 'CantinaShop.urls'
 
 ASGI_APPLICATION = 'CantinaShop.asgi.application'
 
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
     }
 }
+
+
 
 AUTH_USER_MODEL = 'accounts.UserModel'
 
@@ -104,8 +114,5 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_URL = 'static/'
-
-STATICFILES_DIRS = [BASE_DIR / 'static']
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
