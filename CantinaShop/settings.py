@@ -29,7 +29,7 @@ DJANGO_APPS = [
 INSTALLED_APPS = [
     'accounts',
     'common',
-    'sockets'
+    'chat'
 ] + DJANGO_APPS
 
 SITE_ID = 1
@@ -56,14 +56,11 @@ ROOT_URLCONF = 'CantinaShop.urls'
 
 ASGI_APPLICATION = 'CantinaShop.asgi.application'
 
-
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
     }
 }
-
-
 
 AUTH_USER_MODEL = 'accounts.UserModel'
 
