@@ -20,12 +20,16 @@
     chatToggleBtn?.addEventListener('click', toggleChat);
     document.getElementById('chat-close')?.addEventListener('click', toggleChat);
 
-    loadInitialMessages();
-    connectSocket();
+    loadChatMessages(currentUserId);
+    connectSocket(currentUserId);
   }
 
   function toggleChat() {
     if (!chatBox) return;
+
+    if (userIsStaffOrSuperuser) {
+      window.location.href = `chat/admin`;
+    }
 
     const isOpen = chatBox.classList.contains('opacity-100');
     if (isOpen) {
@@ -37,30 +41,40 @@
     }
   }
 
-  function loadInitialMessages() {
-    fetch(`/chat/messages/${currentUserId}/?limit=100`, { credentials: 'same-origin' })
-      .then(res => res.json())
-      .then(data => {
-        data.messages.forEach(msg => {
-          addMessage({
-            text: msg.message,
-            username: msg.sender_username,
-            avatarUrl: (msg.sender_id === 0 || msg.from_admin) ? '/static/images/admin.jpg' : (msg.avatar_url || '/static/images/avatar.png'),
-            timestamp: msg.timestamp,
-            fromAdmin: msg.sender_id === 0 || msg.from_admin,
-          });
-        });
-      })
-      .catch(err => console.error('Failed to load initial messages:', err));
+  function clearChat() {
+    chatMessages.innerHTML = '';
   }
 
-  function connectSocket() {
+  async function loadChatMessages(userId) {
+    clearChat();
+    try {
+      const res = await fetch(`/chat/messages/${userId}/`);
+      console.log(`/chat/messages/${userId}/`)
+      if (!res.ok) throw new Error('Failed to fetch messages');
+      const data = await res.json();
+
+      const recentMessages = data.messages.slice(-100);
+      recentMessages.forEach(msg => {
+        addMessage({
+          text: msg.message,
+          username: msg.sender_username,
+          avatarUrl: (msg.sender_id === 0 || msg.from_admin) ? '/static/images/admin.jpg' : (msg.avatar_url || '/static/images/avatar.png'),
+          timestamp: msg.timestamp,
+          fromAdmin: msg.sender_id === 0 || msg.from_admin,
+        });
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  function connectSocket(userId) {
     if (chatSocket) chatSocket.close();
 
     const socketUrl =
       (window.location.protocol === "https:" ? "wss://" : "ws://") +
       window.location.host +
-      `/ws/chat/user/${currentUserId}/`;
+      `/ws/chat/user/${userId}/`;
 
     chatSocket = new WebSocket(socketUrl);
 

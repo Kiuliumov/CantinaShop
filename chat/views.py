@@ -7,6 +7,7 @@ from django.template.context_processors import static
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import TemplateView
+from django.contrib.auth import get_user_model
 
 from accounts.models import Account, UserModel
 from chat.models import ChatMessage
@@ -32,16 +33,12 @@ class AdminChatHubView(UserPassesTestMixin, TemplateView):
 @method_decorator(login_required, name='dispatch')
 class ChatMessagesView(View):
     def get(self, request, user_id, **kwargs):
-        from django.contrib.auth import get_user_model
         UserModel = get_user_model()
 
         try:
             user = UserModel.objects.get(id=user_id)
         except UserModel.DoesNotExist:
             raise Http404("User not found")
-
-        if not (request.user.is_staff or request.user.is_superuser):
-            raise Http404("Not permitted")
 
         try:
             limit = int(request.GET.get('limit', 100))
@@ -50,18 +47,18 @@ class ChatMessagesView(View):
         except ValueError:
             limit = 100
 
+        admins = UserModel.objects.filter(Q(is_staff=True) | Q(is_superuser=True))
+
         messages_qs = ChatMessage.objects.filter(
-            Q(sender=user, recipient__id=0) |
-            Q(sender__id=0, recipient=user) |
-            Q(sender=user, recipient=request.user) |
-            Q(sender=request.user, recipient=user)
+            Q(sender__id=user_id, recipient__in=admins) |
+            Q(sender__in=admins, recipient__id=user_id)
         ).order_by('-timestamp')[:limit]
 
         messages = reversed(messages_qs)
 
         messages_data = []
         for msg in messages:
-            if msg.sender_id == 0:
+            if user.is_staff or user.is_superuser:
                 sender_username = "Admin"
                 avatar_url = static('images/admin.jpg')
                 from_admin = True

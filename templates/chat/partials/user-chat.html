@@ -28,6 +28,7 @@
   document.addEventListener('DOMContentLoaded', () => {
     chatApp.init();
   });
+      const userIsStaffOrSuperuser = {{ user.is_staff|yesno:"true,false" }} || {{ user.is_superuser|yesno:"true,false" }};
 </script>
 
   <script src="{% static 'js/chatFrontEnd.js' %}"></script>
