@@ -13,11 +13,17 @@ const chatSocket = new WebSocket(
 );
 
 chatToggle.addEventListener('click', () => {
-  chatBox.classList.toggle('hidden');
+  chatBox.classList.remove('opacity-0', 'invisible');
+  chatBox.classList.add('opacity-100', 'visible');
+  chatToggle.classList.add('hidden');
 });
 
 chatClose.addEventListener('click', () => {
-  chatBox.classList.add('hidden');
+  chatBox.classList.remove('opacity-100', 'visible');
+  chatBox.classList.add('opacity-0', 'invisible');
+  setTimeout(() => {
+    chatToggle.classList.remove('hidden');
+  }, 300);
 });
 
 chatSocket.onmessage = function(e) {
@@ -25,7 +31,7 @@ chatSocket.onmessage = function(e) {
   const message = data.message;
   const username = data.username;
   const avatarUrl = data.avatar_url || adminAvatarUrl;
-  if(username === "{{ user.username }}"){
+  if (username === "{{ user.username }}") {
     addUserMessage(message, avatarUrl);
   } else {
     addAdminMessage(message, avatarUrl);
@@ -42,7 +48,7 @@ chatForm.addEventListener('submit', (e) => {
   if (!message) return;
   chatSocket.send(JSON.stringify({
     'message': message,
-    'avatar_url': "{{ user.account.image_url|default:'/static/images/avatar.png' }}"
+    'avatar_url': userAvatarUrl
   }));
   chatInput.value = '';
 });
