@@ -1,0 +1,25 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Confirm Your Email</title>
+  <link rel="stylesheet" href="{% static 'css/email.css' %}" />
+</head>
+<body>
+  <div class="container">
+    <h1>Confirm Your Email Address</h1>
+    <p>Hi {{ user.get_full_name|default:user.username }},</p>
+    <p>Thank you for registering. Please confirm your email address by clicking the button below:</p>
+    <p style="text-align: center;">
+      <a href="{{ activation_link }}" class="button" target="_blank" rel="noopener noreferrer">Activate Account</a>
+    </p>
+    <p>If you didn’t create an account, you can safely ignore this email.</p>
+    <div class="footer">
+      &copy; {{ current_year }} CantinaShop. All rights reserved.
+    </div>
+  </div>
+</body>
+</html>
