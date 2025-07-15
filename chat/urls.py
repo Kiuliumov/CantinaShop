@@ -1,5 +1,6 @@
 from django.urls import path
 
+from chat import routing
 from chat.views import AdminChatHubView, ChatMessagesAPIView
 
 urlpatterns = [

@@ -2,7 +2,7 @@
   let chatSocket = null;
   let chatMessages, chatForm, chatInput, chatToggleBtn, chatBox;
 
-  let currentUserId = window.currentUserId || null;
+  let currentUserId = window.chatConfig?.userId || null;
 
   function init() {
     chatMessages = document.getElementById('chat-messages');
@@ -48,8 +48,8 @@
   async function loadChatMessages(userId) {
     clearChat();
     try {
-      const res = await fetch(`/chat/messages/${userId}/`);
-      console.log(`/chat/messages/${userId}/`)
+      const url = window.chatConfig.apiMessagesUrl.replace(/\/\d+\/$/, `/${userId}/`);
+      const res = await fetch(url);
       if (!res.ok) throw new Error('Failed to fetch messages');
       const data = await res.json();
 
@@ -58,7 +58,7 @@
         addMessage({
           text: msg.message,
           username: msg.sender_username,
-          avatarUrl: (msg.sender_id === 0 || msg.from_admin) ? '/static/images/admin.jpg' : (msg.avatar_url || '/static/images/avatar.png'),
+          avatarUrl: (msg.sender_id === 0 || msg.from_admin) ? window.chatConfig.adminAvatarUrl : (msg.avatar_url || window.chatConfig.defaultAvatarUrl),
           timestamp: msg.timestamp,
           fromAdmin: msg.sender_id === 0 || msg.from_admin,
         });
@@ -71,12 +71,9 @@
   function connectSocket(userId) {
     if (chatSocket) chatSocket.close();
 
-    const socketUrl =
-      (window.location.protocol === "https:" ? "wss://" : "ws://") +
-      window.location.host +
-      `/ws/chat/user/${userId}/`;
+    const baseWsUrl = window.chatConfig.wsChatUrl.replace(/\/\d+\/$/, `/${userId}/`);
 
-    chatSocket = new WebSocket(socketUrl);
+    chatSocket = new WebSocket(baseWsUrl);
 
     chatSocket.onopen = () => {
       chatInput.disabled = false;
@@ -89,7 +86,7 @@
       addMessage({
         text: data.message,
         username: data.username,
-        avatarUrl: data.avatar_url || '/static/images/avatar.png',
+        avatarUrl: data.avatar_url || window.chatConfig.defaultAvatarUrl,
         timestamp: data.timestamp,
         fromAdmin: data.from_admin,
       });
@@ -103,46 +100,45 @@
   }
 
   function addMessage({ text, username, avatarUrl, timestamp, fromAdmin }) {
-  const bubble = document.createElement('div');
-  bubble.className = 'flex flex-col space-y-1 max-w-xs ' + (fromAdmin ? 'items-end ml-auto' : 'items-start mr-auto');
+    const bubble = document.createElement('div');
+    bubble.className = 'flex flex-col space-y-1 max-w-xs ' + (fromAdmin ? 'items-end ml-auto' : 'items-start mr-auto');
 
-  const bubbleRow = document.createElement('div');
-  bubbleRow.className = 'flex items-start gap-2';
+    const bubbleRow = document.createElement('div');
+    bubbleRow.className = 'flex items-start gap-2';
 
-  const avatar = document.createElement('img');
-  avatar.src = avatarUrl;
-  avatar.alt = username;
-  avatar.className = 'w-8 h-8 rounded-full object-cover' + (fromAdmin ? ' ml-2' : '');
+    const avatar = document.createElement('img');
+    avatar.src = avatarUrl;
+    avatar.alt = username;
+    avatar.className = 'w-8 h-8 rounded-full object-cover' + (fromAdmin ? ' ml-2' : '');
 
-  const msgDiv = document.createElement('div');
-  msgDiv.className = fromAdmin
-    ? 'bg-gray-200 text-gray-900 px-3 py-2 rounded-lg break-words'
-    : 'bg-blue-600 text-white px-3 py-2 rounded-lg break-words';
+    const msgDiv = document.createElement('div');
+    msgDiv.className = fromAdmin
+      ? 'bg-gray-200 text-gray-900 px-3 py-2 rounded-lg break-words'
+      : 'bg-blue-600 text-white px-3 py-2 rounded-lg break-words';
 
-  msgDiv.style.wordBreak = 'break-word';
-  msgDiv.textContent = text;
+    msgDiv.style.wordBreak = 'break-word';
+    msgDiv.textContent = text;
 
-  if (fromAdmin) {
-    bubbleRow.appendChild(msgDiv);
-    bubbleRow.appendChild(avatar);
-  } else {
-    bubbleRow.appendChild(avatar);
-    bubbleRow.appendChild(msgDiv);
+    if (fromAdmin) {
+      bubbleRow.appendChild(msgDiv);
+      bubbleRow.appendChild(avatar);
+    } else {
+      bubbleRow.appendChild(avatar);
+      bubbleRow.appendChild(msgDiv);
+    }
+
+    const timeDiv = document.createElement('div');
+    timeDiv.className = 'text-xs text-gray-400';
+    timeDiv.textContent = timestamp
+      ? new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      : '';
+
+    bubble.appendChild(bubbleRow);
+    bubble.appendChild(timeDiv);
+
+    chatMessages.appendChild(bubble);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
   }
-
-  const timeDiv = document.createElement('div');
-  timeDiv.className = 'text-xs text-gray-400';
-  timeDiv.textContent = timestamp
-    ? new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    : '';
-
-  bubble.appendChild(bubbleRow);
-  bubble.appendChild(timeDiv);
-
-  chatMessages.appendChild(bubble);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
 
   function onSendMessage(e) {
     e.preventDefault();

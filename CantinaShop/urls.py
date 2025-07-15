@@ -18,6 +18,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+import chat.routing
 from CantinaShop import settings
 
 urlpatterns = [
@@ -25,4 +26,5 @@ urlpatterns = [
     path('', include('common.urls')),
     path('accounts/', include('accounts.urls')),
     path('chat/', include('chat.urls')),
-] + static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
+
+] + static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0]) + chat.routing.websocket_urlpatterns
