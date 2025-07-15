@@ -1,7 +1,8 @@
 from django.urls import path
 
-from chat.views import RecentChatMessagesView
+from chat.views import AdminChatHubView, ChatMessagesView
 
 urlpatterns = [
-    path('recent/', RecentChatMessagesView.as_view(), name='recent_chat_messages'),
+    path('admin/', AdminChatHubView.as_view(), name='admin_chat_hub'),
+    path('messages/<int:user_id>/', ChatMessagesView.as_view(), name='chat_messages'),
 ]

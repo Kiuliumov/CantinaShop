@@ -1,9 +1,6 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -27,6 +24,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
+        if hasattr(self, 'room_group_name') and self.room_group_name:
+            await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
     async def receive(self, text_data):
@@ -37,9 +36,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         sender = self.user
 
-        # Determine recipient for message:
         if sender.is_staff or sender.is_superuser:
-            # Admin sends message to recipient user id from URL
             recipient = await self.get_user(self.recipient_user_id)
             if not recipient:
                 return
@@ -76,7 +73,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             )
 
     async def chat_message(self, event):
-        # Send message event to WebSocket
         await self.send(text_data=json.dumps({
             'message': event['message'],
             'username': event['username'],
@@ -87,6 +83,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def get_user(self, user_id):
+        from django.contrib.auth import get_user_model
+
+        User = get_user_model()
+
+
         try:
             return User.objects.get(id=user_id)
         except User.DoesNotExist:
@@ -94,6 +95,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def get_admin_user(self):
+        from django.contrib.auth import get_user_model
+
+        User = get_user_model()
         return User.objects.filter(is_staff=True).first()
 
     @database_sync_to_async
