@@ -17,6 +17,10 @@ class ChatMessagesAPIView(APIView):
         UserModel = get_user_model()
         user = get_object_or_404(UserModel, id=user_id)
 
+
+        if not request.user.is_superuser and not request.user.is_staff and user.id != request.user.id:
+            raise PermissionDenied
+
         admins = UserModel.objects.filter(Q(is_staff=True) | Q(is_superuser=True))
         messages_qs = (ChatMessage.objects.filter(
             Q(sender=user, recipient__in=admins) |
