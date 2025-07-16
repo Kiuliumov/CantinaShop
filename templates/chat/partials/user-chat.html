@@ -24,22 +24,22 @@
 {% endif %}
 
 <script>
-    window.currentUserId = "{{ request.user.id }}";
     window.chatConfig = {
         userId: {{ request.user.id|default:'null' }},
+        wsProtocol: "{{ request.is_secure|yesno:'wss,ws' }}",
+        host: "{{ request.get_host }}",
         {% if request.user.is_authenticated %}
           apiMessagesUrl: "{% url 'chat-messages-api-base' request.user.id %}",
         {% else %}
           apiMessagesUrl: null,
         {% endif %}        
-        wsChatUrl: "{% if request.is_secure %}wss{% else %}ws{% endif %}://{{ request.get_host }}{% url 'chat-ws-user' user_id=request.user.id %}",
         adminAvatarUrl: "{% static 'images/admin.jpg' %}",
-        defaultAvatarUrl: "{% static 'images/avatar.png' %}"
+        defaultAvatarUrl: "{% static 'images/avatar.png' %}",
+        userIsStaffOrSuperuser: {{ user.is_staff|yesno:"true,false" }} || {{ user.is_superuser|yesno:"true,false" }}
   };
   document.addEventListener('DOMContentLoaded', () => {
     chatApp.init();
   });
-      const userIsStaffOrSuperuser = {{ user.is_staff|yesno:"true,false" }} || {{ user.is_superuser|yesno:"true,false" }};
 </script>
 
   <script src="{% static 'js/chatFrontEnd.js' %}"></script>

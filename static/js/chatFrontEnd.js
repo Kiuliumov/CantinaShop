@@ -1,6 +1,7 @@
 (function () {
   let chatSocket = null;
   let chatMessages, chatForm, chatInput, chatToggleBtn, chatBox;
+const wsChatUrl = `${window.chatConfig.wsProtocol}://${window.chatConfig.host}/ws/chat/user/${window.chatConfig.userId}/`;
 
   let currentUserId = window.chatConfig?.userId || null;
 
@@ -27,7 +28,7 @@
   function toggleChat() {
     if (!chatBox) return;
 
-    if (userIsStaffOrSuperuser) {
+    if (window.chatConfig.userIsStaffOrSuperuser) {
       window.location.href = `chat/admin`;
     }
 
@@ -71,8 +72,7 @@
   function connectSocket(userId) {
     if (chatSocket) chatSocket.close();
 
-    const baseWsUrl = window.chatConfig.wsChatUrl.replace(/\/\d+\/$/, `/${userId}/`);
-
+    const baseWsUrl = wsChatUrl.replace(/\/\d+\/$/, `/${userId}/`);
     chatSocket = new WebSocket(baseWsUrl);
 
     chatSocket.onopen = () => {
@@ -109,7 +109,7 @@
     const avatar = document.createElement('img');
     avatar.src = avatarUrl;
     avatar.alt = username;
-    avatar.className = 'w-8 h-8 rounded-full object-cover' + (fromAdmin ? ' ml-2' : '');
+    avatar.className = 'w-8 h-8 rounded-full object-cover';
 
     const msgDiv = document.createElement('div');
     msgDiv.className = fromAdmin
