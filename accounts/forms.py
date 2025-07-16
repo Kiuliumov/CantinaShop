@@ -77,7 +77,7 @@ class LoginForm(AuthenticationForm):
 
 class AccountForm(forms.ModelForm):
     username = forms.CharField(max_length=150)
-    profile_picture = forms.ImageField(required=False)  # NEW
+    profile_picture = forms.ImageField(required=False)
     street_address = forms.CharField(required=False)
     city = forms.CharField(required=False)
     state = forms.CharField(required=False)
