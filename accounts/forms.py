@@ -76,6 +76,10 @@ class LoginForm(AuthenticationForm):
 
 
 class AccountForm(forms.ModelForm):
+
+    """
+    Shows account details and adds account data.
+    """
     username = forms.CharField(max_length=150)
     profile_picture = forms.ImageField(required=False)
     street_address = forms.CharField(required=False)
