@@ -47,41 +47,20 @@ class Address(models.Model):
         ('other', 'Other'),
     ]
 
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='addresses')
-    address_type = models.CharField(max_length=10, choices=ADDRESS_TYPE_CHOICES, default='shipping')
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='addresses', blank=True, null=True)
+    address_type = models.CharField(max_length=10, choices=ADDRESS_TYPE_CHOICES, default='shipping', blank=True, null=True)
     label = models.CharField(max_length=30, blank=True, null=True)
 
-    street_address = models.CharField(max_length=100, blank=True)
-    city = models.CharField(max_length=50, blank=True)
-    state = models.CharField(max_length=50, blank=True)
-    postal_code = models.CharField(max_length=20, blank=True)
-    country = models.CharField(max_length=50, blank=True)
+    street_address = models.CharField(max_length=100, blank=True, null=True)
+    city = models.CharField(max_length=50, blank=True, null=True)
+    state = models.CharField(max_length=50, blank=True, null=True)
+    postal_code = models.CharField(max_length=20, blank=True, null=True)
+    country = models.CharField(max_length=50, blank=True, null=True)
 
     is_default = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    def clean(self):
-        errors = {}
-
-        if self.address_type in ['shipping', 'billing'] and not self.street_address:
-            errors['street_address'] = _('Street address is required for shipping or billing addresses.')
-
-        if self.address_type in ['shipping', 'billing'] and not self.city:
-            errors['city'] = _('City is required for shipping or billing addresses.')
-
-        if self.address_type in ['shipping', 'billing'] and not self.country:
-            errors['country'] = _('Country is required for shipping or billing addresses.')
-
-        if self.postal_code and len(self.postal_code) > 20:
-            errors['postal_code'] = _('Postal code cannot be longer than 20 characters.')
-
-        if self.label and len(self.label) > 30:
-            errors['label'] = _('Label cannot be longer than 30 characters.')
-
-        if errors:
-            raise ValidationError(errors)
 
     def save(self, *args, **kwargs):
         self.full_clean()
