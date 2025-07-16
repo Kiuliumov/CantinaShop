@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, get_user_model
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
-from .image_cloud_storage import upload_to_cloud_storage
+from .image_cloud_storage import upload_to_cloud_storage, get_public_id_from_url, delete_cloudinary_image
 from .models import UserModel, Account, Address
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
@@ -137,6 +137,11 @@ class AccountForm(forms.ModelForm):
             user.save()
 
         profile_picture: InMemoryUploadedFile = self.cleaned_data.get('profile_picture')
+
+        if account.profile_picture_url:
+            public_id = get_public_id_from_url(account.profile_picture_url)
+            delete_cloudinary_image(public_id)
+
         if profile_picture:
             image_url = upload_to_cloud_storage(profile_picture)
             account.profile_picture_url = image_url
