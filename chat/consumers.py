@@ -15,6 +15,11 @@ class BaseChatConsumer(AsyncWebsocketConsumer):
 
         self.user = user
 
+        is_banned = await self.is_user_banned(user)
+        if is_banned:
+            await self.close()
+            return
+
         if user.is_staff or user.is_superuser:
             self.recipient_user_id = self.scope['url_route']['kwargs'].get('user_id')
             if not self.recipient_user_id:
@@ -107,6 +112,10 @@ class BaseChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def get_avatar_url(self, chat_message):
         return chat_message.avatar_url
+
+    @database_sync_to_async
+    def is_user_banned(self, user):
+        return getattr(user, 'is_chat_banned', False)
 
 
 class UserConsumer(BaseChatConsumer):

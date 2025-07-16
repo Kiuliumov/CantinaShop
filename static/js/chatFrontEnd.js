@@ -26,21 +26,28 @@
   }
 
   function toggleChat() {
-    if (!chatBox) return;
+  if (!chatBox) return;
 
-    if (window.chatConfig.userIsStaffOrSuperuser) {
-      window.location.href = `chat/admin`;
-    }
-
-    const isOpen = chatBox.classList.contains('opacity-100');
-    if (isOpen) {
-      chatBox.classList.remove('opacity-100', 'visible');
-      chatBox.classList.add('opacity-0', 'invisible');
-    } else {
-      chatBox.classList.remove('opacity-0', 'invisible');
-      chatBox.classList.add('opacity-100', 'visible');
-    }
+  if (window.chatConfig.userIsStaffOrSuperuser) {
+    window.location.href = `chat/admin`;
+    return;
   }
+
+  console.log(window.chatConfig.userIsChatBanned);
+  if (window.chatConfig.userIsChatBanned) {
+    showChatBanAlert();
+    return;
+  }
+
+  const isOpen = chatBox.classList.contains('opacity-100');
+  if (isOpen) {
+    chatBox.classList.remove('opacity-100', 'visible');
+    chatBox.classList.add('opacity-0', 'invisible');
+  } else {
+    chatBox.classList.remove('opacity-0', 'invisible');
+    chatBox.classList.add('opacity-100', 'visible');
+  }
+}
 
   function clearChat() {
     chatMessages.innerHTML = '';
@@ -82,15 +89,15 @@
     };
 
     chatSocket.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      addMessage({
-        text: data.message,
-        username: data.username,
-        avatarUrl: data.avatar_url || window.chatConfig.defaultAvatarUrl,
-        timestamp: data.timestamp,
-        fromAdmin: data.from_admin,
-      });
-    };
+    const data = JSON.parse(e.data);
+    addMessage({
+      text: data.message,
+      username: data.username,
+      avatarUrl: data.avatar_url || window.chatConfig.defaultAvatarUrl,
+      timestamp: data.timestamp,
+      fromAdmin: data.from_admin,
+    });
+  };
 
     chatSocket.onclose = () => {
       chatInput.disabled = true;
@@ -150,6 +157,31 @@
     chatSocket.send(JSON.stringify({ message }));
     chatInput.value = '';
   }
+
+  function showChatBanAlert() {
+  if (document.getElementById('chat-ban-alert')) return;
+
+  const alertBox = document.createElement('div');
+  alertBox.id = 'chat-ban-alert';
+  alertBox.className = 'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50';
+
+  alertBox.innerHTML = `
+    <div class="bg-gray-900 text-gray-100 p-6 rounded-xl shadow-lg max-w-sm w-full text-center space-y-4">
+      <h2 class="text-lg font-semibold text-red-500">You are banned from using the live chat.</h2>
+      <p class="text-sm text-gray-300">Please contact support if you believe this is a mistake.</p>
+      <button id="close-chat-ban-alert" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition">
+        Close
+      </button>
+    </div>
+  `;
+
+  document.body.appendChild(alertBox);
+
+  document.getElementById('close-chat-ban-alert').addEventListener('click', () => {
+    alertBox.remove();
+  });
+}
+
 
   window.chatApp = { init };
 })();

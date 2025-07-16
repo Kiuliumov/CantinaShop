@@ -35,8 +35,9 @@
         {% endif %}        
         adminAvatarUrl: "{% static 'images/admin.jpg' %}",
         defaultAvatarUrl: "{% static 'images/avatar.png' %}",
-        userIsStaffOrSuperuser: {{ user.is_staff|yesno:"true,false" }} || {{ user.is_superuser|yesno:"true,false" }}
-  };
+        userIsStaffOrSuperuser: {{ user.is_staff|yesno:"true,false" }} || {{ user.is_superuser|yesno:"true,false" }},
+        userIsChatBanned: {{ request.user.is_chat_banned|yesno:"true,false" }},
+    };
   document.addEventListener('DOMContentLoaded', () => {
     chatApp.init();
   });
