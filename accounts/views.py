@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.views import LoginView, LogoutView
@@ -6,11 +7,12 @@ from django.urls import reverse_lazy
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.views import View
-from django.views.generic.edit import FormView
+from django.views.generic.edit import FormView, UpdateView
 from django.contrib import messages
 
 from common.email_service import EmailService
-from .forms import RegistrationForm, LoginForm
+from .forms import RegistrationForm, LoginForm, AccountForm
+from .models import Account
 
 User = get_user_model()
 EMAIL_SENDER = 'no-reply@cantinashop.com'
@@ -64,3 +66,29 @@ class Login(ProfileProhibitedMixin, LoginView):
 
 class Logout(LogoutView):
     next_page = reverse_lazy('index')
+
+class AccountUpdateView(LoginRequiredMixin, UpdateView):
+    model = Account
+    form_class = AccountForm
+    template_name = 'accounts/account_info.html'
+    success_url = reverse_lazy('account')
+
+    def get_object(self, queryset=None):
+        return Account.objects.get(user=self.request.user)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        form = context['form']
+        context['address_fields'] = [
+            form['street_address'],
+            form['city'],
+            form['state'],
+            form['postal_code'],
+            form['country'],
+        ]
+        return context

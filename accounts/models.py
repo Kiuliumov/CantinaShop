@@ -1,5 +1,8 @@
+from django.utils.translation import gettext_lazy as _
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from rest_framework.exceptions import ValidationError
 
 
 class UserModel(AbstractUser):
@@ -58,6 +61,31 @@ class Address(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def clean(self):
+        errors = {}
+
+        if self.address_type in ['shipping', 'billing'] and not self.street_address:
+            errors['street_address'] = _('Street address is required for shipping or billing addresses.')
+
+        if self.address_type in ['shipping', 'billing'] and not self.city:
+            errors['city'] = _('City is required for shipping or billing addresses.')
+
+        if self.address_type in ['shipping', 'billing'] and not self.country:
+            errors['country'] = _('Country is required for shipping or billing addresses.')
+
+        if self.postal_code and len(self.postal_code) > 20:
+            errors['postal_code'] = _('Postal code cannot be longer than 20 characters.')
+
+        if self.label and len(self.label) > 30:
+            errors['label'] = _('Label cannot be longer than 30 characters.')
+
+        if errors:
+            raise ValidationError(errors)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.label or self.address_type} address for {self.account.user.username}"

@@ -1,6 +1,6 @@
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, get_user_model
 
-from .models import UserModel, Account
+from .models import UserModel, Account, Address
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
 
@@ -69,3 +69,92 @@ class LoginForm(AuthenticationForm):
             self.user_cache = user
 
         return self.cleaned_data
+
+
+
+
+class AccountForm(forms.ModelForm):
+    username = forms.CharField(max_length=150)
+    street_address = forms.CharField(required=False)
+    city = forms.CharField(required=False)
+    state = forms.CharField(required=False)
+    postal_code = forms.CharField(required=False)
+    country = forms.CharField(required=False)
+
+    class Meta:
+        model = Account
+        fields = [
+            'username', 'profile_picture_url', 'phone_number',
+            'street_address', 'city', 'state', 'postal_code', 'country',
+        ]
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            existing_classes = field.widget.attrs.get('class', '')
+            field.widget.attrs['class'] = (
+                existing_classes + ' w-full px-5 py-3 bg-gray-700 border border-gray-600 rounded-lg '
+                'text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-3 focus:ring-indigo-500 '
+                'focus:border-indigo-400 transition'
+            ).strip()
+
+        if user:
+            self.fields['username'].initial = user.username
+
+        if self.instance and hasattr(self.instance, 'default_shipping') and self.instance.default_shipping:
+            addr = self.instance.default_shipping
+            self.fields['street_address'].initial = addr.street_address
+            self.fields['city'].initial = addr.city
+            self.fields['state'].initial = addr.state
+            self.fields['postal_code'].initial = addr.postal_code
+            self.fields['country'].initial = addr.country
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        qs = UserModel.objects.filter(username=username).exclude(pk=self.instance.user.pk)
+        if qs.exists():
+            raise forms.ValidationError("This username is already taken.")
+        return username
+
+    def clean_postal_code(self):
+        postal_code = self.cleaned_data.get('postal_code')
+        if postal_code and len(postal_code) > 20:
+            raise forms.ValidationError("Postal code cannot exceed 20 characters.")
+        return postal_code
+
+    def save(self, commit=True):
+        account = super().save(commit=False)
+        user = account.user
+
+        new_username = self.cleaned_data['username']
+        if user.username != new_username:
+            user.username = new_username
+            user.save()
+
+        if commit:
+            account.save()
+
+        address_data = {
+            'street_address': self.cleaned_data.get('street_address', ''),
+            'city': self.cleaned_data.get('city', ''),
+            'state': self.cleaned_data.get('state', ''),
+            'postal_code': self.cleaned_data.get('postal_code', ''),
+            'country': self.cleaned_data.get('country', ''),
+            'address_type': 'shipping',
+            'account': account,
+        }
+
+        default_shipping = getattr(account, 'default_shipping', None)
+        if default_shipping:
+            for attr, value in address_data.items():
+                setattr(default_shipping, attr, value)
+            default_shipping.save()
+        else:
+            new_address = Address.objects.create(**address_data)
+            account.default_shipping = new_address
+            if commit:
+                account.save()
+
+        return account

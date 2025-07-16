@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import RegisterView, ActivateAccount, Login, Logout
+from .views import RegisterView, ActivateAccount, Login, Logout, AccountUpdateView
 from django.views.generic import TemplateView
 
 urlpatterns = [
@@ -18,4 +18,6 @@ urlpatterns = [
     path('activation-success/',
              TemplateView.as_view(template_name='accounts/activation_success.html'),
              name='activation_success'),
+
+    path('', AccountUpdateView.as_view(), name='account'),
 ]
