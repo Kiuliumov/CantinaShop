@@ -1,7 +1,7 @@
 (function () {
   let chatSocket = null;
   let chatMessages, chatForm, chatInput, chatToggleBtn, chatBox;
-const wsChatUrl = `${window.chatConfig.wsProtocol}://${window.chatConfig.host}/ws/chat/user/${window.chatConfig.userId}/`;
+  const wsChatUrl = `${window.chatConfig.wsProtocol}://${window.chatConfig.host}/ws/chat/user/${window.chatConfig.userId}/`;
 
   let currentUserId = window.chatConfig?.userId || null;
 

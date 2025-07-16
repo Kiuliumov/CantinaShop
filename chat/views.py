@@ -2,18 +2,21 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.http import JsonResponse, Http404
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.template.context_processors import static
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import TemplateView
 from django.contrib.auth import get_user_model
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import Account, UserModel
 from chat.models import ChatMessage
+from chat.serializers import ChatMessageSerializer
+
 
 class AdminChatHubView(UserPassesTestMixin, TemplateView):
     template_name = 'chat/hub.html'
@@ -38,47 +41,23 @@ class ChatMessagesAPIView(APIView):
 
     def get(self, request, user_id, **kwargs):
         UserModel = get_user_model()
+        user = get_object_or_404(UserModel, id=user_id)
 
-        try:
-            user = UserModel.objects.get(id=user_id)
-        except UserModel.DoesNotExist:
-            raise Http404("User not found")
+        admins = UserModel.objects.filter(Q(is_staff=True) | Q(is_superuser=True))
+        messages_qs = ChatMessage.objects.filter(
+            Q(sender=user, recipient__in=admins) |
+            Q(sender__in=admins, recipient=user)
+        ).order_by('timestamp')
 
+        limit = request.GET.get('limit', 100)
         try:
-            limit = int(request.GET.get('limit', 100))
+            limit = int(limit)
             if limit <= 0:
                 limit = 100
         except ValueError:
             limit = 100
+        messages_qs = messages_qs[:limit]
 
-        admins = UserModel.objects.filter(Q(is_staff=True) | Q(is_superuser=True))
+        serializer = ChatMessageSerializer(messages_qs, many=True, context={'request': request})
 
-        messages_qs = ChatMessage.objects.filter(
-            Q(sender__id=user_id, recipient__in=admins) |
-            Q(sender__in=admins, recipient__id=user_id)
-        ).order_by('-timestamp')[:limit]
-
-        messages = reversed(messages_qs)
-
-        messages_data = []
-        for msg in messages:
-            if request.user.is_staff or request.user.is_superuser:
-                sender_username = "Admin" if msg.sender.is_staff or msg.sender.is_superuser else msg.sender.username
-                avatar_url = static('images/admin.jpg') if msg.sender.is_staff or msg.sender.is_superuser else getattr(msg.sender.account, 'profile_picture_url', '') or '/static/images/avatar.png'
-                from_admin = msg.sender.is_staff or msg.sender.is_superuser
-            else:
-                sender_username = msg.sender.username
-                avatar_url = getattr(msg.sender.account, 'profile_picture_url', '') or '/static/images/avatar.png'
-                from_admin = msg.sender.is_staff or msg.sender.is_superuser
-
-            messages_data.append({
-                'id': msg.id,
-                'message': msg.message,
-                'sender_id': msg.sender_id,
-                'sender_username': sender_username,
-                'avatar_url': avatar_url,
-                'timestamp': msg.timestamp.isoformat(),
-                'from_admin': from_admin,
-            })
-
-        return Response({'messages': messages_data})
+        return Response({'messages': serializer.data})
