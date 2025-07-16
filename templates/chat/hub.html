@@ -1,23 +1,21 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<div class="flex flex-col md:flex-row h-[80vh] gap-4">
+<div class="flex flex-col md:flex-row h-[80vh] gap-4 px-2 md:px-0">
 
-  <aside class="w-full md:w-1/4 bg-gray-800 rounded-lg p-4 overflow-y-auto">
-    <h2 class="text-xl font-semibold mb-2">Users</h2>
+  <aside class="w-full md:w-1/4 bg-gray-800 rounded-lg p-4 overflow-y-auto max-h-[50vh] md:max-h-full">
+    <h2 class="text-xl font-semibold mb-2 text-gray-100">Users</h2>
     <input
       type="text"
       id="user-search"
       placeholder="Search users..."
       class="w-full mb-4 p-2 rounded bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
     />
-    <ul id="user-list" class="space-y-3">
-
-    <ul id="user-list" class="space-y-3">
+    <ul id="user-list" class="space-y-3 max-h-[calc(50vh-8rem)] overflow-y-auto">
       {% for user in users %}
       <li>
         <button
-          class="w-full flex items-center space-x-3 p-2 rounded hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          class="w-full flex items-center space-x-3 p-2 rounded hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100"
           data-user-id="{{ user.user.id }}"
           data-username="{{ user.user.username }}"
         >
@@ -30,54 +28,67 @@
         </button>
       </li>
       {% empty %}
-      <li>No users found.</li>
+      <li class="text-gray-400">No users found.</li>
       {% endfor %}
     </ul>
   </aside>
 
-  <section class="flex-grow bg-gray-800 rounded-lg flex flex-col p-4">
+  <section class="flex-grow bg-gray-800 rounded-lg flex flex-col p-4 min-h-[60vh]">
     <header class="flex items-center border-b border-gray-700 pb-2 mb-4">
       <img src="{{ admin_avatar_url }}" alt="Admin" class="w-10 h-10 rounded-full object-cover mr-3">
-      <h3 id="chat-header" class="text-lg font-semibold">Select a user to chat</h3>
+      <h3 id="chat-header" class="text-lg font-semibold text-gray-100">Select a user to chat</h3>
     </header>
 
-    <div id="chat-messages" class="flex-grow overflow-y-auto mb-4 space-y-4 px-2">
+    <div id="chat-messages" class="flex-grow overflow-y-auto mb-4 space-y-4 px-2 text-gray-100">
+      <!-- messages go here -->
     </div>
 
-    <form id="chat-form" class="flex space-x-2">
-      <input
-        id="chat-input"
-        type="text"
-        placeholder="Type a message..."
-        class="flex-grow rounded px-3 py-2 bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        autocomplete="off"
-        disabled
-      />
-      <button
-        type="submit"
-        class="bg-indigo-600 hover:bg-indigo-700 text-white rounded px-4 py-2 disabled:opacity-50"
-        disabled
-      >
-        Send
-      </button>
-    </form>
+    <form id="chat-form" class="flex items-center space-x-2 w-full max-w-full">
+  <input
+    id="chat-input"
+    type="text"
+    placeholder="Type a message..."
+    class="flex-grow min-w-0 rounded px-3 py-2 bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+    autocomplete="off"
+    disabled
+  />
+  <button
+    type="submit"
+    class="bg-indigo-600 hover:bg-indigo-700 text-white rounded px-4 py-2 flex-shrink-0 disabled:opacity-50"
+    disabled
+  >
+    Send
+  </button>
+</form>
   </section>
 
 </div>
-    
 
 <script src="{% static 'js/chatAdmin.js' %}"></script>
 <script>
   const apiUrlWithUserId = "{% url 'chat-messages-api-base' 0 %}";
-    const messagesApiUrlBase = apiUrlWithUserId.slice(0, -2)
+  const messagesApiUrlBase = apiUrlWithUserId.slice(0, -2);
   window.chatConfig = {
     adminAvatarUrl: "{% static 'images/admin.jpg' %}",
-    defaultAvatarUrl: "{% static 'images/avatar.png' %}", 
+    defaultAvatarUrl: "{% static 'images/avatar.png' %}",
     messagesApiUrlBase: messagesApiUrlBase,
     websocketBaseUrl: "{{ websocket_base_url }}",
   };
   chatApp.init("{{ admin_avatar_url }}");
+
+  function handleFooterVisibility() {
+    const footer = document.querySelector('footer');
+    if (!footer) return;
+
+    if (window.innerWidth < 768) {
+      footer.classList.add('hidden');
+    } else {
+      footer.classList.remove('hidden');
+    }
+  }
+
+  window.addEventListener('resize', handleFooterVisibility);
+  window.addEventListener('load', handleFooterVisibility);
 </script>
-    
 
 {% endblock %}
