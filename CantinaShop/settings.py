@@ -1,12 +1,25 @@
+import os
 from pathlib import Path
 
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+from dotenv import load_dotenv
 from django.template.context_processors import static
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-f_&8fjh6u@(1-=8rs&8t5zn!lw)1jq#$ufx6s+vjkt6hlm$h-r'
+SECRET_KEY = os.getenv('SECRET_KEY', 'unsafe-dev-secret')
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-DEBUG = True
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+    secure=True
+)
+
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [BASE_DIR / 'static']
@@ -82,6 +95,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'CantinaShop.wsgi.application'
+
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+    secure=True
+)
 
 DATABASES = {
     'default': {

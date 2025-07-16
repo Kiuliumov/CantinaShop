@@ -27,7 +27,7 @@ class EmailService:
             'activation_link': activation_link,
         }
 
-        html_content = render_to_string('accounts/email_for_confirmation.html', context)
+        html_content = render_to_string('accounts/authentication/email_for_confirmation.html', context)
 
         email = EmailMultiAlternatives(subject, '', EMAIL_SENDER, [user.email])
         email.attach_alternative(html_content, "text/html")

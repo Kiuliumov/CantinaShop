@@ -1,5 +1,7 @@
 from django.contrib.auth import authenticate, get_user_model
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
+from .image_cloud_storage import upload_to_cloud_storage
 from .models import UserModel, Account, Address
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
@@ -75,6 +77,7 @@ class LoginForm(AuthenticationForm):
 
 class AccountForm(forms.ModelForm):
     username = forms.CharField(max_length=150)
+    profile_picture = forms.ImageField(required=False)  # NEW
     street_address = forms.CharField(required=False)
     city = forms.CharField(required=False)
     state = forms.CharField(required=False)
@@ -84,7 +87,7 @@ class AccountForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = [
-            'username', 'profile_picture_url', 'phone_number',
+            'username', 'phone_number', 'profile_picture',
             'street_address', 'city', 'state', 'postal_code', 'country',
         ]
 
@@ -132,6 +135,11 @@ class AccountForm(forms.ModelForm):
         if user.username != new_username:
             user.username = new_username
             user.save()
+
+        profile_picture: InMemoryUploadedFile = self.cleaned_data.get('profile_picture')
+        if profile_picture:
+            image_url = upload_to_cloud_storage(profile_picture)
+            account.profile_picture_url = image_url
 
         if commit:
             account.save()

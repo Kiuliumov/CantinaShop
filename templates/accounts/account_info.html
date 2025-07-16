@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Update Account{% endblock %}
+{% block title %}Account Details{% endblock %}
 
 {% block content %}
 <div class="max-w-2xl mx-auto bg-gray-800 p-10 rounded-2xl shadow-2xl">
@@ -23,7 +23,7 @@
     <p class="mt-4 text-gray-300 font-semibold text-lg">{{ form.instance.user.username }}</p>
   </div>
 
-  <form method="POST" class="space-y-7" novalidate>
+  <form method="POST" enctype="multipart/form-data" class="space-y-7" novalidate>
     {% csrf_token %}
 
     {% if form.non_field_errors %}
@@ -53,11 +53,24 @@
     </div>
 
     <div>
-      <label for="{{ form.profile_picture_url.id_for_label }}" class="block text-gray-300 mb-2 font-semibold tracking-wide">
-        Profile Picture URL
+      <label for="{{ form.profile_picture.id_for_label }}" class="block text-gray-300 mb-2 font-semibold tracking-wide">
+        Upload Profile Picture
       </label>
-      {{ form.profile_picture_url }}
-      {% for error in form.profile_picture_url.errors %}
+      <div class="flex items-center space-x-4">
+        <input
+          type="file"
+          name="{{ form.profile_picture.name }}"
+          id="{{ form.profile_picture.id_for_label }}"
+          accept="image/*"
+          class="block w-full text-sm text-gray-200
+                 file:mr-4 file:py-2 file:px-4
+                 file:rounded-full file:border-0
+                 file:text-sm file:font-semibold
+                 file:bg-indigo-600 file:text-white
+                 hover:file:bg-indigo-700 transition"
+        />
+      </div>
+      {% for error in form.profile_picture.errors %}
         <p class="text-red-500 text-sm mt-1">{{ error }}</p>
       {% endfor %}
     </div>

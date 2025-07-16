@@ -24,7 +24,7 @@ class ProfileProhibitedMixin:
         return super().dispatch(request, *args, **kwargs)
 
 class RegisterView(ProfileProhibitedMixin, FormView):
-    template_name = 'accounts/register.html'
+    template_name = 'accounts/authentication/register.html'
     form_class = RegistrationForm
     success_url = reverse_lazy('email_confirmation_sent')
 
@@ -56,7 +56,7 @@ class ActivateAccount(View):
         return redirect('activation_invalid')
 
 class Login(ProfileProhibitedMixin, LoginView):
-    template_name = 'accounts/login.html'
+    template_name = 'accounts/authentication/login.html'
     authentication_form = LoginForm
     redirect_authenticated_user = True
     success_url = reverse_lazy('index')
