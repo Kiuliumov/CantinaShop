@@ -6,21 +6,27 @@ import re
 profanity.load_censor_words()
 
 
+def split_to_words(value):
+    parts = re.findall(r'[A-Z]?[a-z]+|[A-Z]+|[0-9]+', value)
+    return parts
+
 @deconstructible
 class NoProfanityValidator:
     message = "Inappropriate language is not allowed."
     code = "profanity"
 
     def __init__(self, message=None, code=None):
+        profanity.load_censor_words()
         if message:
             self.message = message
         if code:
             self.code = code
 
     def __call__(self, value):
-        if profanity.contains_profanity(value):
-            raise ValidationError(self.message, code=self.code)
-
+        parts = split_to_words(value)
+        for part in parts:
+            if profanity.contains_profanity(part.lower()):
+                raise ValidationError(self.message, code=self.code)
 
 @deconstructible
 class PhoneNumberValidator:

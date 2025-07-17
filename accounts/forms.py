@@ -1,10 +1,14 @@
+from better_profanity import profanity
 from django.contrib.auth import authenticate
+from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from common.image_cloud_storage import upload_to_cloud_storage, get_public_id_from_url, delete_cloudinary_image
 from .models import UserModel, Account, Address
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
+
+from .validators import NoProfanityValidator
 
 
 class RegistrationForm(UserCreationForm):
@@ -39,6 +43,7 @@ class RegistrationForm(UserCreationForm):
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
+        NoProfanityValidator()(username)
         existing_users = UserModel.objects.filter(username=username)
         for user in existing_users:
             if not user.is_active:
@@ -46,6 +51,7 @@ class RegistrationForm(UserCreationForm):
             else:
                 raise forms.ValidationError("This username is already taken.")
         return username
+
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(label="Username or Email")
