@@ -40,9 +40,12 @@ class ProductListView(ListView):
         if search_query:
             qs = qs.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
 
-        category_id = self.request.GET.get('category')
-        if category_id:
-            qs = qs.filter(category_id=category_id)
+        category = self.request.GET.get('category')
+        if category:
+            if not category.isdigit():
+                qs = qs.filter(category__name__exact=category)
+            else:
+                qs = qs.filter(category_id=category)
 
         availability = self.request.GET.get('availability')
         if availability == 'available':
@@ -112,7 +115,7 @@ class AddProductView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
 
 class ProductDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
     model = Product
-    success_url = reverse_lazy('product_list')
+    success_url = reverse_lazy('product-list')
 
 class CommentDeleteView(LoginRequiredMixin, DeleteView):
     model = Comment
