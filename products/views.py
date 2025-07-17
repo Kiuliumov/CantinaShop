@@ -1,11 +1,14 @@
+from audioop import reverse
+
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.views.generic import ListView
+from django.shortcuts import redirect
+from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, FormMixin
 from django.urls import reverse_lazy
 from common.mixins import AdminRequiredMixin
-from .forms import ProductForm
+from .forms import ProductForm, CommentForm
 from products.models import Product, Category
 
 
@@ -65,6 +68,36 @@ class ProductListView(ListView):
         return params.urlencode()
 
 
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'products/product_details.html'
+    context_object_name = 'product'
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        comments = self.object.comments.select_related('account__user').order_by('-created_at')
+
+        paginator = Paginator(comments, 5)
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        context['comments'] = page_obj
+        context['form'] = CommentForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.product = self.object
+            comment.account = request.user.account
+            comment.save()
+            form = CommentForm()
+        context = self.get_context_data(form=form)
+        return self.render_to_response(context)
 
 class AddProductView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
     model = Product

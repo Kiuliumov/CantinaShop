@@ -1,5 +1,8 @@
 from django.db import models
 
+from accounts.models import Account
+
+
 # Create your models here.
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -27,3 +30,12 @@ class Product(models.Model):
 
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
+
+class Comment(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments')
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    content = models.TextField(max_length=500)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.account.user.username} on {self.product.name}"
