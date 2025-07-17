@@ -34,10 +34,10 @@
         </a>
 
         {% if request.user.is_staff or request.user.is_superuser %}
-          <a href="#" class="inline-flex items-center bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-4 py-3 rounded-lg shadow transition">
+          <a href="{% url 'product-edit' product.slug %}" class="inline-flex items-center bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-4 py-3 rounded-lg shadow transition">
             <i class="fas fa-edit mr-2"></i> Edit
           </a>
-          <form action="#" method="post" class="inline-block">
+          <form action="{% url 'product-delete' product.slug %}" method="post" class="inline-block">
             {% csrf_token %}
             <button type="submit" class="delete-btn inline-flex items-center bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-3 rounded-lg shadow transition">
               <i class="fas fa-trash-alt mr-2"></i> Delete
@@ -67,41 +67,36 @@
 
     {% if comments %}
       {% for comment in comments %}
-        <div class="mb-6 border-t border-gray-600 pt-4">
+        <div class="mb-6 border-t border-gray-600 pt-4" id="comment-{{ comment.id }}">
           <div class="flex justify-between items-center">
             <div class="flex items-center gap-3">
               {% if comment.account.profile_picture_url %}
-                <img src="{{ comment.account.profile_picture_url }}" alt="{{ comment.account.user.username }}'s profile picture" class="w-10 h-10 rounded-full object-cover shadow-sm">
+                <img src="{{ comment.account.profile_picture_url }}" alt="{{ comment.account.user.username }}" class="w-10 h-10 rounded-full object-cover shadow-sm">
               {% else %}
                 <img src="{% static 'images/avatar.png' %}" alt="Default profile picture" class="w-10 h-10 rounded-full object-cover shadow-sm">
               {% endif %}
-              <p class="text-sm text-indigo-300 font-semibold">
-                {{ comment.account.user.username }}
-              </p>
+              <p class="text-sm text-indigo-300 font-semibold">{{ comment.account.user.username }}</p>
             </div>
             <span class="text-xs text-gray-400">{{ comment.created_at|date:"M d, Y H:i" }}</span>
           </div>
 
-          <p class="mt-2 text-gray-200">{{ comment.content }}</p>
+          <div id="comment-content-{{ comment.id }}" class="mt-2 text-gray-200">{{ comment.content }}</div>
+
+          <form id="edit-form-{{ comment.id }}" action="{% url 'comment-edit' comment.pk %}" method="post" class="hidden mt-2 space-y-2">
+            {% csrf_token %}
+            <textarea name="content" rows="3" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">{{ comment.content }}</textarea>
+            <div class="flex gap-3">
+              <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded shadow">Save</button>
+              <button type="button" onclick="toggleEdit({{ comment.id }})" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold px-4 py-2 rounded shadow">Cancel</button>
+            </div>
+          </form>
 
           <div class="mt-2 flex gap-3 text-sm">
-            {% if request.user.is_staff or request.user.is_superuser %}
-              {% if request.user == comment.account.user %}
-                <a href="#" class="text-yellow-400 hover:text-yellow-500 transition">
-                  <i class="fas fa-edit"></i> Edit
-                </a>
-              {% endif %}
-              <form action="#" method="post" class="inline-block">
-                {% csrf_token %}
-                <button type="submit" class="delete-btn text-red-500 hover:text-red-600 transition">
-                  <i class="fas fa-trash-alt"></i> Delete
-                </button>
-              </form>
-            {% elif request.user == comment.account.user %}
-              <a href="#" class="text-yellow-400 hover:text-yellow-500 transition">
+            {% if request.user.is_staff or request.user.is_superuser or request.user == comment.account.user %}
+              <button onclick="toggleEdit({{ comment.id }})" class="text-yellow-400 hover:text-yellow-500 transition">
                 <i class="fas fa-edit"></i> Edit
-              </a>
-              <form action="#" method="post" class="inline-block">
+              </button>
+              <form action="{% url 'comment-delete' comment.pk %}" method="post" class="inline-block">
                 {% csrf_token %}
                 <button type="submit" class="delete-btn text-red-500 hover:text-red-600 transition ml-2">
                   <i class="fas fa-trash-alt"></i> Delete
@@ -135,5 +130,7 @@
     {% endif %}
   </div>
 </div>
+
 <script src="{% static 'js/confirmDelete.js' %}"></script>
+    <script src="{% static 'js/toggleEdit.js' %}"></script>
 {% endblock %}

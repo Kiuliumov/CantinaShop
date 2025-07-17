@@ -1,15 +1,16 @@
 from audioop import reverse
 
+from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import CreateView, FormMixin
+from django.views.generic.edit import CreateView, FormMixin, DeleteView, UpdateView
 from django.urls import reverse_lazy
 from common.mixins import AdminRequiredMixin
 from .forms import ProductForm, CommentForm
-from products.models import Product, Category
+from products.models import Product, Category, Comment
 
 
 class ProductListView(ListView):
@@ -108,3 +109,46 @@ class AddProductView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
     def form_invalid(self, form):
         print("Form errors:", form.errors.as_json())
         return super().form_invalid(form)
+
+class ProductDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
+    model = Product
+    success_url = reverse_lazy('product_list')
+
+class CommentDeleteView(LoginRequiredMixin, DeleteView):
+    model = Comment
+
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+        user = request.user
+        if user != obj.account.user and not (user.is_staff or user.is_superuser):
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        comment = self.get_object()
+        product_id = comment.product.id
+        return self.request.META.get('HTTP_REFERER', reverse_lazy('product-details', kwargs={'pk': product_id}))
+
+
+class ProductUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'products/edit_product.html'
+    context_object_name = 'product'
+
+    def get_success_url(self):
+        return reverse_lazy('product-details', kwargs={'slug': self.object.slug})
+
+
+class CommentUpdateView(LoginRequiredMixin, UpdateView):
+    model = Comment
+    form_class = CommentForm
+
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if request.user != obj.account.user and not request.user.is_staff:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse_lazy('product-details', kwargs={'slug': self.object.product.slug})
