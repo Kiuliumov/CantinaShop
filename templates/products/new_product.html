@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Add Product{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto bg-gray-800 p-10 rounded-2xl shadow-2xl">
+  <h1 class="text-3xl font-bold mb-8 text-center text-gray-100">Add New Product</h1>
+
+  <form method="POST" enctype="multipart/form-data" class="space-y-7" novalidate>
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+      {% for error in form.non_field_errors %}
+        <div class="text-red-500 text-sm mb-4">{{ error }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      {% for field in form.visible_fields %}
+        <div>
+          <label for="{{ field.id_for_label }}" class="block text-gray-300 mb-2 font-semibold tracking-wide">
+            {{ field.label }}
+          </label>
+
+          {% if field.field.widget.input_type == "file" %}
+            <input
+              type="file"
+              name="{{ field.name }}"
+              id="{{ field.id_for_label }}"
+              accept="image/*"
+              class="block w-full text-sm text-gray-200
+                     file:mr-4 file:py-2 file:px-4
+                     file:rounded-full file:border-0
+                     file:text-sm file:font-semibold
+                     file:bg-indigo-600 file:text-white
+                     hover:file:bg-indigo-700 transition"
+            />
+          {% else %}
+            {{ field }}
+          {% endif %}
+
+          {% for error in field.errors %}
+            <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <button
+      type="submit"
+      class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-3 mt-8 rounded-lg shadow-lg transition"
+    >
+      Add Product
+    </button>
+  </form>
+</div>
+{% endblock %}

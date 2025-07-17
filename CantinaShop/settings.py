@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'accounts',
     'common',
     'chat',
+    'products',
     'api'
 ] + DJANGO_APPS
 

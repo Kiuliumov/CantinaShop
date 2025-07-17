@@ -24,7 +24,7 @@ class AdminRequiredMixin(UserPassesTestMixin):
 class AddProductView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
-    template_name = 'products/add_product.html'
+    template_name = 'products/new_product.html'
     success_url = reverse_lazy('add-product')
 
     def form_valid(self, form):
