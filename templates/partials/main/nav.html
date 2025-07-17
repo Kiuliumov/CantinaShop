@@ -62,7 +62,7 @@
 
       {% if user.is_authenticated %}
         <li><a href="{% url 'index' %}" class="block hover:text-indigo-400">Cart</a></li>
-        <li><a href="{% url 'index' %}" class="block hover:text-indigo-400">Account</a></li>
+        <li><a href="{% url 'account' %}" class="block hover:text-indigo-400">Account</a></li>
         <li>
           <form method="POST" action="{% url 'logout' %}">
             {% csrf_token %}

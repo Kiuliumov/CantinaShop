@@ -1,7 +1,7 @@
 (function () {
   let adminAvatarUrl = window.chatConfig?.adminAvatarUrl || '/static/images/admin.jpg';
   let defaultAvatarUrl = window.chatConfig?.defaultAvatarUrl || '/static/images/avatar.png';
-  let messagesApiUrlBase = window.chatConfig?.messagesApiUrlBase || '/chat/messages/';
+  let messagesApiUrlBase = window.chatConfig?.messagesApiUrlBase || '/api/messages/';
   let websocketBaseUrl = window.chatConfig?.websocketBaseUrl || (window.location.protocol === "https:" ? "wss://" : "ws://") + window.location.host;
 
   let currentChatUserId = null;

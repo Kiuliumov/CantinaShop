@@ -44,7 +44,8 @@ DJANGO_APPS = [
 INSTALLED_APPS = [
     'accounts',
     'common',
-    'chat'
+    'chat',
+    'api'
 ] + DJANGO_APPS
 
 SITE_ID = 1

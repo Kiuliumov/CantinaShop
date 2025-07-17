@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from chat.api.serializers import ChatMessageSerializer
+from api.serializers import ChatMessageSerializer
 from chat.models import ChatMessage
 
 
