@@ -5,9 +5,15 @@
   <h1 class="text-4xl font-extrabold text-indigo-500 mb-8 text-center tracking-wide drop-shadow-lg">
     All Products
   </h1>
+  
 
-  <form method="GET" class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8 w-full max-w-full">
-    <input
+    <form method="GET" class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8 w-full max-w-full">
+       {% if request.user.is_staff or request.user.is_superuser %}
+        <a class="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-6 py-3 shadow transition text-lg font-semibold" href="{% url "product-add" %}">Add Product</a>
+        <a class="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-6 py-3 shadow transition text-lg font-semibold" href="{% url "product-add" %}">Add Category</a>
+      
+       {% endif %}
+        <input
       type="text"
       name="search"
       placeholder="Search products..."

@@ -9,19 +9,15 @@ from django.utils.http import urlsafe_base64_decode
 from django.views import View
 from django.views.generic.edit import FormView, UpdateView
 from django.contrib import messages
-
 from common.email_service import EmailService
+from common.mixins import ProfileProhibitedMixin
 from .forms import RegistrationForm, LoginForm, AccountForm
 from .models import Account
 
 User = get_user_model()
 EMAIL_SENDER = 'no-reply@cantinashop.com'
 
-class ProfileProhibitedMixin:
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return redirect('index')
-        return super().dispatch(request, *args, **kwargs)
+
 
 class RegisterView(ProfileProhibitedMixin, FormView):
     template_name = 'accounts/authentication/register.html'

@@ -1,12 +1,12 @@
-from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.views.generic import ListView
-from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.contrib import messages
-from django.shortcuts import redirect
+
+from common.mixins import AdminRequiredMixin
 from .forms import ProductForm
 from products.models import Product, Category
 
@@ -66,12 +66,7 @@ class ProductListView(ListView):
             params.pop('page')
         return params.urlencode()
 
-class AdminRequiredMixin(UserPassesTestMixin):
-    def test_func(self):
-        return self.request.user.is_staff or self.request.user.is_superuser
 
-    def handle_no_permission(self):
-        raise PermissionDenied
 
 class AddProductView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
     model = Product
