@@ -5,6 +5,44 @@
   <h1 class="text-4xl font-extrabold text-indigo-500 mb-8 text-center tracking-wide drop-shadow-lg">
     All Products
   </h1>
+
+  <form method="GET" class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8 w-full max-w-full">
+    <input
+      type="text"
+      name="search"
+      placeholder="Search products..."
+      value="{{ request.GET.search }}"
+      class="bg-gray-700 text-gray-100 rounded-lg px-5 py-4 focus:outline-none focus:ring-4 focus:ring-indigo-500 flex-grow lg:max-w-[35%] text-lg"
+    />
+
+    <select name="category" class="bg-gray-700 text-gray-100 rounded-lg px-5 py-4 focus:outline-none focus:ring-4 focus:ring-indigo-500 text-lg w-full lg:w-auto">
+      <option value="">All Categories</option>
+      {% for category in categories %}
+        <option value="{{ category.id }}" {% if category.id|stringformat:"s" == request.GET.category %}selected{% endif %}>
+          {{ category.name }}
+        </option>
+      {% endfor %}
+    </select>
+
+    <select name="availability" class="bg-gray-700 text-gray-100 rounded-lg px-5 py-4 focus:outline-none focus:ring-4 focus:ring-indigo-500 text-lg w-full lg:w-auto">
+      <option value="">All Availability</option>
+      <option value="available" {% if request.GET.availability == 'available' %}selected{% endif %}>In Stock</option>
+      <option value="unavailable" {% if request.GET.availability == 'unavailable' %}selected{% endif %}>Out of Stock</option>
+    </select>
+
+    <select name="sort" class="bg-gray-700 text-gray-100 rounded-lg px-5 py-4 focus:outline-none focus:ring-4 focus:ring-indigo-500 text-lg w-full lg:w-auto">
+      <option value="">Sort By</option>
+      <option value="name_asc" {% if request.GET.sort == 'name_asc' %}selected{% endif %}>Name (A-Z)</option>
+      <option value="name_desc" {% if request.GET.sort == 'name_desc' %}selected{% endif %}>Name (Z-A)</option>
+      <option value="price_asc" {% if request.GET.sort == 'price_asc' %}selected{% endif %}>Price (Low to High)</option>
+      <option value="price_desc" {% if request.GET.sort == 'price_desc' %}selected{% endif %}>Price (High to Low)</option>
+    </select>
+
+    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-6 py-3 shadow transition text-lg font-semibold">
+      Apply
+    </button>
+  </form>
+
   {% if products %}
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       {% for product in products %}
@@ -45,21 +83,21 @@
       {% endfor %}
     </div>
 
-    <div class="flex justify-center mt-8 space-x-4 text-indigo-500">
+    <div class="flex justify-center mt-8 space-x-4 text-indigo-500 flex-wrap gap-2">
       {% if products.has_previous %}
-        <a href="?page={{ products.previous_page_number }}" class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">Previous</a>
+        <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.availability %}availability={{ request.GET.availability }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort }}&{% endif %}page={{ products.previous_page_number }}" class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">Previous</a>
       {% endif %}
 
       {% for num in products.paginator.page_range %}
         {% if num == products.number %}
           <span class="px-3 py-1 rounded bg-indigo-600 text-white">{{ num }}</span>
         {% else %}
-          <a href="?page={{ num }}" class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">{{ num }}</a>
+          <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.availability %}availability={{ request.GET.availability }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort }}&{% endif %}page={{ num }}" class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">{{ num }}</a>
         {% endif %}
       {% endfor %}
 
       {% if products.has_next %}
-        <a href="?page={{ products.next_page_number }}" class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">Next</a>
+        <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.availability %}availability={{ request.GET.availability }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort }}&{% endif %}page={{ products.next_page_number }}" class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">Next</a>
       {% endif %}
     </div>
 
