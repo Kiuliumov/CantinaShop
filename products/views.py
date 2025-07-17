@@ -1,9 +1,6 @@
-from audioop import reverse
-
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, FormMixin, DeleteView, UpdateView
@@ -109,9 +106,6 @@ class AddProductView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
     template_name = 'products/new_product.html'
     success_url = reverse_lazy('product-list')
 
-    def form_invalid(self, form):
-        print("Form errors:", form.errors.as_json())
-        return super().form_invalid(form)
 
 class ProductDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
     model = Product

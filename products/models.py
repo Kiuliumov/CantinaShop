@@ -1,3 +1,5 @@
+from better_profanity import profanity
+from django.core.validators import MaxValueValidator
 from django.db import models
 
 from accounts.models import Account
@@ -9,27 +11,42 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        profanity.load_censor_words()
+        self.name = profanity.censor(self.name)
+        super().save(*args, **kwargs)
 
 class Tag(models.Model):
     name = models.CharField(max_length=100, unique=True)
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        profanity.load_censor_words()
+        self.name = profanity.censor(self.name)
+        super().save(*args, **kwargs)
+
 class Product(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
     price = models.DecimalField(max_digits=5, decimal_places=2)
     is_available = models.BooleanField(default=True)
-    image_url = models.CharField(max_length=255, blank=True, default='https://flightsunglasses.com/cdn/shop/products/ScreenShot2021-01-09at3.49.54PM_2048x.png?v=1610225425');
+    image_url = models.CharField(max_length=255, blank=True)
     quantity = models.PositiveIntegerField(default=1)
     slug = models.SlugField(unique=True, blank=True)
     has_discount = models.BooleanField(default=False)
     tags = models.CharField(max_length=255, blank=True)
+    rating = models.PositiveIntegerField(validators=[MaxValueValidator(5)])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
+    def save(self, *args, **kwargs):
+        profanity.load_censor_words()
+        self.name = profanity.censor(self.name)
+        self.description = profanity.censor(self.description)
+        super().save(*args, **kwargs)
 
 class Comment(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments')
@@ -39,3 +56,9 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.account.user.username} on {self.product.name}"
+
+
+    def save(self, *args, **kwargs):
+        profanity.load_censor_words()
+        self.content = profanity.censor(self.content)
+        super().save(*args, **kwargs)

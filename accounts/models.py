@@ -1,11 +1,21 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from accounts.validators import NoProfanityValidator, PhoneNumberValidator
 
 
 class UserModel(AbstractUser):
     is_active = models.BooleanField(default=False)
     is_chat_banned = models.BooleanField(default=False)
-    email = models.EmailField(unique=True, error_messages={'unique': 'A user with that email already exists.'})
+    email = models.EmailField(
+        unique=True,
+        error_messages={'unique': 'A user with that email already exists.'}
+    )
+    username = models.CharField(
+        max_length=150,
+        unique=True,
+        validators=[NoProfanityValidator()],
+    )
+
     def __str__(self):
         return self.username
 
@@ -13,7 +23,12 @@ class UserModel(AbstractUser):
 class Account(models.Model):
     user = models.OneToOneField(UserModel, on_delete=models.CASCADE)
     profile_picture_url = models.CharField(max_length=255, blank=True, null=True)
-    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    phone_number = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True,
+        validators=[PhoneNumberValidator()],
+    )
 
     default_shipping = models.ForeignKey(
         'Address',
@@ -46,13 +61,13 @@ class Address(models.Model):
 
     account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='addresses', blank=True, null=True)
     address_type = models.CharField(max_length=10, choices=ADDRESS_TYPE_CHOICES, default='shipping', blank=True, null=True)
-    label = models.CharField(max_length=30, blank=True, null=True)
+    label = models.CharField(max_length=30, blank=True, null=True, validators=[NoProfanityValidator()])
 
-    street_address = models.CharField(max_length=100, blank=True, null=True)
-    city = models.CharField(max_length=50, blank=True, null=True)
-    state = models.CharField(max_length=50, blank=True, null=True)
+    street_address = models.CharField(max_length=100, blank=True, null=True, validators=[NoProfanityValidator()])
+    city = models.CharField(max_length=50, blank=True, null=True, validators=[NoProfanityValidator()])
+    state = models.CharField(max_length=50, blank=True, null=True, validators=[NoProfanityValidator()])
     postal_code = models.CharField(max_length=20, blank=True, null=True)
-    country = models.CharField(max_length=50, blank=True, null=True)
+    country = models.CharField(max_length=50, blank=True, null=True, validators=[NoProfanityValidator()])
 
     is_default = models.BooleanField(default=False)
 
