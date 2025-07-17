@@ -6,17 +6,29 @@ from products.models import Product
 
 
 class ProductForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['slug'].widget = forms.HiddenInput()
+    image_file = forms.ImageField(
+        required=False,
+        widget=forms.ClearableFileInput(attrs={
+            'class': 'block w-full text-sm text-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 transition',
+            'accept': 'image/*',
+        })
+    )
+
+
+    def _generate_unique_slug(self, name):
+        base_slug = slugify(name)
+        slug = base_slug
+        counter = 1
+        while Product.objects.filter(slug=slug).exists():
+            slug = f"{base_slug}-{counter}"
+            counter += 1
+        return slug
 
     def save(self, commit=True):
         product = super().save(commit=False)
+        product.slug = self.cleaned_data.get('slug')
 
-        if not product.slug and product.name:
-            product.slug = slugify(product.name)
-
-        image_file = self.cleaned_data.get('image')
+        image_file = self.cleaned_data.get('image_file')
 
         if product.image_url:
             public_id = get_public_id_from_url(product.image_url)
@@ -33,8 +45,8 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = [
-            'name', 'description', 'price', 'is_available', 'image_url', 'quantity',
-            'slug', 'has_discount', 'tags', 'category',
+            'name', 'description',  'price', 'is_available', 'image_file', 'quantity',
+            'has_discount', 'tags', 'category',
         ]
         widgets = {
             'name': forms.TextInput(attrs={
@@ -49,18 +61,13 @@ class ProductForm(forms.ModelForm):
                 'step': '0.01',
             }),
             'is_available': forms.CheckboxInput(attrs={
-                'class': 'rounded text-indigo-500 focus:ring-indigo-500 focus:ring-2 focus:ring-offset-0',
+                'class': 'h-5 w-5 text-indigo-600 bg-gray-700 border-gray-500 rounded focus:ring-indigo-500 transition',
             }),
-            'image_url': forms.ClearableFileInput(attrs={
-                'class': 'block w-full text-sm text-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 transition',
-                'accept': 'image/*',
+            'has_discount': forms.CheckboxInput(attrs={
+                'class': 'h-5 w-5 text-yellow-400 bg-gray-700 border-gray-500 rounded focus:ring-yellow-400 transition',
             }),
             'quantity': forms.NumberInput(attrs={
                 'class': 'w-full px-4 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition',
-            }),
-            'slug': forms.HiddenInput(),
-            'has_discount': forms.CheckboxInput(attrs={
-                'class': 'rounded text-yellow-400 focus:ring-yellow-400 focus:ring-2 focus:ring-offset-0',
             }),
             'tags': forms.TextInput(attrs={
                 'placeholder': 'Comma-separated tags',
@@ -70,3 +77,13 @@ class ProductForm(forms.ModelForm):
                 'class': 'w-full px-4 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition',
             }),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        name = cleaned_data.get('name')
+
+        if name:
+            slug = self._generate_unique_slug(name)
+            cleaned_data['slug'] = slug
+
+        return cleaned_data

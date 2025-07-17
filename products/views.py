@@ -4,8 +4,6 @@ from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
-from django.contrib import messages
-
 from common.mixins import AdminRequiredMixin
 from .forms import ProductForm
 from products.models import Product, Category
@@ -74,6 +72,6 @@ class AddProductView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
     template_name = 'products/new_product.html'
     success_url = reverse_lazy('product-list')
 
-    def form_valid(self, form):
-        messages.success(self.request, "Product added successfully.")
-        return super().form_valid(form)
+    def form_invalid(self, form):
+        print("Form errors:", form.errors.as_json())
+        return super().form_invalid(form)

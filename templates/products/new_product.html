@@ -4,10 +4,10 @@
 {% block title %}Add Product{% endblock %}
 
 {% block content %}
-<div class="max-w-3xl mx-auto bg-gray-800 p-10 rounded-2xl shadow-2xl">
+<div class="max-w-2xl mx-auto bg-gray-800 p-10 rounded-2xl shadow-xl">
   <h1 class="text-4xl font-extrabold mb-10 text-center text-indigo-400 tracking-wide">Add New Product</h1>
 
-  <form method="POST" enctype="multipart/form-data" class="space-y-8" novalidate>
+  <form method="POST" enctype="multipart/form-data" class="space-y-6" novalidate>
     {% csrf_token %}
 
     {% if form.non_field_errors %}
@@ -18,35 +18,35 @@
       </div>
     {% endif %}
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
-      {% for field in form.visible_fields %}
-        <div>
-          <label for="{{ field.id_for_label }}" class="block text-gray-300 mb-3 font-semibold tracking-wide">
-            {{ field.label }}{% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
-          </label>
+    {% for field in form.visible_fields %}
+      <div class="w-full">
+        <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-300 mb-2">
+          {{ field.label }}{% if field.field.required %}<span class="text-red-500 ml-1">*</span>{% endif %}
+        </label>
 
+        {% if field.field.widget.input_type == "checkbox" %}
+          <div class="flex items-center gap-3">
+            <label class="inline-flex items-center text-gray-200">
+              {{ field }}
+              <span class="ml-2">{{ field.help_text|default:"Yes" }}</span>
+            </label>
+          </div>
+        {% else %}
           {{ field }}
-
-          {% if field.name == 'image' %}
-            <div class="mt-4">
-              <img id="imagePreview" class="max-h-48 rounded-lg shadow-lg hidden" />
-            </div>
-          {% endif %}
-
           {% if field.help_text %}
-            <p class="text-gray-400 text-xs mt-1">{{ field.help_text }}</p>
+            <p class="text-xs text-gray-400 mt-1">{{ field.help_text }}</p>
           {% endif %}
+        {% endif %}
 
-          {% if field.errors %}
-            <p class="text-red-500 text-sm mt-1">{{ field.errors|join:", " }}</p>
-          {% endif %}
-        </div>
-      {% endfor %}
-    </div>
+        {% if field.errors %}
+          <p class="text-red-500 text-sm mt-1">{{ field.errors|join:", " }}</p>
+        {% endif %}
+      </div>
+    {% endfor %}
 
     <button
       type="submit"
-      class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-4 mt-10 rounded-lg shadow-lg transition"
+      class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-3 rounded-lg shadow-lg transition"
     >
       Add Product
     </button>
@@ -54,4 +54,3 @@
 </div>
 {% endblock %}
 
-<script src="{% static 'js/imagePreview.js' %}"></script>
