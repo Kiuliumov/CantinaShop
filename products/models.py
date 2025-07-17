@@ -17,7 +17,7 @@ class Product(models.Model):
     description = models.TextField()
     price = models.DecimalField(max_digits=5, decimal_places=2)
     is_available = models.BooleanField(default=True)
-    image = models.ImageField(upload_to='product_images/', blank=True, null=True)
+    image_url = models.CharField(max_length=255, blank=True, default='https://flightsunglasses.com/cdn/shop/products/ScreenShot2021-01-09at3.49.54PM_2048x.png?v=1610225425');
     quantity = models.PositiveIntegerField(default=1)
     slug = models.SlugField(unique=True)
     has_discount = models.BooleanField(default=False)
