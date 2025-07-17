@@ -26,6 +26,7 @@ urlpatterns = [
     path('', include('common.urls')),
     path('accounts/', include('accounts.urls')),
     path('chat/', include('chat.urls')),
+    path('products/', include('products.urls')),
     path('api/', include('api.urls')),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0]) + chat.routing.websocket_urlpatterns

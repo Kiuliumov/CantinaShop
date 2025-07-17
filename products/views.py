@@ -1,4 +1,5 @@
-from msilib.schema import ListView
+from django.core.exceptions import PermissionDenied
+from django.views.generic import ListView
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
@@ -18,8 +19,7 @@ class AdminRequiredMixin(UserPassesTestMixin):
         return self.request.user.is_staff or self.request.user.is_superuser
 
     def handle_no_permission(self):
-        messages.error(self.request, "You must be an admin to access this page.")
-        return redirect('admin:login')
+        raise PermissionDenied
 
 class AddProductView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
     model = Product

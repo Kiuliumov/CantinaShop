@@ -23,21 +23,12 @@
             {{ field.label }}
           </label>
 
-          {% if field.field.widget.input_type == "file" %}
-            <input
-              type="file"
-              name="{{ field.name }}"
-              id="{{ field.id_for_label }}"
-              accept="image/*"
-              class="block w-full text-sm text-gray-200
-                     file:mr-4 file:py-2 file:px-4
-                     file:rounded-full file:border-0
-                     file:text-sm file:font-semibold
-                     file:bg-indigo-600 file:text-white
-                     hover:file:bg-indigo-700 transition"
-            />
-          {% else %}
-            {{ field }}
+          {{ field }}
+
+          {% if field.name == 'image' %}
+          <div class="mt-4">
+            <img id="imagePreview" class="max-h-48 rounded-lg shadow-lg hidden" />
+          </div>
           {% endif %}
 
           {% for error in field.errors %}
@@ -55,4 +46,8 @@
     </button>
   </form>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/imagePreview.js' %}"></script>
 {% endblock %}

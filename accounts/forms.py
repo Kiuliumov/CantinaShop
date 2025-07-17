@@ -1,7 +1,7 @@
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import authenticate
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
-from .image_cloud_storage import upload_to_cloud_storage, get_public_id_from_url, delete_cloudinary_image
+from common.image_cloud_storage import upload_to_cloud_storage, get_public_id_from_url, delete_cloudinary_image
 from .models import UserModel, Account, Address
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
