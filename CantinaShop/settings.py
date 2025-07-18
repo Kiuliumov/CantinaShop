@@ -68,6 +68,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'CantinaShop.middlewares.rate_limit.RateLimitMiddleware',
+    'CantinaShop.middlewares.request_log.RequestLoggingMiddleware',
 ]
 
 ROOT_URLCONF = 'CantinaShop.urls'
