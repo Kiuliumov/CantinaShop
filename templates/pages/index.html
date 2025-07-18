@@ -18,10 +18,16 @@
         <span class="font-semibold">bracelets</span>. Unleash your unique style today.
       </p>
       <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
-         <a href="{% if not user.is_authenticated %}{% url 'register' %}{% else %}{% url 'index' %}{% endif %}" class="inline-block bg-indigo-600 hover:bg-indigo-700 px-6 py-3 text-base sm:text-lg font-bold rounded-lg shadow-lg transition">
+         <a
+          href="{% if not user.is_authenticated %}{% url 'register' %}{% else %}#{% endif %}"
+          class="inline-block bg-indigo-600 hover:bg-indigo-700 px-6 py-3 text-base sm:text-lg font-bold rounded-lg shadow-lg transition"
+          {% if user.is_authenticated %}
+            onclick="event.preventDefault(); document.getElementById('alreadyRegisteredModal').classList.remove('hidden');"
+          {% endif %}
+         >
           <i class="fas fa-shopping-cart mr-2"></i> Shop Now
          </a>
-        <a href="{% url 'index' %}" class="inline-block px-6 py-3 border-2 border-indigo-500 text-base sm:text-lg font-bold text-indigo-500 rounded-lg hover:bg-indigo-600 hover:text-white transition">
+        <a href="{% url 'product-list' %}" class="inline-block px-6 py-3 border-2 border-indigo-500 text-base sm:text-lg font-bold text-indigo-500 rounded-lg hover:bg-indigo-600 hover:text-white transition">
           <i class="fas fa-search mr-2"></i> Browse Collection
         </a>
       </div>
@@ -60,4 +66,21 @@
     </div>
   </div>
 </section>
+
+<div id="alreadyRegisteredModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50">
+  <div class="bg-gray-900 rounded-2xl shadow-2xl p-10 max-w-md w-full text-center border border-green-500">
+    <h2 class="text-4xl font-extrabold text-green-400 mb-6">Already Registered</h2>
+    <p class="text-gray-300 mb-8 text-lg">
+      You are already registered and logged in. Enjoy shopping!
+    </p>
+    <button
+      onclick="document.getElementById('alreadyRegisteredModal').classList.add('hidden')"
+      class="inline-block px-8 py-3 rounded-lg bg-green-600 hover:bg-green-700 text-white font-bold shadow-lg transition focus:outline-none focus:ring-4 focus:ring-green-500"
+    >
+      Close
+    </button>
+  </div>
+</div>
+
+
 {% endblock %}
