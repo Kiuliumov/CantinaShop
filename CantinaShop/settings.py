@@ -66,10 +66,12 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'CantinaShop.middlewares.login_protecter.LoginDefenderMiddleware',
     'CantinaShop.middlewares.rate_limit.RateLimitMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 ROOT_URLCONF = 'CantinaShop.urls'
 
 ASGI_APPLICATION = 'CantinaShop.asgi.application'

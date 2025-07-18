@@ -39,7 +39,7 @@ class RateLimitMiddleware:
 
                 return render(
                     request,
-                    "too_many_requests.html",
+                    "middlewear_pages/too_many_requests.html",
                     status=429,
                     context={"retry_after_seconds": retry_after}
                 )
