@@ -55,11 +55,11 @@
   <div id="mobile-menu" class="md:hidden hidden px-4 pb-4">
     <ul class="space-y-4 text-base text-gray-300">
       <li><a href="{% url 'index' %}" class="block hover:text-indigo-400">Home</a></li>
-      <li><a href="{% url 'index' %}" class="block hover:text-indigo-400">All Products</a></li>
-      <li><a href="{% url 'index' %}" class="block hover:text-indigo-400">Glasses</a></li>
-      <li><a href="{% url 'index' %}" class="block hover:text-indigo-400">Rings</a></li>
-      <li><a href="{% url 'index' %}" class="block hover:text-indigo-400">Necklaces</a></li>
-      <li><a href="{% url 'index' %}" class="block hover:text-indigo-400">Bracelets</a></li>
+      <li><a href="{% url 'product-list' %}" class="block hover:text-indigo-400">All Products</a></li>
+      <li><a href="{% url 'product-list' %}?category=Glasses" class="block hover:text-indigo-400">Glasses</a></li>
+      <li><a href="{% url 'product-list' %}?category=Rings" class="block hover:text-indigo-400">Rings</a></li>
+      <li><a href="{% url 'product-list' %}?category=Necklaces" class="block hover:text-indigo-400">Necklaces</a></li>
+      <li><a href="{% url 'product-list' %}?category=Bracelets" class="block hover:text-indigo-400">Bracelets</a></li>
 
       {% if user.is_authenticated %}
         <li><a href="{% url 'index' %}" class="block hover:text-indigo-400">Cart</a></li>
