@@ -14,7 +14,7 @@ class RequestLoggingMiddleware(MiddlewareMixin):
         request._start_time = time.time()
 
     def process_response(self, request, response):
-        duration = (time.time() - getattr(request, '_start_time', time.time())) * 1000  # in ms
+        duration = (time.time() - getattr(request, '_start_time', time.time())) * 1000
 
         user = getattr(request, 'user', None)
         username = user.username if user and user.is_authenticated else 'Anonymous'
