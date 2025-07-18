@@ -1,7 +1,8 @@
 import time
 from django.conf import settings
 from django.core.cache import cache
-from django.http import JsonResponse
+from django.shortcuts import render
+
 
 class RateLimitMiddleware:
     """
@@ -20,7 +21,7 @@ class RateLimitMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
         config = getattr(settings, "RATE_LIMIT", {})
-        self.rate = config.get("RATE", 10)
+        self.rate = config.get("RATE", 60)
         self.period = config.get("PERIOD", 60)
         self.cache_key_prefix = config.get("CACHE_KEY_PREFIX", "rl:")
 
@@ -29,20 +30,18 @@ class RateLimitMiddleware:
         if ip:
             cache_key = f"{self.cache_key_prefix}{ip}"
             now = time.time()
-
             request_times = cache.get(cache_key, [])
 
             request_times = [t for t in request_times if t > now - self.period]
 
             if len(request_times) >= self.rate:
                 retry_after = int(request_times[0] + self.period - now)
-                return JsonResponse(
-                    {
-                        "error": "Too many requests",
-                        "retry_after_seconds": retry_after,
-                    },
+
+                return render(
+                    request,
+                    "too_many_requests.html",
                     status=429,
-                    headers={"Retry-After": str(retry_after)},
+                    context={"retry_after_seconds": retry_after}
                 )
 
             request_times.append(now)
