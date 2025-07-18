@@ -62,15 +62,14 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'CantinaShop.middlewares.request_log.RequestLoggingMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'CantinaShop.middlewares.rate_limit.RateLimitMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'CantinaShop.middlewares.rate_limit.RateLimitMiddleware',
-    'CantinaShop.middlewares.request_log.RequestLoggingMiddleware',
 ]
-
 ROOT_URLCONF = 'CantinaShop.urls'
 
 ASGI_APPLICATION = 'CantinaShop.asgi.application'
