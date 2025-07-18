@@ -20,6 +20,7 @@
       <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
          <a href="{% if not user.is_authenticated %}{% url 'register' %}{% else %}{% url 'index' %}{% endif %}" class="inline-block bg-indigo-600 hover:bg-indigo-700 px-6 py-3 text-base sm:text-lg font-bold rounded-lg shadow-lg transition">
           <i class="fas fa-shopping-cart mr-2"></i> Shop Now
+         </a>
         <a href="{% url 'index' %}" class="inline-block px-6 py-3 border-2 border-indigo-500 text-base sm:text-lg font-bold text-indigo-500 rounded-lg hover:bg-indigo-600 hover:text-white transition">
           <i class="fas fa-search mr-2"></i> Browse Collection
         </a>
