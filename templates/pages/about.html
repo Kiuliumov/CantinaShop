@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} About Us {% endblock %}
+
+{% block content %}
+<section class="bg-gray-900 text-white py-32">
+  <div class="container mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+    <div class="space-y-10 max-w-xl">
+      <h1 class="text-6xl sm:text-7xl font-extrabold leading-tight tracking-tight text-white drop-shadow-lg">
+        Our Story <i class="fas fa-heart text-pink-500"></i>
+      </h1>
+      <p class="text-lg sm:text-xl text-gray-300 leading-relaxed">
+        <span class="text-indigo-500 font-semibold">CantinaShop</span> was born in Bulgaria
+        <img src="https://flagcdn.com/20x15/bg.png" alt="Bulgarian Flag" class="inline-block w-6 h-auto ml-2 rounded-sm align-middle" />
+        with a simple mission: to craft distinctive accessories that express your unique personality. Every ring, bracelet, and necklace tells a story.
+      </p>
+      <p class="text-lg text-gray-400 leading-relaxed">
+        What began as a passion project has grown into a vibrant community. We believe in timeless design, ethical creation, and the confidence our pieces bring to you.
+      </p>
+      <div class="pt-6 text-sm text-gray-400 flex flex-wrap gap-8 items-center">
+        <span class="flex items-center gap-2">
+          <i class="fas fa-clock text-indigo-400"></i> Founded in 2022
+        </span>
+        <span class="flex items-center gap-2">
+          <i class="fas fa-hands-helping text-green-400"></i> Family-Owned & Operated
+        </span>
+        <span class="flex items-center gap-2">
+          <i class="fas fa-globe-europe text-yellow-300"></i> Shipping Across Europe
+        </span>
+      </div>
+    </div>
+    <div class="flex justify-center md:justify-end">
+      <img
+        src="https://www.usatoday.com/gcdn/presto/2018/08/30/USAT/03362003-3e33-4668-90cc-e0e0b74e5370-CantinaBar_FINAL_w.jpg.001.jpeg?crop=810,1080,x636,y0"
+        alt="About CantinaShop"
+        class="rounded-3xl shadow-2xl max-w-sm sm:max-w-md md:max-w-lg transition-transform hover:scale-105 duration-300 ease-in-out"
+        loading="lazy"
+      />
+    </div>
+  </div>
+</section>
+
+<section class="bg-gray-800 py-24 text-white">
+  <div class="container mx-auto px-6 md:px-12">
+    <h2 class="text-4xl sm:text-5xl font-bold text-center mb-20 tracking-tight drop-shadow-md">
+      Why Choose Us?
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-16 text-center">
+      <div class="space-y-4 px-6 py-8 rounded-xl bg-gray-700 hover:bg-gray-600 transition-colors shadow-lg">
+        <i class="fas fa-award text-indigo-400 text-6xl mb-2"></i>
+        <h3 class="text-2xl font-semibold">Authentic Craftsmanship</h3>
+        <p class="text-gray-300 text-base max-w-xs mx-auto">
+          Each item is hand-finished with precision, ensuring beauty and durability in every detail.
+        </p>
+      </div>
+      <div class="space-y-4 px-6 py-8 rounded-xl bg-gray-700 hover:bg-gray-600 transition-colors shadow-lg">
+        <i class="fas fa-users text-green-400 text-6xl mb-2"></i>
+        <h3 class="text-2xl font-semibold">People First</h3>
+        <p class="text-gray-300 text-base max-w-xs mx-auto">
+          We're built on relationships — between makers, buyers, and the stories they carry.
+        </p>
+      </div>
+      <div class="space-y-4 px-6 py-8 rounded-xl bg-gray-700 hover:bg-gray-600 transition-colors shadow-lg">
+        <i class="fas fa-infinity text-yellow-300 text-6xl mb-2"></i>
+        <h3 class="text-2xl font-semibold">Timeless Design</h3>
+        <p class="text-gray-300 text-base max-w-xs mx-auto">
+          Modern silhouettes fused with eternal charm — crafted to last a lifetime.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

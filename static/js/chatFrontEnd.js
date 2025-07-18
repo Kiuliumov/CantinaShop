@@ -27,9 +27,8 @@
 
   function toggleChat() {
   if (!chatBox) return;
-
   if (window.chatConfig.userIsStaffOrSuperuser) {
-    window.location.href = `chat/admin`;
+      window.location.href = `${window.location.protocol}//${window.location.host}/chat/admin`;
     return;
   }
 
