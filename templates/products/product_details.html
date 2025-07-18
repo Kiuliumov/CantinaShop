@@ -112,13 +112,36 @@
           <a href="?page={{ comments.previous_page_number }}" class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">Previous</a>
         {% endif %}
 
-        {% for num in comments.paginator.page_range %}
-          {% if num == comments.number %}
-            <span class="px-3 py-1 rounded bg-indigo-600 text-white">{{ num }}</span>
-          {% else %}
-            <a href="?page={{ num }}" class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">{{ num }}</a>
-          {% endif %}
-        {% endfor %}
+        {% with total_pages=comments.paginator.num_pages current=comments.number %}
+          {% with start=current|add:"-2" end=current|add:"2" %}
+            {% if start < 1 %}
+              {% with end=end|add:1|add:"-"|add:start %}
+                {% with start=1 %}
+                {% endwith %}
+              {% endwith %}
+            {% endif %}
+            {% if end > total_pages %}
+              {% with start=start|add:"-"|add:end|add:total_pages|add:"-"|add:total_pages %}
+                {% if start < 1 %}
+                  {% with start=1 %}
+                  {% endwith %}
+                {% endif %}
+                {% with end=total_pages %}
+                {% endwith %}
+              {% endwith %}
+            {% endif %}
+
+            {% for num in comments.paginator.page_range %}
+              {% if num >= start and num <= end %}
+                {% if num == current %}
+                  <span class="px-3 py-1 rounded bg-indigo-600 text-white">{{ num }}</span>
+                {% else %}
+                  <a href="?page={{ num }}" class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">{{ num }}</a>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          {% endwith %}
+        {% endwith %}
 
         {% if comments.has_next %}
           <a href="?page={{ comments.next_page_number }}" class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">Next</a>
@@ -132,5 +155,5 @@
 </div>
 
 <script src="{% static 'js/confirmDelete.js' %}"></script>
-    <script src="{% static 'js/toggleEdit.js' %}"></script>
+<script src="{% static 'js/toggleEdit.js' %}"></script>
 {% endblock %}
