@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load page_range %}
 
 {% block content %}
 <div class="container mx-auto px-4 py-6">
@@ -74,43 +75,25 @@
         </div>
       {% endfor %}
     </div>
+<div class="flex justify-center mt-6 space-x-2 text-indigo-500 flex-wrap gap-2">
+  {% if products.has_previous %}
+    <a href="?page={{ products.previous_page_number }}" class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">Previous</a>
+  {% endif %}
 
-    <div class="flex justify-center mt-8 space-x-2 text-indigo-500 flex-wrap gap-2">
-      {% with current_page=products.number total_pages=products.paginator.num_pages %}
-        {% with start=current_page|add:"-2" end=current_page|add:"2" %}
-          {% if start < 1 %}
-            {% with offset=1|add:"-start" %}
-              {% with end=end|add:offset %}
-                {% with start=1 %}
-                {% endwith %}
-              {% endwith %}
-            {% endwith %}
-          {% endif %}
-          {% if end > total_pages %}
-            {% with start=start|add:"-end"|add:total_pages end=total_pages %}
-            {% endwith %}
-          {% endif %}
+  {% page_range products.paginator products.number as page_range %}
+  {% for num in page_range %}
+    {% if num == products.number %}
+      <span class="px-3 py-1 rounded bg-indigo-600 text-white">{{ num }}</span>
+    {% else %}
+      <a href="?page={{ num }}" class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">{{ num }}</a>
+    {% endif %}
+  {% endfor %}
 
-          {% if products.has_previous %}
-            <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ products.previous_page_number }}" class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">Previous</a>
-          {% endif %}
+  {% if products.has_next %}
+    <a href="?page={{ products.next_page_number }}" class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">Next</a>
+  {% endif %}
+</div>
 
-          {% for num in products.paginator.page_range %}
-            {% if num >= start and num <= end %}
-              {% if num == current_page %}
-                <span class="px-3 py-1 rounded bg-indigo-600 text-white">{{ num }}</span>
-              {% else %}
-                <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ num }}" class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">{{ num }}</a>
-              {% endif %}
-            {% endif %}
-          {% endfor %}
-
-          {% if products.has_next %}
-            <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ products.next_page_number }}" class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">Next</a>
-          {% endif %}
-        {% endwith %}
-      {% endwith %}
-    </div>
 
   {% else %}
     <p class="text-center text-gray-400 italic mt-12 text-lg">No products available at the moment. Please check back later.</p>
