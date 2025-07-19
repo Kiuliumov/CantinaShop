@@ -1,13 +1,13 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth import get_user_model, login
+from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.views import LoginView, LogoutView
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.views import View
-from django.views.generic.edit import FormView, UpdateView
+from django.views.generic.edit import FormView, UpdateView, DeleteView
 from django.contrib import messages
 from common.email_service import EmailService
 from common.mixins import ProfileProhibitedMixin
@@ -88,3 +88,34 @@ class AccountUpdateView(LoginRequiredMixin, UpdateView):
             form['country'],
         ]
         return context
+
+
+class AccountDeactivateView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        user.is_active = False
+        user.save()
+        logout(request)
+        messages.success(request, "Your account has been deactivated.")
+        return redirect('index')
+
+
+class AccountBanView(LoginRequiredMixin, UserPassesTestMixin, View):
+    def test_func(self):
+        return self.request.user.is_superuser
+
+    def handle_no_permission(self):
+        raise PermissionError
+
+    def post(self, request, *args, **kwargs):
+        target_user_id = kwargs.get('user_id')
+        target_user = get_object_or_404(User, id=target_user_id)
+
+        if target_user.is_superuser:
+            messages.error(request, "You cannot ban another superuser.")
+            return redirect('admin_dashboard')
+
+        target_user.is_active = False
+        target_user.save()
+        messages.success(request, f"{target_user.username} has been banned.")
+        return redirect('admin_dashboard')
