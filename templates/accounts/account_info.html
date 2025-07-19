@@ -87,7 +87,6 @@
           data-initial="{{ form.country_code.value|default_if_none:'' }}"
           class="w-full rounded-md bg-gray-700 border border-gray-600 text-gray-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
-          <!-- Options loaded dynamically -->
         </select>
         {% if form.country_code.errors %}
           {% for error in form.country_code.errors %}
