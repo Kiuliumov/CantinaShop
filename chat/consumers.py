@@ -2,10 +2,14 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from django.db.models import Q
+from django.utils.timezone import now, timedelta
 
 
 class BaseChatConsumer(AsyncWebsocketConsumer):
     is_from_admin = False
+
+    MESSAGE_LIMIT = 60
+    TIME_WINDOW = 60
 
     async def connect(self):
         user = self.scope['user']
@@ -43,6 +47,26 @@ class BaseChatConsumer(AsyncWebsocketConsumer):
             return
 
         sender = self.user
+
+        if not sender.is_staff and not sender.is_superuser:
+            is_banned = await self.is_user_banned(sender)
+            if is_banned:
+                await self.send(text_data=json.dumps({
+                    'type': 'chat_banned',
+                    'message': 'You have been banned from chatting due to excessive messaging.'
+                }))
+                await self.close()
+                return
+
+            too_many = await self.too_many_messages(sender)
+            if too_many:
+                await self.ban_user(sender)
+                await self.send(text_data=json.dumps({
+                    'type': 'chat_banned',
+                    'message': 'You have been banned from chatting due to excessive messaging.'
+                }))
+                await self.close()
+                return
 
         if sender.is_staff or sender.is_superuser:
             recipient = await self.get_user(self.recipient_user_id)
@@ -116,6 +140,18 @@ class BaseChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def is_user_banned(self, user):
         return getattr(user, 'is_chat_banned', False)
+
+    @database_sync_to_async
+    def too_many_messages(self, user):
+        from .models import ChatMessage
+        cutoff = now() - timedelta(seconds=self.TIME_WINDOW)
+        count = ChatMessage.objects.filter(sender=user, timestamp__gte=cutoff).count()
+        return count >= self.MESSAGE_LIMIT
+
+    @database_sync_to_async
+    def ban_user(self, user):
+        user.is_chat_banned = True
+        user.save(update_fields=['is_chat_banned'])
 
 
 class UserConsumer(BaseChatConsumer):
