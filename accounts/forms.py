@@ -79,16 +79,11 @@ class LoginForm(AuthenticationForm):
         return self.cleaned_data
 
 
-
-
 class AccountForm(forms.ModelForm):
-
-    """
-    Shows account details and adds account data.
-    """
     username = forms.CharField(max_length=150)
     profile_picture = forms.ImageField(required=False)
     street_address = forms.CharField(required=False)
+    country_code = forms.CharField(required=False)
     city = forms.CharField(required=False)
     state = forms.CharField(required=False)
     postal_code = forms.CharField(required=False)
@@ -97,7 +92,7 @@ class AccountForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = [
-            'username', 'phone_number', 'profile_picture',
+            'username', 'country_code', 'first_name', 'last_name', 'phone_number', 'profile_picture',
             'street_address', 'city', 'state', 'postal_code', 'country',
         ]
 
@@ -115,6 +110,9 @@ class AccountForm(forms.ModelForm):
 
         if user:
             self.fields['username'].initial = user.username
+
+        if self.instance and self.instance.country_code:
+            self.fields['country_code'].initial = self.instance.country_code
 
         if self.instance and hasattr(self.instance, 'default_shipping') and self.instance.default_shipping:
             addr = self.instance.default_shipping

@@ -22,7 +22,10 @@ class UserModel(AbstractUser):
 
 class Account(models.Model):
     user = models.OneToOneField(UserModel, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=150, blank=True, null=True)
+    last_name = models.CharField(max_length=150, blank=True, null=True)
     profile_picture_url = models.CharField(max_length=255, blank=True, null=True)
+    country_code = models.CharField(max_length=15, blank=True, null=True)
     phone_number = models.CharField(
         max_length=20,
         blank=True,
