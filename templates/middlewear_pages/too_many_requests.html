@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,21 +14,7 @@
       <span class="text-white font-bold" id="countdown">{{ retry_after_seconds }}</span> seconds.
     </p>
   </div>
-
-  <script>
-    const countdown = document.getElementById('countdown');
-    const redirectUrl = "{% url 'index' %}"
-    let seconds = parseInt(countdown.innerText);
-
-    const timer = setInterval(() => {
-      if (seconds <= 1) {
-        clearInterval(timer);
-        window.location.href = redirectUrl;
-      } else {
-        seconds -= 1;
-        countdown.innerText = seconds;
-      }
-    }, 1000);
+  <script src="{% static 'js/countdownForErrors.js' %}">
   </script>
 </body>
 </html>

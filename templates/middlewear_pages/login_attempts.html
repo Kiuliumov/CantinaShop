@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,19 +19,6 @@
     </a>
   </div>
 
-  <script>
-    let countdown = document.getElementById('countdown');
-    let seconds = parseInt(countdown.innerText);
-
-    const timer = setInterval(() => {
-      if (seconds <= 1) {
-        clearInterval(timer);
-        location.reload();
-      } else {
-        seconds -= 1;
-        countdown.innerText = seconds;
-      }
-    }, 1000);
-  </script>
+  <script src="{% static 'js/countdownForErrors.js' %}"></script>
 </body>
 </html>

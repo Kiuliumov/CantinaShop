@@ -180,10 +180,15 @@
   </div>
 </div>
     {% include 'chat/partials/user-chat.html' %}
+    {% include 'partials/main/confirm_delete.html' %}
+{% endblock %}
+{% block script %}
+    {{ block.super }}
     <script>
   window.SelectConfig = {
     countryCodesUrl: "{% static 'json/countryCodes.json' %}"
   };
 </script>
     <script src="{% static 'js/countryCodeSelector.js' %}"></script>
+    <script src="{% static 'js/confirmDelete.js' %}"> </script>
 {% endblock %}

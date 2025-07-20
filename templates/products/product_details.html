@@ -136,7 +136,14 @@
     {% endif %}
   </div>
 </div>
+</div>
+
+{% include 'partials/main/confirm_delete.html' %}
 {% include 'chat/partials/user-chat.html' %}
-<script src="{% static 'js/toggleEdit.js' %}"></script>
 {% endblock %}
 
+{% block script %}
+    {{ block.super }}
+    <script src="{% static 'js/toggleEdit.js' %}"></script>
+    <script src="{% static 'js/confirmDelete.js' %}"></script>
+{% endblock %}
