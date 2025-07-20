@@ -1,30 +1,29 @@
-from better_profanity import profanity
-from django.core.validators import MaxValueValidator
 from django.db import models
-
+from django.core.validators import MaxValueValidator
 from accounts.models import Account
+from common.profanity_utils import smart_censor
 
-
-# Create your models here.
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
+
     def __str__(self):
         return self.name
 
     def save(self, *args, **kwargs):
-        profanity.load_censor_words()
-        self.name = profanity.censor(self.name)
+        self.name = smart_censor(self.name)
         super().save(*args, **kwargs)
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=100, unique=True)
+
     def __str__(self):
         return self.name
 
     def save(self, *args, **kwargs):
-        profanity.load_censor_words()
-        self.name = profanity.censor(self.name)
+        self.name = smart_censor(self.name)
         super().save(*args, **kwargs)
+
 
 class Product(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -39,14 +38,13 @@ class Product(models.Model):
     rating = models.PositiveIntegerField(validators=[MaxValueValidator(5)])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
-        profanity.load_censor_words()
-        self.name = profanity.censor(self.name)
-        self.description = profanity.censor(self.description)
+        self.name = smart_censor(self.name)
+        self.description = smart_censor(self.description)
         super().save(*args, **kwargs)
+
 
 class Comment(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments')
@@ -57,8 +55,6 @@ class Comment(models.Model):
     def __str__(self):
         return f"{self.account.user.username} on {self.product.name}"
 
-
     def save(self, *args, **kwargs):
-        profanity.load_censor_words()
-        self.content = profanity.censor(self.content)
+        self.content = smart_censor(self.content)
         super().save(*args, **kwargs)
