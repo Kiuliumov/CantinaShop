@@ -12,7 +12,6 @@ from chat.models import ChatMessage
 
 class ChatMessagesAPIView(APIView):
     permission_classes = [IsAuthenticated]
-
     def get(self, request, user_id, **kwargs):
         UserModel = get_user_model()
         user = get_object_or_404(UserModel, id=user_id)

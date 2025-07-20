@@ -1,225 +1,200 @@
-(function () {
+document.addEventListener("DOMContentLoaded", function () {
+  const {
+    adminAvatarUrl,
+    defaultAvatarUrl,
+    userId,
+    wsProtocol,
+    host,
+    apiMessagesUrl,
+    userIsChatBanned
+  } = window.chatConfig || {};
+
+  if (!userId) return;
+
+  const chatToggleBtn = document.getElementById('chat-toggle');
+  const chatBox = document.getElementById('chat-box');
+  const chatCloseBtn = document.getElementById('chat-close');
+  const chatMessages = document.getElementById('chat-messages');
+  const chatForm = document.getElementById('chat-form');
+  const chatInput = document.getElementById('chat-input');
+
   let chatSocket = null;
-  let chatMessages, chatForm, chatInput, chatToggleBtn, chatBox;
-  const wsChatUrl = `${window.chatConfig.wsProtocol}://${window.chatConfig.host}/ws/chat/user/${window.chatConfig.userId}/`;
+  const recentMessagesSet = new Set();
 
-  let currentUserId = window.chatConfig?.userId || null;
-
-  function init() {
-    chatMessages = document.getElementById('chat-messages');
-    chatForm = document.getElementById('chat-form');
-    chatInput = document.getElementById('chat-input');
-    chatToggleBtn = document.getElementById('chat-toggle');
-    chatBox = document.getElementById('chat-box');
-
-    if (!currentUserId || !chatMessages || !chatForm || !chatInput) {
-      console.error("Chat initialization failed: missing elements or user ID");
-      return;
-    }
-
-    chatForm.addEventListener('submit', onSendMessage);
-    chatToggleBtn?.addEventListener('click', toggleChat);
-    document.getElementById('chat-close')?.addEventListener('click', toggleChat);
-
-    loadChatMessages(currentUserId);
-    connectSocket(currentUserId);
+  function showBanNotice() {
+    const banNotice = document.createElement('div');
+    banNotice.className = 'fixed bottom-20 right-6 max-w-sm bg-red-100 border border-red-300 text-red-800 px-4 py-3 rounded-lg shadow-lg z-50';
+    banNotice.innerHTML = `
+      <strong class="block font-semibold mb-1">Chat Unavailable</strong>
+      <span>You are currently banned from using the chat feature.</span>
+    `;
+    document.body.appendChild(banNotice);
+    setTimeout(() => banNotice.remove(), 6000);
   }
 
-  function toggleChat() {
-    if (!chatBox) return;
+  if (chatToggleBtn) {
+    chatToggleBtn.addEventListener('click', () => {
+      if (userIsChatBanned) {
+        showBanNotice();
+        return;
+      }
 
-    if (window.chatConfig.userIsStaffOrSuperuser) {
-      window.location.href = `${window.location.protocol}//${window.location.host}/chat/admin`;
-      return;
-    }
+      if (chatBox.classList.contains('invisible')) {
+        chatBox.classList.remove('invisible', 'opacity-0');
+        chatBox.classList.add('opacity-100');
+        chatInput.focus();
+        loadChatMessages();
+        connectSocket();
+      } else {
+        chatBox.classList.add('opacity-0', 'invisible');
+      }
+    });
+  }
 
-    if (window.chatConfig.userIsChatBanned) {
-      showChatBanAlert();
-      return;
-    }
-
-    const isOpen = chatBox.classList.contains('opacity-100');
-    if (isOpen) {
-      chatBox.classList.remove('opacity-100', 'visible');
+  if (chatCloseBtn) {
+    chatCloseBtn.addEventListener('click', () => {
       chatBox.classList.add('opacity-0', 'invisible');
-    } else {
-      chatBox.classList.remove('opacity-0', 'invisible');
-      chatBox.classList.add('opacity-100', 'visible');
-    }
+    });
   }
+
+  function messageKey(msg) {
+    return `${msg.timestamp}|${msg.sender_id}|${msg.text}`;
+  }
+
+  function addMessageSafe(msg) {
+    const key = messageKey(msg);
+    if (recentMessagesSet.has(key)) return;
+    recentMessagesSet.add(key);
+    if (recentMessagesSet.size > 500) {
+      const keys = Array.from(recentMessagesSet).slice(-250);
+      recentMessagesSet.clear();
+      keys.forEach(k => recentMessagesSet.add(k));
+    }
+    addMessage(msg);
+  }
+
+  function addMessage({ text, username, avatarUrl, timestamp, fromAdmin }) {
+  const container = document.createElement('div');
+  container.className = `flex ${fromAdmin ? 'justify-end' : 'justify-start'} mb-3`;
+
+  const messageWrapper = document.createElement('div');
+  messageWrapper.className = 'flex items-start space-x-2 max-w-xs';
+
+  const avatar = document.createElement('img');
+  avatar.src = avatarUrl || defaultAvatarUrl;
+  avatar.alt = username;
+  avatar.className = 'w-8 h-8 rounded-full object-cover';
+
+  const contentWrapper = document.createElement('div');
+  contentWrapper.className = 'flex flex-col';
+
+  const header = document.createElement('div');
+  header.className = 'flex items-center space-x-2 text-xs text-gray-400 mb-1';
+
+  const name = document.createElement('span');
+  name.className = 'font-semibold text-gray-700';
+  name.textContent = username;
+
+  const time = document.createElement('span');
+  time.textContent = timestamp
+    ? new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    : '';
+
+  header.appendChild(name);
+  header.appendChild(time);
+
+  const message = document.createElement('div');
+  message.className = `${fromAdmin
+    ? 'bg-gray-200 text-gray-900'
+    : 'bg-blue-500 text-white'} px-4 py-2 rounded-lg text-sm break-words`;
+
+  message.textContent = text;
+
+  contentWrapper.appendChild(header);
+  contentWrapper.appendChild(message);
+
+  if (fromAdmin) {
+    messageWrapper.appendChild(contentWrapper);
+    messageWrapper.appendChild(avatar);
+  } else {
+    messageWrapper.appendChild(avatar);
+    messageWrapper.appendChild(contentWrapper);
+  }
+
+  container.appendChild(messageWrapper);
+  chatMessages.appendChild(container);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
 
   function clearChat() {
     chatMessages.innerHTML = '';
+    recentMessagesSet.clear();
   }
 
-  async function loadChatMessages(userId) {
+  async function loadChatMessages() {
     clearChat();
+    if (!apiMessagesUrl) return;
+
     try {
-      const url = window.chatConfig.apiMessagesUrl.replace(/\/\d+\/$/, `/${userId}/`);
-      const res = await fetch(url);
+      const res = await fetch(apiMessagesUrl);
       if (!res.ok) throw new Error('Failed to fetch messages');
       const data = await res.json();
-
       const recentMessages = data.messages.slice(-100);
       recentMessages.forEach(msg => {
-        addMessage({
+        addMessageSafe({
           text: msg.message,
-          username: msg.sender_username,
-          avatarUrl: (msg.sender_id === 0 || msg.from_admin) ? window.chatConfig.adminAvatarUrl : (msg.avatar_url || window.chatConfig.defaultAvatarUrl),
+          username: msg.sender_username || 'You',
+          avatarUrl: msg.from_admin ? adminAvatarUrl : (msg.avatar_url || defaultAvatarUrl),
           timestamp: msg.timestamp,
-          fromAdmin: msg.sender_id === 0 || msg.from_admin,
-          isBanMessage: msg.message.toLowerCase().includes('banned'),  // mark ban messages
+          fromAdmin: msg.from_admin,
+          sender_id: msg.sender_id,
         });
       });
     } catch (err) {
-      console.error(err);
+      console.error('Error loading messages:', err);
+      chatMessages.innerHTML = '<div class="text-center text-red-500">Failed to load messages.</div>';
     }
   }
 
-  function connectSocket(userId) {
+  function connectSocket() {
     if (chatSocket) chatSocket.close();
 
-    const baseWsUrl = wsChatUrl.replace(/\/\d+\/$/, `/${userId}/`);
-    chatSocket = new WebSocket(baseWsUrl);
+    const socketUrl = `${wsProtocol}://${host}/ws/chat/user/${userId}/`;
+    chatSocket = new WebSocket(socketUrl);
 
     chatSocket.onopen = () => {
       chatInput.disabled = false;
-      const submitBtn = chatForm.querySelector('button[type="submit"]');
-      if (submitBtn) submitBtn.disabled = false;
+      chatForm.querySelector('button[type="submit"]').disabled = false;
     };
 
     chatSocket.onmessage = (e) => {
       const data = JSON.parse(e.data);
-
-      // Special type from server for ban
-      if (data.type === 'chat_banned') {
-        showChatBanAlert(data.message || "You have been banned from chatting.");
-        chatSocket.close();
-        chatInput.disabled = true;
-        const submitBtn = chatForm.querySelector('button[type="submit"]');
-        if (submitBtn) submitBtn.disabled = true;
-        return;
-      }
-
-      // If ban message comes as normal chat message, also show alert
-      if (data.message && data.message.toLowerCase().includes("banned")) {
-        showChatBanAlert(data.message);
-      }
-
-      addMessage({
+      addMessageSafe({
         text: data.message,
-        username: data.username,
-        avatarUrl: data.avatar_url || window.chatConfig.defaultAvatarUrl,
+        username: data.username || (data.from_admin ? 'Admin' : 'You'),
+        avatarUrl: data.from_admin ? adminAvatarUrl : (data.avatar_url || defaultAvatarUrl),
         timestamp: data.timestamp,
         fromAdmin: data.from_admin,
-        isBanMessage: data.message.toLowerCase().includes("banned"),
+        sender_id: data.sender_id,
       });
-    };
-
-    chatSocket.onerror = (e) => {
-      console.error("WebSocket error:", e);
-      chatInput.disabled = true;
-      const submitBtn = chatForm.querySelector('button[type="submit"]');
-      if (submitBtn) submitBtn.disabled = true;
     };
 
     chatSocket.onclose = () => {
       chatInput.disabled = true;
-      const submitBtn = chatForm.querySelector('button[type="submit"]');
-      if (submitBtn) submitBtn.disabled = true;
+      chatForm.querySelector('button[type="submit"]').disabled = true;
     };
+
+    chatSocket.onerror = (err) => console.error('WebSocket error:', err);
   }
 
-  function onSendMessage(e) {
-    e.preventDefault();
-    const message = chatInput.value.trim();
-    if (!message) return;
-
-    if (!chatSocket || chatSocket.readyState !== WebSocket.OPEN) {
-      console.warn("Chat socket is not open.");
-      return;
-    }
-
-    chatSocket.send(JSON.stringify({ message }));
-    chatInput.value = '';
+  if (chatForm) {
+    chatForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!chatSocket || chatSocket.readyState !== WebSocket.OPEN) return;
+      const message = chatInput.value.trim();
+      if (!message) return;
+      chatSocket.send(JSON.stringify({ message }));
+      chatInput.value = '';
+    });
   }
-
-  function addMessage({ text, username, avatarUrl, timestamp, fromAdmin, isBanMessage = false }) {
-    const messageEl = document.createElement('div');
-    messageEl.classList.add('chat-message');
-
-    // Use special classes and no avatar if banned message
-    if (isBanMessage) {
-      messageEl.classList.add('chat-ban-message');
-    } else {
-      messageEl.classList.add(fromAdmin ? 'from-admin' : 'from-user');
-    }
-
-    if (!isBanMessage) {
-      const avatar = document.createElement('img');
-      avatar.src = avatarUrl;
-      avatar.alt = username;
-      avatar.classList.add('chat-avatar');
-      messageEl.appendChild(avatar);
-    }
-
-    const content = document.createElement('div');
-    content.classList.add('chat-content');
-
-    const header = document.createElement('div');
-    header.classList.add('chat-header');
-
-    const userSpan = document.createElement('span');
-    userSpan.classList.add('chat-username');
-    userSpan.textContent = username;
-
-    const timeSpan = document.createElement('span');
-    timeSpan.classList.add('chat-timestamp');
-    timeSpan.textContent = new Date(timestamp).toLocaleTimeString();
-
-    header.appendChild(userSpan);
-    header.appendChild(timeSpan);
-
-    const messageText = document.createElement('div');
-    messageText.classList.add('chat-text');
-    messageText.textContent = text;
-
-    content.appendChild(header);
-    content.appendChild(messageText);
-
-    messageEl.appendChild(content);
-
-    chatMessages.appendChild(messageEl);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
-
-  function showChatBanAlert(message) {
-    const banMsg = message || "You have been banned from chatting due to excessive messaging. Please contact support.";
-    const existingAlert = document.getElementById('chat-ban-alert');
-    if (existingAlert) return;
-
-    const alertBox = document.createElement('div');
-    alertBox.id = 'chat-ban-alert';
-    alertBox.style.position = 'fixed';
-    alertBox.style.top = '20%';
-    alertBox.style.left = '50%';
-    alertBox.style.transform = 'translateX(-50%)';
-    alertBox.style.backgroundColor = '#f44336'; // red background
-    alertBox.style.color = 'white';
-    alertBox.style.padding = '1rem 2rem';
-    alertBox.style.borderRadius = '8px';
-    alertBox.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
-    alertBox.style.zIndex = 9999;
-    alertBox.style.fontSize = '1.1rem';
-    alertBox.style.textAlign = 'center';
-    alertBox.textContent = banMsg;
-
-    document.body.appendChild(alertBox);
-
-    setTimeout(() => {
-      alertBox.remove();
-    }, 7000);
-  }
-
-  document.addEventListener('DOMContentLoaded', init);
-})();
+});

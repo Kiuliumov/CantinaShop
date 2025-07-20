@@ -15,8 +15,6 @@ from .forms import RegistrationForm, LoginForm, AccountForm
 from .models import Account
 
 User = get_user_model()
-EMAIL_SENDER = 'no-reply@cantinashop.com'
-
 
 
 class RegisterView(ProfileProhibitedMixin, FormView):
