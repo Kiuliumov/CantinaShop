@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
     userIsChatBanned
   } = window.chatConfig || {};
 
+
   if (!userId) return;
 
   const chatToggleBtn = document.getElementById('chat-toggle');
@@ -34,6 +35,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (chatToggleBtn) {
     chatToggleBtn.addEventListener('click', () => {
+        if (window.chatConfig.userIsStaffOrSuperuser) {
+        window.location.href = "/chat/admin";
+        return;
+  }
+
       if (userIsChatBanned) {
         showBanNotice();
         return;
