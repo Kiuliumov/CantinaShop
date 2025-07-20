@@ -10,6 +10,22 @@
 
     <div class="flex-1">
       <h1 class="text-4xl font-bold text-indigo-400 mb-2">{{ product.name }}</h1>
+
+      <div class="flex items-center gap-2 mb-2" aria-label="Average rating">
+        {% with avg=product.average_rating %}
+          {% for i in "12345" %}
+            {% if avg >= i|add:"0" %}
+              <span class="text-yellow-400 text-2xl">&#9733;</span>
+            {% elif avg >= i|add:"-0.5" %}
+              <span class="text-yellow-400 text-2xl">&#9733;</span>
+            {% else %}
+              <span class="text-gray-600 text-2xl">&#9733;</span>
+            {% endif %}
+          {% endfor %}
+          <span class="text-gray-400 ml-2 text-sm">({{ product.rating_count }} review{% if product.rating_count != 1 %}s{% endif %})</span>
+        {% endwith %}
+      </div>
+
       <p class="text-sm text-gray-400 mb-4">{{ product.category.name }}</p>
       <p class="mb-6 text-lg">{{ product.description }}</p>
 
@@ -48,6 +64,22 @@
     </div>
   </div>
 
+  {% if request.user.is_authenticated %}
+  <div class="mt-10">
+    <h2 class="text-2xl font-semibold mb-4 text-indigo-300">Rate this product</h2>
+    <form method="post" action="{% url 'rate' product.slug %}" class="inline-block">
+      {% csrf_token %}
+      <div class="flex space-x-1 text-yellow-400 text-3xl select-none cursor-pointer" id="star-rating">
+        {% for i in "12345" %}
+          <input type="radio" name="rating" id="star{{ i }}" value="{{ i }}" class="hidden" />
+          <label for="star{{ i }}" title="{{ i }} star{% if i|add:'-1' != '0' %}s{% endif %}">&#9733;</label>
+        {% endfor %}
+      </div>
+      <button type="submit" class="mt-4 px-6 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-lg text-white font-semibold transition">Submit Rating</button>
+    </form>
+  </div>
+  {% endif %}
+
   <div class="mt-12">
     <h2 class="text-2xl font-semibold mb-6 text-indigo-300">Comments</h2>
 
@@ -62,7 +94,7 @@
       </button>
     </form>
     {% else %}
-      <p class="text-gray-400 italic">You must be <a href="#" class="text-indigo-400 underline">logged in</a> to post a comment.</p>
+      <p class="text-gray-400 italic">You must be <a href="{% url 'login' %}" class="text-indigo-400 underline">logged in</a> to post a comment.</p>
     {% endif %}
 
     {% if comments %}
@@ -112,38 +144,34 @@
           <a href="?page={{ comments.previous_page_number }}" class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">Previous</a>
         {% endif %}
 
-        <div class="flex justify-center mt-6 space-x-2 text-indigo-500 flex-wrap gap-2">
-  {% if comments.has_previous %}
-    <a href="?page={{ comments.previous_page_number }}" class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">Previous</a>
-  {% endif %}
+        {% page_range comments.paginator comments.number as pages %}
+        {% for num in pages %}
+          {% if num == comments.number %}
+            <span class="px-3 py-1 rounded bg-indigo-600 text-white">{{ num }}</span>
+          {% else %}
+            <a href="?page={{ num }}" class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
 
-  {% page_range comments.paginator comments.number as pages %}
-  {% for num in pages %}
-    {% if num == comments.number %}
-      <span class="px-3 py-1 rounded bg-indigo-600 text-white">{{ num }}</span>
-    {% else %}
-      <a href="?page={{ num }}" class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">{{ num }}</a>
-    {% endif %}
-  {% endfor %}
-
-  {% if comments.has_next %}
-    <a href="?page={{ comments.next_page_number }}" class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">Next</a>
-  {% endif %}
-</div>
+        {% if comments.has_next %}
+          <a href="?page={{ comments.next_page_number }}" class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">Next</a>
+        {% endif %}
+      </div>
 
     {% else %}
       <p class="text-gray-400 italic">No comments yet.</p>
     {% endif %}
   </div>
 </div>
-</div>
 
 {% include 'partials/main/confirm_delete.html' %}
-{% include 'chat/partials/user-chat.html' %}
 {% endblock %}
 
 {% block script %}
-    {{ block.super }}
-    <script src="{% static 'js/toggleEdit.js' %}"></script>
-    <script src="{% static 'js/confirmDelete.js' %}"></script>
+  {{ block.super }}
+  <script src="{% static 'js/toggleEdit.js' %}"></script>
+  <script src="{% static 'js/confirmDelete.js' %}"></script>
+  {% if request.user.is_authenticated %}
+  <script src="{% static 'js/starRating.js' %}"></script>
+  {% endif %}
 {% endblock %}

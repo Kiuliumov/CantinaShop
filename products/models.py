@@ -44,7 +44,8 @@ class Product(models.Model):
 
     @property
     def average_rating(self):
-        return self.rating_set.aggregate(avg=Avg('rating'))['avg'] or 0
+        avg = self.rating_set.aggregate(avg=Avg('rating'))['avg']
+        return float(avg) if avg is not None else 0
 
     @property
     def rating_count(self):

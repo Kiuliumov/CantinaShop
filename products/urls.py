@@ -11,4 +11,5 @@ urlpatterns = [
     path('edit/<slug:slug>/', views.ProductUpdateView.as_view(), name='product-edit'),
     path('comments/<int:pk>/delete/', views.CommentDeleteView.as_view(), name='comment-delete'),
     path('comments/<int:pk>/edit/', views.CommentUpdateView.as_view(), name='comment-edit'),
+    path('rate/<slug:slug>', views.SetRatingView.as_view(), name='rate'),
 ]

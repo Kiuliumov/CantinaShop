@@ -155,12 +155,14 @@ class CommentUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class SetRatingView(LoginRequiredMixin, View):
-
     def post(self, request, *args, **kwargs):
-        product_id = request.POST.get('product_id')
+        product_slug = kwargs.get('slug')
         value = request.POST.get('rating')
 
-        if not product_id or not value:
+        if not value:
+            return redirect('product-details', slug=product_slug)
+
+        if not product_slug:
             raise Http404
 
         try:
@@ -170,12 +172,13 @@ class SetRatingView(LoginRequiredMixin, View):
         except ValueError:
             return JsonResponse({'error': 'Rating must be an integer between 1 and 5.'}, status=400)
 
-        product = get_object_or_404(Product, id=product_id)
+        product = get_object_or_404(Product, slug=product_slug)
 
         Rating.objects.update_or_create(
             user=request.user.account,
             product=product,
             defaults={'rating': value}
         )
-
+        print(product.average_rating)
+        print(product.rating_set.first().rating)
         return redirect(reverse_lazy('product-details', kwargs={'slug': product.slug}))
