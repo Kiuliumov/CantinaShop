@@ -20,11 +20,11 @@ cloudinary.config(
     secure=True
 )
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 THIRD_PARTY_APPS = [
     'rest_framework'
 ]
@@ -61,6 +61,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'CantinaShop.middlewares.request_log.RequestLoggingMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -73,7 +74,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'CantinaShop.urls'
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 ASGI_APPLICATION = 'CantinaShop.asgi.application'
 
 CHANNEL_LAYERS = {
@@ -132,6 +133,8 @@ LOGGING = {
     },
 }
 WSGI_APPLICATION = 'CantinaShop.wsgi.application'
+
+STATIC_ROOT = BASE_DIR / 'staticfilesSh'
 
 DATABASES = {
     'default': {

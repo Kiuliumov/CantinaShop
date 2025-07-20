@@ -1,5 +1,7 @@
 from django.db import models
 from django.core.validators import MaxValueValidator
+from django.db.models import Avg, Count
+
 from accounts.models import Account
 from common.profanity_utils import smart_censor
 
@@ -25,6 +27,7 @@ class Tag(models.Model):
         super().save(*args, **kwargs)
 
 
+
 class Product(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
@@ -35,16 +38,28 @@ class Product(models.Model):
     slug = models.SlugField(unique=True, blank=True)
     has_discount = models.BooleanField(default=False)
     tags = models.CharField(max_length=255, blank=True)
-    rating = models.PositiveIntegerField(validators=[MaxValueValidator(5)])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    @property
+    def average_rating(self):
+        return self.rating_set.aggregate(avg=Avg('rating'))['avg'] or 0
+
+    @property
+    def rating_count(self):
+        return self.rating_set.aggregate(count=Count('id'))['count'] or 0
 
     def save(self, *args, **kwargs):
         self.name = smart_censor(self.name)
         self.description = smart_censor(self.description)
         super().save(*args, **kwargs)
 
+
+class Rating(models.Model):
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    rating = models.IntegerField(validators=[MaxValueValidator(5)])
 
 class Comment(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments')

@@ -1,13 +1,16 @@
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.http import JsonResponse, Http404
+from django.shortcuts import get_object_or_404, redirect
+from django.views import View
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, FormMixin, DeleteView, UpdateView
 from django.urls import reverse_lazy
 from common.mixins import AdminRequiredMixin
 from .forms import ProductForm, CommentForm
-from products.models import Product, Category, Comment
+from products.models import Product, Category, Comment, Rating
 
 
 class ProductListView(ListView):
@@ -149,3 +152,30 @@ class CommentUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('product-details', kwargs={'slug': self.object.product.slug})
+
+
+class SetRatingView(LoginRequiredMixin, View):
+
+    def post(self, request, *args, **kwargs):
+        product_id = request.POST.get('product_id')
+        value = request.POST.get('rating')
+
+        if not product_id or not value:
+            raise Http404
+
+        try:
+            value = int(value)
+            if not 1 <= value <= 5:
+                raise ValueError
+        except ValueError:
+            return JsonResponse({'error': 'Rating must be an integer between 1 and 5.'}, status=400)
+
+        product = get_object_or_404(Product, id=product_id)
+
+        Rating.objects.update_or_create(
+            user=request.user.account,
+            product=product,
+            defaults={'rating': value}
+        )
+
+        return redirect(reverse_lazy('product-details', kwargs={'slug': product.slug}))
