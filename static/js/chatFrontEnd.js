@@ -73,58 +73,39 @@ document.addEventListener("DOMContentLoaded", function () {
     addMessage(msg);
   }
 
-  function addMessage({ text, username, avatarUrl, timestamp, fromAdmin }) {
-  const container = document.createElement('div');
-  container.className = `flex ${fromAdmin ? 'justify-end' : 'justify-start'} mb-3`;
+  function addMessage({ text, avatarUrl, timestamp, fromAdmin }) {
+    const container = document.createElement('div');
+    container.className = `flex ${fromAdmin ? 'justify-end' : 'justify-start'} mb-3`;
 
-  const messageWrapper = document.createElement('div');
-  messageWrapper.className = 'flex items-start space-x-2 max-w-xs';
+    const contentRow = document.createElement('div');
+    contentRow.className = `flex items-center space-x-2 ${fromAdmin ? 'flex-row-reverse space-x-reverse' : ''}`;
 
-  const avatar = document.createElement('img');
-  avatar.src = avatarUrl || defaultAvatarUrl;
-  avatar.alt = username;
-  avatar.className = 'w-8 h-8 rounded-full object-cover';
+    const avatar = document.createElement('img');
+    avatar.src = avatarUrl || defaultAvatarUrl;
+    avatar.alt = 'avatar';
+    avatar.className = 'w-8 h-8 rounded-full object-cover';
 
-  const contentWrapper = document.createElement('div');
-  contentWrapper.className = 'flex flex-col';
+    const messageAndTimestamp = document.createElement('div');
+    messageAndTimestamp.className = 'flex flex-col';
 
-  const header = document.createElement('div');
-  header.className = 'flex items-center space-x-2 text-xs text-gray-400 mb-1';
+    const message = document.createElement('div');
+    message.className = `px-4 py-2 rounded-lg text-sm break-words max-w-xs ${fromAdmin ? 'bg-gray-200 text-gray-900 rounded-br-none' : 'bg-blue-500 text-white rounded-bl-none'}`;
+    message.textContent = text;
 
-  const name = document.createElement('span');
-  name.className = 'font-semibold text-gray-700';
-  name.textContent = username;
+    const time = document.createElement('span');
+    time.className = `text-xs text-gray-400 mt-1 ${fromAdmin ? 'text-right' : 'text-left'}`;
+    time.textContent = timestamp ? new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
 
-  const time = document.createElement('span');
-  time.textContent = timestamp
-    ? new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    : '';
+    messageAndTimestamp.appendChild(message);
+    messageAndTimestamp.appendChild(time);
 
-  header.appendChild(name);
-  header.appendChild(time);
+    contentRow.appendChild(avatar);
+    contentRow.appendChild(messageAndTimestamp);
 
-  const message = document.createElement('div');
-  message.className = `${fromAdmin
-    ? 'bg-gray-200 text-gray-900'
-    : 'bg-blue-500 text-white'} px-4 py-2 rounded-lg text-sm break-words`;
-
-  message.textContent = text;
-
-  contentWrapper.appendChild(header);
-  contentWrapper.appendChild(message);
-
-  if (fromAdmin) {
-    messageWrapper.appendChild(contentWrapper);
-    messageWrapper.appendChild(avatar);
-  } else {
-    messageWrapper.appendChild(avatar);
-    messageWrapper.appendChild(contentWrapper);
+    container.appendChild(contentRow);
+    chatMessages.appendChild(container);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
   }
-
-  container.appendChild(messageWrapper);
-  chatMessages.appendChild(container);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-}
 
   function clearChat() {
     chatMessages.innerHTML = '';
