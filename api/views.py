@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.serializers import ChatMessageSerializer
-from chat.models import ChatMessage
+from api.models import ChatMessage
 
 
 class ChatMessagesAPIView(APIView):

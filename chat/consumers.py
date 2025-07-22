@@ -125,7 +125,7 @@ class BaseChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def save_message(self, sender, recipient, message, is_from_admin):
-        from .models import ChatMessage
+        from api.models import ChatMessage
         return ChatMessage.objects.create(
             sender=sender,
             recipient=recipient,
@@ -143,7 +143,7 @@ class BaseChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def too_many_messages(self, user):
-        from .models import ChatMessage
+        from api.models import ChatMessage
         cutoff = now() - timedelta(seconds=self.TIME_WINDOW)
         count = ChatMessage.objects.filter(sender=user, timestamp__gte=cutoff).count()
         return count >= self.MESSAGE_LIMIT
