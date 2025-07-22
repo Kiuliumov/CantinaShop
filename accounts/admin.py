@@ -1,6 +1,4 @@
 from django.contrib import admin
-
-from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
 from .models import UserModel, Account, Address
@@ -32,7 +30,7 @@ class UserAdmin(BaseUserAdmin):
 
 class AddressInline(admin.TabularInline):
     model = Address
-    extraIt = 0
+    extra = 0
 
 
 @admin.register(Account)
@@ -42,9 +40,15 @@ class AccountAdmin(admin.ModelAdmin):
     list_filter = ('created_at', 'updated_at')
     inlines = [AddressInline]
 
+    readonly_fields = ('created_at', 'updated_at')
+    raw_id_fields = ('user', 'default_shipping', 'default_billing')
+
 
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):
     list_display = ('account', 'label', 'address_type', 'city', 'state', 'is_default')
     list_filter = ('address_type', 'is_default', 'country')
     search_fields = ('label', 'city', 'state', 'postal_code', 'country')
+
+    readonly_fields = ('created_at', 'updated_at')
+    raw_id_fields = ('account',)
