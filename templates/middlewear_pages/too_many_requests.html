@@ -14,7 +14,7 @@
       <span class="text-white font-bold" id="countdown">{{ retry_after_seconds }}</span> seconds.
     </p>
   </div>
-  <script src="{% static 'js/countdownForErrors.js' %}">
-  </script>
+  <script> window.redirectUrl = {% url 'index' %}</script>
+  <script src="{% static 'js/countdownForErrors.js' %}"></script>
 </body>
 </html>
