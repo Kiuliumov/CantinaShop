@@ -163,7 +163,8 @@
   </div>
 </div>
 
-{% include 'partials/main/../partials/pop-ups/confirm_delete.html' %}
+{% include 'partials/pop-ups/confirm_delete.html' %}
+{% include 'partials/pop-ups/cart-pop-up.html' %}
 {% endblock %}
 
 {% block script %}
@@ -172,5 +173,6 @@
   <script src="{% static 'js/confirmDelete.js' %}"></script>
   {% if request.user.is_authenticated %}
   <script src="{% static 'js/starRating.js' %}"></script>
+      <script src="{% static 'js/orderPopUp.js' %}"></script>
   {% endif %}
 {% endblock %}
