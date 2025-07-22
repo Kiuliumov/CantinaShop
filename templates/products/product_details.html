@@ -45,7 +45,7 @@
 
       <div class="flex gap-4">
         <a href="#" class="inline-flex items-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-3 rounded-lg shadow transition">
-          <i class="fas fa-shopping-cart mr-2"></i> Order Now
+          <i class="fas fa-shopping-cart mr-2"></i> Order
         </a>
 
         {% if request.user.is_staff or request.user.is_superuser %}
@@ -70,7 +70,7 @@
       {% csrf_token %}
       <div class="flex space-x-1 text-yellow-400 text-3xl select-none cursor-pointer" id="star-rating">
         {% for i in "12345" %}
-          <input type="radio" name="rating" id="star{{ i }}" value="{{ i }}" class="hidden" />
+          <input type="radio" name="rating" id="star{{ i }}" value="{{ i }}" class="hidden pointer-events-none" />
           <label for="star{{ i }}" title="{{ i }} star{% if i|add:'-1' != '0' %}s{% endif %}">&#9733;</label>
         {% endfor %}
       </div>
