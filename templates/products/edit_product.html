@@ -37,7 +37,7 @@
     {% endfor %}
 
     <div class="flex justify-between items-center mt-8">
-      <a href="{% url 'product-details' product.pk %}" class="text-indigo-400 hover:underline">&larr; Back to Product</a>
+      <a href="{% url 'product-details' product.slug %}" class="text-indigo-400 hover:underline">&larr; Back to Product</a>
       <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 px-6 py-3 rounded-lg text-white font-semibold shadow transition">
         Save Changes
       </button>
