@@ -2,32 +2,24 @@
 {% load static %}
 
 {% block content %}
-<div class="max-w-screen-xl mx-auto px-6 md:px-10 lg:px-16 py-12 bg-gray-800 text-white rounded-2xl shadow-xl">
-  <h1 class="text-4xl font-bold text-indigo-400 mb-10 flex items-center gap-3">
+<div class="max-w-screen-2xl mx-auto px-6 md:px-12 lg:px-20 py-16 bg-gray-800 text-white rounded-2xl shadow-xl">
+  <h1 class="text-5xl font-bold text-indigo-400 mb-12 flex items-center gap-4">
     <i class="fas fa-shopping-cart"></i> Your Cart
   </h1>
 
   {% if cart_items %}
-    <div id="cart-container" class="space-y-8">
+    <div id="cart-items" class="space-y-10">
       {% for item in cart_items %}
-        <div class="cart-item flex flex-col md:flex-row items-center gap-6 bg-gray-700 rounded-xl p-6 shadow-md" data-slug="{{ item.product.slug }}">
-          <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="w-28 h-28 object-cover rounded-lg shadow">
+        <div class="cart-item flex flex-col lg:flex-row items-center gap-8 bg-gray-700 rounded-xl p-8 shadow-md" data-slug="{{ item.product.slug }}">
+          <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="w-36 h-36 object-cover rounded-lg shadow">
 
           <div class="flex-1 w-full">
-            <div class="flex justify-between items-start">
-              <div>
-                <h2 class="text-xl font-semibold text-indigo-300 mb-1">{{ item.product.name }}</h2>
-                <p class="text-gray-400 text-sm mb-3">{{ item.product.category.name }}</p>
-              </div>
-              <button class="remove-item text-red-500 hover:text-red-400 transition" data-slug="{{ item.product.slug }}">
-                <i class="fas fa-trash-alt"></i>
-              </button>
-            </div>
-
+            <h2 class="text-2xl font-semibold text-indigo-300 mb-2">{{ item.product.name }}</h2>
+            <p class="text-gray-400 text-sm mb-2">{{ item.product.category.name }}</p>
             <p class="text-sm mb-4">{{ item.product.description|truncatewords:20 }}</p>
 
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div class="flex items-center gap-3">
                 <label class="text-sm text-indigo-200 font-medium select-none">Quantity:</label>
                 <div class="flex items-center border rounded-lg overflow-hidden bg-gray-600 text-white">
                   <button class="quantity-decrement px-3 py-1 hover:bg-gray-500" data-slug="{{ item.product.slug }}">
@@ -44,25 +36,26 @@
                     <i class="fas fa-plus"></i>
                   </button>
                 </div>
+                <button class="remove-btn ml-4 px-4 py-2 bg-red-600 hover:bg-red-700 text-sm rounded shadow" data-slug="{{ item.product.slug }}">
+                  <i class="fas fa-trash-alt mr-1"></i> Remove
+                </button>
               </div>
 
-              <p class="subtotal text-lg font-semibold text-indigo-300" data-slug="{{ item.product.slug }}">
-                ${{ item.subtotal|floatformat:2 }}
-              </p>
+              <p class="text-xl font-bold text-indigo-300">${{ item.subtotal|floatformat:2 }}</p>
             </div>
           </div>
         </div>
       {% endfor %}
     </div>
 
-    <div class="mt-12 border-t border-gray-600 pt-6 flex justify-between items-center">
-      <div class="text-gray-400 text-sm max-w-lg">
-        <p class="mb-2"><i class="fas fa-undo-alt mr-1 text-yellow-400"></i> <strong>Refund Policy:</strong> You can request a refund within 14 days of purchase if the product is unused and in original condition.</p>
-        <p><i class="fas fa-shield-alt mr-1 text-green-400"></i> <strong>Secure Checkout:</strong> All transactions are SSL secured and encrypted.</p>
+    <div class="mt-16 border-t border-gray-600 pt-8 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
+      <div class="text-gray-400 text-sm max-w-xl">
+        <p class="mb-2"><i class="fas fa-undo-alt mr-2 text-yellow-400"></i> <strong>Refund Policy:</strong> Refunds available within 14 days if product is unused and in original packaging.</p>
+        <p><i class="fas fa-shield-alt mr-2 text-green-400"></i> <strong>Secure Checkout:</strong> All transactions are SSL encrypted and secured.</p>
       </div>
 
       <div class="text-right">
-        <p class="text-xl font-bold text-indigo-300">Total: $<span id="cart-total">{{ cart_total|floatformat:2 }}</span></p>
+        <p class="text-2xl font-bold text-indigo-300">Total: ${{ cart_total|floatformat:2 }}</p>
         <a href="{% url 'login' %}" class="mt-4 inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg shadow transition">
           <i class="fas fa-lock mr-2"></i> Proceed to Checkout
         </a>
@@ -72,137 +65,9 @@
     <p class="text-gray-400 text-center text-xl"><i class="fas fa-info-circle mr-2"></i> Your cart is empty.</p>
   {% endif %}
 </div>
+    {% include 'partials/pop-ups/shopping-cart.html' %}
 {% endblock %}
 
 {% block script %}
-<script>
-  function getCart() {
-    const cartCookie = document.cookie.split('; ').find(row => row.startsWith('cart='));
-    if (!cartCookie) return [];
-    try {
-      return JSON.parse(decodeURIComponent(cartCookie.split('=')[1]));
-    } catch {
-      return [];
-    }
-  }
-
-  function setCart(cart) {
-    document.cookie = `cart=${encodeURIComponent(JSON.stringify(cart))};path=/;max-age=${60*60*24*7};SameSite=Lax`;
-  }
-
-  function formatMoney(value) {
-    return value.toFixed(2);
-  }
-
-  function updateCartDisplay(cart) {
-    let total = 0;
-
-    cart.forEach(item => {
-      const productEl = document.querySelector(`.cart-item[data-slug="${item.slug}"]`);
-      const price = parseFloat(productEl.querySelector('.subtotal').dataset.unitPrice);
-      const subtotal = item.quantity * price;
-      total += subtotal;
-
-      productEl.querySelector('.subtotal').textContent = '$' + formatMoney(subtotal);
-    });
-
-    document.getElementById('cart-total').textContent = formatMoney(total);
-  }
-
-  function removeItemFromDOM(slug) {
-    const item = document.querySelector(`.cart-item[data-slug="${slug}"]`);
-    if (item) item.remove();
-
-    // If cart is empty now, show empty message
-    if (!document.querySelectorAll('.cart-item').length) {
-      document.getElementById('cart-container').innerHTML = `<p class="text-gray-400 text-center text-xl"><i class="fas fa-info-circle mr-2"></i> Your cart is empty.</p>`;
-      document.querySelector('.text-right')?.remove();
-    }
-  }
-
-  function updateCartItem(slug, quantity) {
-    let cart = getCart();
-    let updated = false;
-
-    cart = cart.map(item => {
-      if (item.slug === slug) {
-        updated = true;
-        return { slug: slug, quantity: quantity };
-      }
-      return item;
-    });
-
-    if (!updated && quantity > 0) {
-      cart.push({ slug: slug, quantity: quantity });
-    }
-
-    if (quantity <= 0) {
-      cart = cart.filter(item => item.slug !== slug);
-      removeItemFromDOM(slug);
-    }
-
-    setCart(cart);
-    updateCartDisplay(cart);
-  }
-
-  function removeItem(slug) {
-    let cart = getCart();
-    cart = cart.filter(item => item.slug !== slug);
-    setCart(cart);
-    removeItemFromDOM(slug);
-    updateCartDisplay(cart);
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    // Cache unit prices
-    document.querySelectorAll('.cart-item').forEach(item => {
-      const slug = item.dataset.slug;
-      const subtotalEl = item.querySelector('.subtotal');
-      const priceText = subtotalEl.textContent.replace('$', '').trim();
-      const input = item.querySelector(`.quantity-input[data-slug="${slug}"]`);
-      const quantity = parseInt(input.value, 10) || 1;
-      subtotalEl.dataset.unitPrice = (parseFloat(priceText) / quantity).toFixed(2);
-    });
-
-    // Quantity controls
-    document.querySelectorAll('.quantity-increment').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const slug = btn.dataset.slug;
-        const input = document.querySelector(`.quantity-input[data-slug="${slug}"]`);
-        const newQty = parseInt(input.value, 10) + 1;
-        input.value = newQty;
-        updateCartItem(slug, newQty);
-      });
-    });
-
-    document.querySelectorAll('.quantity-decrement').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const slug = btn.dataset.slug;
-        const input = document.querySelector(`.quantity-input[data-slug="${slug}"]`);
-        let newQty = parseInt(input.value, 10) - 1;
-        if (newQty < 0) newQty = 0;
-        input.value = newQty;
-        updateCartItem(slug, newQty);
-      });
-    });
-
-    document.querySelectorAll('.quantity-input').forEach(input => {
-      input.addEventListener('input', () => {
-        const slug = input.dataset.slug;
-        let val = parseInt(input.value, 10);
-        if (isNaN(val) || val < 0) val = 0;
-        input.value = val;
-        updateCartItem(slug, val);
-      });
-    });
-
-    // Remove button
-    document.querySelectorAll('.remove-item').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const slug = btn.dataset.slug;
-        removeItem(slug);
-      });
-    });
-  });
-</script>
+<script src="{% static 'js/cartFunc.js' %}"></script>
 {% endblock %}
