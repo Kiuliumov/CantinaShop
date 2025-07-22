@@ -27,6 +27,6 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('chat/', include('chat.urls')),
     path('products/', include('products.urls')),
+    path('orders/', include('orders.urls')),
     path('api/', include('api.urls')),
-
 ] + chat.routing.websocket_urlpatterns
