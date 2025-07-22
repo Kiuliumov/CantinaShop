@@ -46,7 +46,7 @@ class ProductForm(forms.ModelForm):
         model = Product
         fields = [
             'name', 'description',  'price', 'is_available', 'image_file', 'quantity',
-            'has_discount', 'tags', 'category',
+            'has_discount', 'category',
         ]
         widgets = {
             'name': forms.TextInput(attrs={
@@ -67,10 +67,6 @@ class ProductForm(forms.ModelForm):
                 'class': 'h-5 w-5 text-yellow-400 bg-gray-700 border-gray-500 rounded focus:ring-yellow-400 transition',
             }),
             'quantity': forms.NumberInput(attrs={
-                'class': 'w-full px-4 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition',
-            }),
-            'tags': forms.TextInput(attrs={
-                'placeholder': 'Comma-separated tags',
                 'class': 'w-full px-4 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition',
             }),
             'category': forms.Select(attrs={

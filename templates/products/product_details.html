@@ -28,8 +28,6 @@
 
       <p class="text-sm text-gray-400 mb-4">{{ product.category.name }}</p>
       <p class="mb-6 text-lg">{{ product.description }}</p>
-    {% endif %}
-    
       <div class="flex items-center gap-4 mb-4">
         <span class="text-2xl font-bold text-indigo-300">${{ product.price }}</span>
         {% if product.has_discount %}
