@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="bg-gray-900 text-white py-20">
+  <div class="container mx-auto px-6 max-w-screen-lg">
+    <div class="text-center mb-16">
+      <h1 class="text-4xl sm:text-5xl font-extrabold mb-4 tracking-tight">Get in Touch</h1>
+      <p class="text-gray-300 text-lg max-w-2xl mx-auto">
+        Whether you have a question, need help with an order, or just want to say hello, we're here for you.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+      <div class="space-y-8">
+        <div class="flex items-start gap-4">
+          <i class="fas fa-envelope text-indigo-400 text-3xl mt-1"></i>
+          <div>
+            <h3 class="text-xl font-semibold mb-1">Email Us</h3>
+            <p class="text-gray-300">support@cantinashop.bg</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <i class="fas fa-phone-alt text-green-400 text-3xl mt-1"></i>
+          <div>
+            <h3 class="text-xl font-semibold mb-1">Call Us</h3>
+            <p class="text-gray-300">+359 888 123 456</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <i class="fas fa-map-marker-alt text-yellow-300 text-3xl mt-1"></i>
+          <div>
+            <h3 class="text-xl font-semibold mb-1">Visit Us</h3>
+            <p class="text-gray-300">42 Vitosha Blvd, Sofia, Bulgaria</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <i class="fas fa-clock text-blue-400 text-3xl mt-1"></i>
+          <div>
+            <h3 class="text-xl font-semibold mb-1">Working Hours</h3>
+            <p class="text-gray-300">Mon – Fri: 09:00 – 18:00</p>
+            <p class="text-gray-500 italic text-sm">Closed on weekends & holidays</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-gray-800 p-8 rounded-2xl shadow-2xl">
+        <form method="post" action="{% url 'contact' %}" class="space-y-6">
+          {% csrf_token %}
+          <div>
+            <label for="name" class="block font-semibold mb-2">Your Name</label>
+            <input type="text" id="name" name="name" required class="w-full px-4 py-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+
+          <div>
+            <label for="email" class="block font-semibold mb-2">Your Email</label>
+            <input type="email" id="email" name="email" required class="w-full px-4 py-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+
+          <div>
+            <label for="message" class="block font-semibold mb-2">Message</label>
+            <textarea id="message" name="message" rows="5" required class="w-full px-4 py-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+          </div>
+
+          <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 py-3 px-6 rounded-lg font-bold shadow-lg transition">
+            <i class="fas fa-paper-plane mr-2"></i> Send Message
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
