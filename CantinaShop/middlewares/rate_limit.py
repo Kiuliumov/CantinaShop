@@ -11,7 +11,7 @@ class RateLimitMiddleware(MiddlewareMixin):
     Limits requests per IP address.
 
     RATE_LIMIT = {
-        'RATE': 10,        # Number of requests
+        'RATE': 50,        # Number of requests
         'PERIOD': 60,      # Time window in seconds
         'CACHE_KEY_PREFIX': 'rl:',
     }
@@ -20,7 +20,7 @@ class RateLimitMiddleware(MiddlewareMixin):
     def __init__(self, get_response=None):
         super().__init__(get_response)
         config = getattr(settings, "RATE_LIMIT", {})
-        self.rate = config.get("RATE", 60)
+        self.rate = config.get("RATE", 50)
         self.period = config.get("PERIOD", 60)
         self.cache_key_prefix = config.get("CACHE_KEY_PREFIX", "rl:")
 
@@ -31,7 +31,6 @@ class RateLimitMiddleware(MiddlewareMixin):
             now = time.time()
             request_times = cache.get(cache_key, [])
 
-            # Remove timestamps outside of the current rate period
             request_times = [t for t in request_times if t > now - self.period]
 
             if len(request_times) >= self.rate:
@@ -39,7 +38,7 @@ class RateLimitMiddleware(MiddlewareMixin):
 
                 return render(
                     request,
-                    "middlewear_pages/too_many_requests.html",
+                    "middleware_pages/too_many_requests.html",
                     status=429,
                     context={"retry_after_seconds": retry_after}
                 )

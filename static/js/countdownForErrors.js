@@ -3,8 +3,8 @@ const countdown = document.getElementById('countdown');
 
     const timer = setInterval(() => {
       if (seconds <= 1) {
+        window.location.href = window.redirectUrl;
         clearInterval(timer);
-        window.location.href = window.redirectUrl
       } else {
         seconds -= 1;
         countdown.innerText = seconds;

@@ -29,7 +29,7 @@ class LoginDefenderMiddleware(MiddlewareMixin):
                 if retry_after > 0:
                     return render(
                         request,
-                        "middlewear_pages/login_attempts.html",
+                        "middleware_pages/login_attempts.html",
                         context={"retry_after_seconds": retry_after},
                         status=429,
                     )
