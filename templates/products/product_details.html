@@ -3,62 +3,83 @@
 {% load page_range %}
 {% block content %}
 <div class="max-w-4xl mx-auto px-4 py-8 bg-gray-800 text-white rounded-2xl shadow-xl">
-  <div class="flex flex-col md:flex-row gap-8">
+  <div class="flex flex-col md:flex-row gap-8 items-stretch">
     <div class="flex-1">
-      <img src="{{ product.image_url }}" alt="{{ product.name }}" class="rounded-xl w-full h-64 object-cover shadow-md">
+      <img src="{{ product.image_url }}" alt="{{ product.name }}" class="rounded-xl w-full h-full max-h-[400px] object-cover shadow-md">
     </div>
 
-    <div class="flex-1">
-      <h1 class="text-4xl font-bold text-indigo-400 mb-2">{{ product.name }}</h1>
+    <div class="flex-1 flex flex-col justify-between">
+      <div>
+        <h1 class="text-4xl font-bold text-indigo-400 mb-4">{{ product.name }}</h1>
 
-      <div class="flex items-center gap-2 mb-2" aria-label="Average rating">
-        {% with avg=product.average_rating %}
-          {% for i in "12345" %}
-            {% if avg >= i|add:"0" %}
-              <span class="text-yellow-400 text-2xl">&#9733;</span>
-            {% elif avg >= i|add:"-0.5" %}
-              <span class="text-yellow-400 text-2xl">&#9733;</span>
-            {% else %}
-              <span class="text-gray-600 text-2xl">&#9733;</span>
-            {% endif %}
-          {% endfor %}
-          <span class="text-gray-400 ml-2 text-sm">({{ product.rating_count }} review{% if product.rating_count != 1 %}s{% endif %})</span>
-        {% endwith %}
+        <div class="flex items-center gap-2 mb-6" aria-label="Average rating">
+          {% with avg=product.average_rating %}
+            {% for i in "12345" %}
+              {% if avg >= i|add:"0" %}
+                <span class="text-yellow-400 text-2xl">&#9733;</span>
+              {% elif avg >= i|add:"-0.5" %}
+                <span class="text-yellow-400 text-2xl">&#9733;</span>
+              {% else %}
+                <span class="text-gray-600 text-2xl">&#9733;</span>
+              {% endif %}
+            {% endfor %}
+            <span class="text-gray-400 ml-2 text-sm">({{ product.rating_count }} review{% if product.rating_count != 1 %}s{% endif %})</span>
+          {% endwith %}
+        </div>
+
+        <p class="text-sm text-gray-400 mb-4">{{ product.category.name }}</p>
+        <p class="mb-6 text-lg">{{ product.description }}</p>
+
+        <div class="flex items-center gap-4 mb-4">
+          <span class="text-2xl font-bold text-indigo-300">${{ product.price }}</span>
+          {% if product.has_discount %}
+            <span class="bg-yellow-400 text-yellow-900 text-sm font-semibold px-2 py-1 rounded">🔥 Discount</span>
+          {% endif %}
+        </div>
+
+        <p class="mb-6">
+          {% if product.is_available %}
+            <span class="text-green-400">In Stock</span>
+          {% else %}
+            <span class="text-red-400">Out of Stock</span>
+          {% endif %}
+        </p>
       </div>
 
-      <p class="text-sm text-gray-400 mb-4">{{ product.category.name }}</p>
-      <p class="mb-6 text-lg">{{ product.description }}</p>
-      <div class="flex items-center gap-4 mb-4">
-        <span class="text-2xl font-bold text-indigo-300">${{ product.price }}</span>
-        {% if product.has_discount %}
-          <span class="bg-yellow-400 text-yellow-900 text-sm font-semibold px-2 py-1 rounded">🔥 Discount</span>
-        {% endif %}
-      </div>
+      <div>
+        <div class="flex items-center gap-2 mb-6">
+          <label for="quantity-input" class="text-indigo-300 font-semibold select-none">Quantity:</label>
+          <div class="flex items-center border rounded-lg overflow-hidden bg-gray-700 text-white">
+            <button id="quantity-decrement" class="px-3 py-1 hover:bg-gray-600 mr-1" aria-label="Decrease quantity">−</button>
+            <input
+              id="quantity-input"
+              type="number"
+              min="1"
+              value="1"
+              class="w-16 text-center bg-gray-700 outline-none font-semibold"
+              aria-label="Quantity"
+            />
+            <button id="quantity-increment" class="px-3 py-1 hover:bg-gray-600 ml-1" aria-label="Increase quantity">+</button>
+          </div>
+        </div>
 
-      <p class="mb-6">
-        {% if product.is_available %}
-          <span class="text-green-400">In Stock</span>
-        {% else %}
-          <span class="text-red-400">Out of Stock</span>
-        {% endif %}
-      </p>
-
-      <div class="flex gap-4">
-        <a href="{% url 'cart_save' product.slug %}" class="inline-flex items-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-3 rounded-lg shadow transition">
-          <i class="fas fa-shopping-cart mr-2"></i> Order
-        </a>
-
-        {% if request.user.is_staff or request.user.is_superuser %}
-          <a href="{% url 'product-edit' product.slug %}" class="inline-flex items-center bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-4 py-3 rounded-lg shadow transition">
-            <i class="fas fa-edit mr-2"></i> Edit
+        <div class="flex gap-4">
+          <a href="{% url 'cart_save' product.slug %}" class="order-link inline-flex items-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-3 rounded-lg shadow transition">
+            <i class="fas fa-shopping-cart mr-2"></i> Order
           </a>
-          <form action="{% url 'product-delete' product.slug %}" method="post" class="inline-block">
-            {% csrf_token %}
-            <button type="submit" class="delete-btn inline-flex items-center bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-3 rounded-lg shadow transition">
-              <i class="fas fa-trash-alt mr-2"></i> Delete
-            </button>
-          </form>
-        {% endif %}
+
+          {% if request.user.is_staff or request.user.is_superuser %}
+            <a href="{% url 'product-edit' product.slug %}" class="inline-flex items-center bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-4 py-3 rounded-lg shadow transition">
+              <i class="fas fa-edit mr-2"></i> Edit
+            </a>
+            <form action="{% url 'product-delete' product.slug %}" method="post" class="inline-block">
+              {% csrf_token %}
+              <button type="submit" class="delete-btn inline-flex items-center bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-3 rounded-lg shadow transition">
+                <i class="fas fa-trash-alt mr-2"></i> Delete
+              </button>
+            </form>
+          {% endif %}
+        </div>
       </div>
     </div>
   </div>
@@ -171,8 +192,10 @@
   {{ block.super }}
   <script src="{% static 'js/toggleEdit.js' %}"></script>
   <script src="{% static 'js/confirmDelete.js' %}"></script>
+  <script src="{% static 'js/quantityButtonPlus.js' %}"></script>
   {% if request.user.is_authenticated %}
   <script src="{% static 'js/starRating.js' %}"></script>
-      <script src="{% static 'js/orderPopUp.js' %}"></script>
+  <script src="{% static 'js/orderPopUp.js' %}"></script>
+  <script src="{% static 'js/orderCookieQuantity.js' %}"></script>
   {% endif %}
 {% endblock %}
