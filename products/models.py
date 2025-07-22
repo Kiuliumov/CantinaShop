@@ -16,18 +16,6 @@ class Category(models.Model):
         super().save(*args, **kwargs)
 
 
-class Tag(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-
-    def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        self.name = smart_censor(self.name)
-        super().save(*args, **kwargs)
-
-
-
 class Product(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
@@ -37,7 +25,6 @@ class Product(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     slug = models.SlugField(unique=True, blank=True)
     has_discount = models.BooleanField(default=False)
-    tags = models.CharField(max_length=255, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)

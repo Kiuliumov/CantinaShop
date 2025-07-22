@@ -28,13 +28,6 @@
 
       <p class="text-sm text-gray-400 mb-4">{{ product.category.name }}</p>
       <p class="mb-6 text-lg">{{ product.description }}</p>
-    
-    {% if product.tags.exists %}
-      <div class="mb-6 flex flex-wrap gap-2">
-        {% for tag in product.tags.all %}
-          <span class="bg-gray-700 text-indigo-300 text-sm px-3 py-1 rounded-full shadow-sm">#{{ tag.name }}</span>
-        {% endfor %}
-      </div>
     {% endif %}
     
       <div class="flex items-center gap-4 mb-4">
