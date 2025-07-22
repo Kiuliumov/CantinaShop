@@ -13,12 +13,12 @@
     <ul class="hidden md:flex items-center space-x-6 lg:space-x-8">
       {% if user.is_staff or user.is_superuser %}
         <li>
-          <a href="{% url 'product-list' %}" class="px-4 py-2 bg-indigo-600 text-white font-bold text-sm sm:text-base rounded-lg shadow hover:bg-indigo-700 transition">
+          <a href="{% url 'admin:accounts_usermodel_changelist' %}" class="px-4 py-2 bg-indigo-600 text-white font-bold text-sm sm:text-base rounded-lg shadow hover:bg-indigo-700 transition">
             Users
           </a>
         </li>
         <li>
-          <a href="{% url 'product-list' %}" class="px-4 py-2 bg-indigo-600 text-white font-bold text-sm sm:text-base rounded-lg shadow hover:bg-indigo-700 transition">
+          <a href="{% url 'admin:orders_order_changelist' %}" class="px-4 py-2 bg-indigo-600 text-white font-bold text-sm sm:text-base rounded-lg shadow hover:bg-indigo-700 transition">
             Orders
           </a>
         </li>
@@ -32,12 +32,13 @@
       <li><a href="{% url 'product-list' %}?category=Bracelets" class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Bracelets</a></li>
       <li><a href="{% url 'about' %}" class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">About</a></li>
 
-      {% if user.is_authenticated %}
-        <li>
-          <a href="{% url 'index' %}" class="text-gray-300 hover:text-indigo-400">
+      <li>
+        <a href="{% url 'index' %}" class="text-gray-300 hover:text-indigo-400">
             <i data-lucide="shopping-cart" class="w-5 h-5 sm:w-6 sm:h-6"></i>
-          </a>
-        </li>
+        </a>
+      </li>
+      {% if user.is_authenticated %}
+
         <li>
           <a href="{% url 'account' %}" class="text-gray-300 hover:text-indigo-400">
             <i data-lucide="user" class="w-5 h-5 sm:w-6 sm:h-6"></i>
@@ -69,12 +70,12 @@
     <ul class="space-y-4 text-base text-gray-300">
       {% if user.is_staff or user.is_superuser %}
         <li>
-          <a href="{% url 'product-list' %}" class="block px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg shadow hover:bg-indigo-700 transition">
+          <a href="{% url 'admin:accounts_usermodel_changelist' %}" class="block px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg shadow hover:bg-indigo-700 transition">
             Users
           </a>
         </li>
         <li>
-          <a href="{% url 'product-list' %}" class="block px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg shadow hover:bg-indigo-700 transition">
+          <a href="{% url 'admin:orders_order_changelist' %}" class="block px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg shadow hover:bg-indigo-700 transition">
             Orders
           </a>
         </li>
@@ -86,9 +87,8 @@
       <li><a href="{% url 'product-list' %}?category=Necklaces" class="block hover:text-indigo-400">Necklaces</a></li>
       <li><a href="{% url 'product-list' %}?category=Bracelets" class="block hover:text-indigo-400">Bracelets</a></li>
       <li><a href="{% url 'about' %}" class="block hover:text-indigo-400">About</a></li>
-
+      <li><a href="{% url 'index' %}" class="block hover:text-indigo-400">Cart</a></li>
       {% if user.is_authenticated %}
-        <li><a href="{% url 'index' %}" class="block hover:text-indigo-400">Cart</a></li>
         <li><a href="{% url 'account' %}" class="block hover:text-indigo-400">Account</a></li>
         <li>
           <form method="POST" action="{% url 'logout' %}">

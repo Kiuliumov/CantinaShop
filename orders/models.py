@@ -7,4 +7,3 @@ from accounts.models import Account
 # Create your models here.
 class Order(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    produc
