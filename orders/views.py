@@ -1,11 +1,11 @@
 import json
+import urllib.parse
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from products.models import Product
 
-# Create your views here.
 class AddToCartView(LoginRequiredMixin, View):
     def get(self, request, slug):
         product = get_object_or_404(Product, slug=slug)
@@ -19,7 +19,11 @@ class AddToCartView(LoginRequiredMixin, View):
 
         cart_cookie = request.COOKIES.get('cart')
         try:
-            raw_cart = json.loads(cart_cookie) if cart_cookie else []
+            if cart_cookie:
+                decoded_cart = urllib.parse.unquote(cart_cookie)
+                raw_cart = json.loads(decoded_cart)
+            else:
+                raw_cart = []
         except json.JSONDecodeError:
             raw_cart = []
 
@@ -38,11 +42,14 @@ class AddToCartView(LoginRequiredMixin, View):
             cart.append({'slug': slug, 'quantity': quantity})
 
         response = HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+        encoded_cart = urllib.parse.quote(json.dumps(cart))
+
         response.set_cookie(
             'cart',
-            json.dumps(cart),
+            encoded_cart,
             max_age=60 * 60 * 24 * 7,
-            httponly=True,
             samesite='Lax',
+            httponly=True,
         )
         return response

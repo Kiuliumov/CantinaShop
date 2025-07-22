@@ -1,8 +1,11 @@
+import json
+import urllib.parse
+
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import JsonResponse, Http404
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -182,3 +185,44 @@ class SetRatingView(LoginRequiredMixin, View):
         print(product.average_rating)
         print(product.rating_set.first().rating)
         return redirect(reverse_lazy('product-details', kwargs={'slug': product.slug}))
+
+
+
+
+class CartView(View):
+    def get(self, request):
+        cart_cookie = request.COOKIES.get('cart')
+        cart_data = []
+
+        if cart_cookie:
+            try:
+                decoded_cookie = urllib.parse.unquote(cart_cookie)
+                cart_data = json.loads(decoded_cookie)
+            except (json.JSONDecodeError, TypeError) as e:
+                print(f"Failed to decode cart cookie: {e}")
+                cart_data = []
+
+        items = []
+        total = 0
+
+        for entry in cart_data:
+            slug = entry.get('slug')
+            quantity = int(entry.get('quantity', 1))
+            if not slug:
+                continue
+
+            product = Product.objects.filter(slug=slug).first()
+            if product:
+                subtotal = quantity * product.price
+                total += subtotal
+                items.append({
+                    'product': product,
+                    'quantity': quantity,
+                    'subtotal': subtotal,
+                })
+
+        context = {
+            'cart_items': items,
+            'cart_total': total,
+        }
+        return render(request, 'products/shopping_cart_list.html', context)

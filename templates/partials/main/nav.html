@@ -31,6 +31,7 @@
       <li><a href="{% url 'product-list' %}?category=Necklaces" class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Necklaces</a></li>
       <li><a href="{% url 'product-list' %}?category=Bracelets" class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Bracelets</a></li>
       <li><a href="{% url 'about' %}" class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">About</a></li>
+      <li><a href="{% url 'contact' %}" class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Contacts</a></li>
 
       <li>
         <a href="{% url 'index' %}" class="text-gray-300 hover:text-indigo-400">
@@ -87,7 +88,9 @@
       <li><a href="{% url 'product-list' %}?category=Necklaces" class="block hover:text-indigo-400">Necklaces</a></li>
       <li><a href="{% url 'product-list' %}?category=Bracelets" class="block hover:text-indigo-400">Bracelets</a></li>
       <li><a href="{% url 'about' %}" class="block hover:text-indigo-400">About</a></li>
+      <li><a href="{% url 'product-list' %}?category=Bracelets" class="block hover:text-indigo-400">Contacts</a></li>
       <li><a href="{% url 'index' %}" class="block hover:text-indigo-400">Cart</a></li>
+    
       {% if user.is_authenticated %}
         <li><a href="{% url 'account' %}" class="block hover:text-indigo-400">Account</a></li>
         <li>
