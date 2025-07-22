@@ -13,4 +13,5 @@ urlpatterns = [
     path('comments/<int:pk>/edit/', views.CommentUpdateView.as_view(), name='comment-edit'),
     path('rate/<slug:slug>', views.SetRatingView.as_view(), name='rate'),
     path('cart/', views.CartView.as_view(), name='cart'),
+    path('category/create/', views.CreateCategory.as_view(), name='category-create'),
 ]

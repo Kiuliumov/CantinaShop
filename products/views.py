@@ -12,7 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, FormMixin, DeleteView, UpdateView
 from django.urls import reverse_lazy
 from common.mixins import AdminRequiredMixin
-from .forms import ProductForm, CommentForm
+from .forms import ProductForm, CommentForm, CategoryForm
 from products.models import Product, Category, Comment, Rating
 
 
@@ -226,3 +226,8 @@ class CartView(View):
             'cart_total': total,
         }
         return render(request, 'products/shopping_cart_list.html', context)
+
+class CreateCategory(CreateView):
+    template_name = 'products/create_category.html'
+    success_url = reverse_lazy('product-list')
+    form_class = CategoryForm

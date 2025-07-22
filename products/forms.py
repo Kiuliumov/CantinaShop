@@ -2,7 +2,7 @@ from django import forms
 from django.template.defaultfilters import slugify
 
 from common.image_cloud_storage import get_public_id_from_url, delete_cloudinary_image, upload_to_cloud_storage
-from products.models import Product, Comment
+from products.models import Product, Comment, Category
 
 
 class ProductForm(forms.ModelForm):
@@ -96,3 +96,14 @@ class CommentForm(forms.ModelForm):
             'placeholder': 'Leave a comment...',
             'class': 'w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition'
         })
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'w-full p-2 rounded bg-gray-700 text-white',
+                'placeholder': 'Enter category name',
+            }),
+        }
