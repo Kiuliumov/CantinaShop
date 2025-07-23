@@ -43,33 +43,47 @@ class ChatMessagesAPIView(APIView):
 
 class ProductListAPIView(APIView):
     def get(self, request, **kwargs):
-        qs = Product.objects.filter(is_available=True)  # default filter, you can remove if you want all
+        qs = Product.objects.all()
 
-        category_name = request.GET.get('category')
-        if category_name:
-            qs = qs.filter(category__name__iexact=category_name)
+        product_id = request.GET.get('id')
+        if product_id:
+            qs = qs.filter(id=product_id)
+
+        search = request.GET.get('search')
+        if search:
+            qs = qs.filter(Q(name__icontains=search) | Q(description__icontains=search))
+
+        category_id = request.GET.get('category')
+        if category_id:
+            qs = qs.filter(category__id=category_id)
+
+        availability = request.GET.get('availability')
+        if availability == 'available':
+            qs = qs.filter(is_available=True)
+        elif availability == 'unavailable':
+            qs = qs.filter(is_available=False)
 
         min_price = request.GET.get('min_price')
         max_price = request.GET.get('max_price')
-        if min_price:
-            try:
-                min_price = float(min_price)
-                qs = qs.filter(price__gte=min_price)
-            except ValueError:
-                pass
-        if max_price:
-            try:
-                max_price = float(max_price)
-                qs = qs.filter(price__lte=max_price)
-            except ValueError:
-                pass
+        try:
+            if min_price:
+                qs = qs.filter(price__gte=float(min_price))
+            if max_price:
+                qs = qs.filter(price__lte=float(max_price))
+        except ValueError:
+            pass
 
-        is_available = request.GET.get('is_available')
-        if is_available is not None:
-            if is_available.lower() in ['true', '1']:
-                qs = qs.filter(is_available=True)
-            elif is_available.lower() in ['false', '0']:
-                qs = qs.filter(is_available=False)
+        sort = request.GET.get('sort')
+        if sort == 'name_asc':
+            qs = qs.order_by('name')
+        elif sort == 'name_desc':
+            qs = qs.order_by('-name')
+        elif sort == 'price_asc':
+            qs = qs.order_by('price')
+        elif sort == 'price_desc':
+            qs = qs.order_by('-price')
+        else:
+            qs = qs.order_by('-created_at')
 
         limit = request.GET.get('limit', 50)
         try:
@@ -79,7 +93,7 @@ class ProductListAPIView(APIView):
         except ValueError:
             limit = 50
 
-        qs = qs.order_by('-created_at')[:limit]
+        qs = qs[:limit]
 
         serializer = ProductSerializer(qs, many=True, context={'request': request})
         return Response({'products': serializer.data})
