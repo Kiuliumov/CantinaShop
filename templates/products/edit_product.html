@@ -4,44 +4,47 @@
 {% block title %}Edit Product{% endblock %}
 
 {% block content %}
-<div class="max-w-2xl mx-auto bg-gray-800 p-10 rounded-2xl shadow-xl text-white">
-  <h1 class="text-3xl font-bold mb-8 text-center text-indigo-400">Edit Product</h1>
+    <div class="max-w-2xl mx-auto bg-gray-800 p-10 rounded-2xl shadow-xl text-white">
+        <h1 class="text-3xl font-bold mb-8 text-center text-indigo-400">Edit Product</h1>
 
-  <form method="POST" enctype="multipart/form-data" class="space-y-6" novalidate>
-    {% csrf_token %}
+        <form method="POST" enctype="multipart/form-data" class="space-y-6" novalidate>
+            {% csrf_token %}
 
-    {% if form.non_field_errors %}
-      <div class="bg-red-600 text-white p-4 rounded mb-4">
-        {% for error in form.non_field_errors %}
-          <p>{{ error }}</p>
-        {% endfor %}
-      </div>
-    {% endif %}
+            {% if form.non_field_errors %}
+                <div class="bg-red-600 text-white p-4 rounded mb-4">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
 
-    {% for field in form.visible_fields %}
-      <div>
-        <label for="{{ field.id_for_label }}" class="block text-sm font-semibold mb-2 text-gray-300">
-          {{ field.label }}{% if field.field.required %}<span class="text-red-500 ml-1">*</span>{% endif %}
-        </label>
+            {% for field in form.visible_fields %}
+                <div>
+                    <label for="{{ field.id_for_label }}" class="block text-sm font-semibold mb-2 text-gray-300">
+                        {{ field.label }}{% if field.field.required %}
+                            <span class="text-red-500 ml-1">*</span>{% endif %}
+                    </label>
 
-        {{ field }}
+                    {{ field }}
 
-        {% if field.help_text %}
-          <p class="text-xs text-gray-400 mt-1">{{ field.help_text }}</p>
-        {% endif %}
+                    {% if field.help_text %}
+                        <p class="text-xs text-gray-400 mt-1">{{ field.help_text }}</p>
+                    {% endif %}
 
-        {% if field.errors %}
-          <p class="text-red-400 text-sm mt-1">{{ field.errors|join:", " }}</p>
-        {% endif %}
-      </div>
-    {% endfor %}
+                    {% if field.errors %}
+                        <p class="text-red-400 text-sm mt-1">{{ field.errors|join:", " }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
 
-    <div class="flex justify-between items-center mt-8">
-      <a href="{% url 'product-details' product.slug %}" class="text-indigo-400 hover:underline">&larr; Back to Product</a>
-      <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 px-6 py-3 rounded-lg text-white font-semibold shadow transition">
-        Edit
-      </button>
+            <div class="flex justify-between items-center mt-8">
+                <a href="{% url 'product-details' product.slug %}" class="text-indigo-400 hover:underline">&larr; Back
+                    to Product</a>
+                <button type="submit"
+                        class="bg-indigo-600 hover:bg-indigo-700 px-6 py-3 rounded-lg text-white font-semibold shadow transition">
+                    Edit
+                </button>
+            </div>
+        </form>
     </div>
-  </form>
-</div>
 {% endblock %}

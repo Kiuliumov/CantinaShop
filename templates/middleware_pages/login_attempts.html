@@ -2,23 +2,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>{% block title %}Login Blocked{% endblock %}</title>
-  {% include 'partials/main/head.html' %}
+    <title>{% block title %}Login Blocked{% endblock %}</title>
+    {% include 'partials/main/head.html' %}
 </head>
 <body class="bg-gradient-to-tr from-gray-900 via-gray-800 to-gray-900 text-gray-100 flex items-center justify-center min-h-screen px-4">
-  <div class="max-w-lg bg-gray-850 bg-opacity-90 backdrop-blur-md rounded-xl shadow-2xl p-10 text-center border border-gray-700">
+<div class="max-w-lg bg-gray-850 bg-opacity-90 backdrop-blur-md rounded-xl shadow-2xl p-10 text-center border border-gray-700">
     <h1 class="text-8xl font-extrabold mb-6 text-red-500 drop-shadow-lg select-none">429</h1>
     <p class="text-2xl font-semibold mb-4">Login Temporarily Blocked</p>
     <p class="mb-6 text-gray-300 max-w-md mx-auto">
-      You've attempted to log in too many times. Please wait
-      <span class="text-white font-bold" id="countdown">{{ retry_after_seconds }}</span> seconds before trying again.
+        You've attempted to log in too many times. Please wait
+        <span class="text-white font-bold" id="countdown">{{ retry_after_seconds }}</span> seconds before trying again.
     </p>
     <a href="{% url 'index' %}"
        class="inline-block px-8 py-3 rounded-lg bg-red-600 hover:bg-red-700 transition text-white font-semibold shadow-lg focus:outline-none focus:ring-4 focus:ring-red-400">
-      Go Home
+        Go Home
     </a>
-  </div>
-  <script> window.redirectUrl = "{% url 'index' %}"</script>
-  <script src="{% static 'js/countdownForErrors.js' %}"></script>
+</div>
+<script> window.redirectUrl = "{% url 'index' %}"</script>
+<script src="{% static 'js/countdownForErrors.js' %}"></script>
 </body>
 </html>

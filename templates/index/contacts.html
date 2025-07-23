@@ -2,83 +2,91 @@
 {% load static %}
 
 {% block content %}
-<section class="bg-gray-900 text-white py-20">
-  <div class="container mx-auto px-6 max-w-screen-lg">
-    <div class="text-center mb-16">
-      <h1 class="text-4xl sm:text-5xl font-extrabold mb-4 tracking-tight">Get in Touch</h1>
-      <p class="text-gray-300 text-lg max-w-2xl mx-auto">
-        Whether you have a question, need help with an order, or just want to say hello, we're here for you.
-      </p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-      <div class="space-y-8">
-        <div class="flex items-start gap-4">
-          <i class="fas fa-envelope text-indigo-400 text-3xl mt-1"></i>
-          <div>
-            <h3 class="text-xl font-semibold mb-1">Email Us</h3>
-            <p class="text-gray-300">support@cantinashop.bg</p>
-          </div>
-        </div>
-        <div class="flex items-start gap-4">
-          <i class="fas fa-phone-alt text-green-400 text-3xl mt-1"></i>
-          <div>
-            <h3 class="text-xl font-semibold mb-1">Call Us</h3>
-            <p class="text-gray-300">+359 888 123 456</p>
-          </div>
-        </div>
-        <div class="flex items-start gap-4">
-          <i class="fas fa-map-marker-alt text-yellow-300 text-3xl mt-1"></i>
-          <div>
-            <h3 class="text-xl font-semibold mb-1">Visit Us</h3>
-            <p class="text-gray-300">42 Vitosha Blvd, Sofia, Bulgaria</p>
-          </div>
-        </div>
-        <div class="flex items-start gap-4">
-          <i class="fas fa-clock text-blue-400 text-3xl mt-1"></i>
-          <div>
-            <h3 class="text-xl font-semibold mb-1">Working Hours</h3>
-            <p class="text-gray-300">Mon – Fri: 09:00 – 18:00</p>
-            <p class="text-gray-500 italic text-sm">Closed on weekends & holidays</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-gray-800 p-8 rounded-2xl shadow-2xl">
-        <form method="post" action="{% url 'contact' %}" class="space-y-6" id="contact-form">
-          {% csrf_token %}
-          {% for field in form %}
-            <div>
-              {{ field.label_tag }}
-              {{ field }}
-              {% if field.errors %}
-                <p class="text-red-500 text-sm mt-1">{{ field.errors|striptags }}</p>
-              {% endif %}
+    <section class="bg-gray-900 text-white py-20">
+        <div class="container mx-auto px-6 max-w-screen-lg">
+            <div class="text-center mb-16">
+                <h1 class="text-4xl sm:text-5xl font-extrabold mb-4 tracking-tight">Get in Touch</h1>
+                <p class="text-gray-300 text-lg max-w-2xl mx-auto">
+                    Whether you have a question, need help with an order, or just want to say hello, we're here for you.
+                </p>
             </div>
-          {% endfor %}
-          <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 py-3 px-6 rounded-lg font-bold shadow-lg transition">
-            <i class="fas fa-paper-plane mr-2"></i> Send Message
-          </button>
-        </form>
-      </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+                <div class="space-y-8">
+                    <div class="flex items-start gap-4">
+                        <i class="fas fa-envelope text-indigo-400 text-3xl mt-1"></i>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-1">Email Us</h3>
+                            <p class="text-gray-300">support@cantinashop.bg</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <i class="fas fa-phone-alt text-green-400 text-3xl mt-1"></i>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-1">Call Us</h3>
+                            <p class="text-gray-300">+359 888 123 456</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <i class="fas fa-map-marker-alt text-yellow-300 text-3xl mt-1"></i>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-1">Visit Us</h3>
+                            <p class="text-gray-300">42 Vitosha Blvd, Sofia, Bulgaria</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <i class="fas fa-clock text-blue-400 text-3xl mt-1"></i>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-1">Working Hours</h3>
+                            <p class="text-gray-300">Mon – Fri: 09:00 – 18:00</p>
+                            <p class="text-gray-500 italic text-sm">Closed on weekends & holidays</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-800 p-8 rounded-2xl shadow-2xl">
+                    <form method="post" action="{% url 'contact' %}" class="space-y-6" id="contact-form">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div>
+                                {{ field.label_tag }}
+                                {{ field }}
+                                {% if field.errors %}
+                                    <p class="text-red-500 text-sm mt-1">{{ field.errors|striptags }}</p>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        <button type="submit"
+                                class="w-full bg-indigo-600 hover:bg-indigo-700 py-3 px-6 rounded-lg font-bold shadow-lg transition">
+                            <i class="fas fa-paper-plane mr-2"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="form-popup-success"
+         class="fixed top-6 right-6 max-w-xs w-full bg-green-600 text-white rounded-xl shadow-lg p-4 flex items-start space-x-3 opacity-0 pointer-events-none transition-opacity duration-300 z-50">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+        </svg>
+        <div class="flex flex-col flex-1 space-y-2">
+            <p class="text-sm font-semibold">Your message has been sent successfully.</p>
+            <button id="popup-success-ok"
+                    class="self-start text-sm bg-white text-green-700 px-3 py-1 rounded-md font-semibold hover:bg-green-100 transition">
+                Okay
+            </button>
+        </div>
+        <button id="popup-success-close" aria-label="Close notification"
+                class="text-white hover:text-green-300 focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                 stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
     </div>
-  </div>
-</section>
 
-<div id="form-popup-success" class="fixed top-6 right-6 max-w-xs w-full bg-green-600 text-white rounded-xl shadow-lg p-4 flex items-start space-x-3 opacity-0 pointer-events-none transition-opacity duration-300 z-50">
-  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-  </svg>
-  <div class="flex flex-col flex-1 space-y-2">
-    <p class="text-sm font-semibold">Your message has been sent successfully.</p>
-    <button id="popup-success-ok" class="self-start text-sm bg-white text-green-700 px-3 py-1 rounded-md font-semibold hover:bg-green-100 transition">Okay</button>
-  </div>
-  <button id="popup-success-close" aria-label="Close notification" class="text-white hover:text-green-300 focus:outline-none">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-    </svg>
-  </button>
-</div>
-
-<script src="{% static 'js/contactFormSubmission.js' %}"></script>
+    <script src="{% static 'js/contactFormSubmission.js' %}"></script>
 {% endblock %}

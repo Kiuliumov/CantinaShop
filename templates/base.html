@@ -2,37 +2,37 @@
 <!DOCTYPE html>
 <html lang="en" class="bg-gray-900">
 <head>
-  <title>{% block title %}CantinaShop{% endblock %}</title>
-  {% include 'partials/main/head.html' %}
+    <title>{% block title %}CantinaShop{% endblock %}</title>
+    {% include 'partials/main/head.html' %}
 </head>
 <body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
-  {% include 'partials/main/nav.html' %}
+{% include 'partials/main/nav.html' %}
 
-  <main class="flex-grow container mx-auto px-4 py-8">
+<main class="flex-grow container mx-auto px-4 py-8">
     {% block content %}{% endblock %}
-  </main>
-  
+</main>
+
 {% include 'partials/main/footer.html' %}
 {% include 'chat/partials/user-chat.html' %}
-  
+
 {% block script %}
     <script src="{% static 'js/iconsLoad.js' %}"></script>
-    
+
     {% if user.is_authenticated %}
-  <script>
-      window.chatConfig = {
-      userId: {{ request.user.id|default:'null' }},
-      wsProtocol: "{{ request.is_secure|yesno:'wss,ws' }}",
-      host: "{{ request.get_host }}",
-      apiMessagesUrl: "{% url 'chat-messages-api-base' request.user.id %}",
-      adminAvatarUrl: "{% static 'images/admin.jpg' %}",
-      defaultAvatarUrl: "{% static 'images/avatar.png' %}",
-      userIsStaffOrSuperuser: {{ user.is_staff|yesno:"true,false" }} || {{ user.is_superuser|yesno:"true,false" }},
-      userIsChatBanned: {{ request.user.is_chat_banned|yesno:"true,false" }},
-    };
-  </script>
-      <script src="{% static 'js/chatFrontEnd.js' %}"></script>
-{% endif %}
+        <script>
+            window.chatConfig = {
+                userId: {{ request.user.id|default:'null' }},
+                wsProtocol: "{{ request.is_secure|yesno:'wss,ws'|escapejs }}",
+                apiMessagesUrl: "{% url 'chat-messages-api-base' request.user.id %}",
+                adminAvatarUrl: "{% static 'images/admin.jpg' %}",
+                defaultAvatarUrl: "{% static 'images/avatar.png' %}",
+                userIsStaffOrSuperuser: {{ user.is_staff|yesno:"true,false" }} || {{ user.is_superuser|yesno:"true,false" }},
+                userIsChatBanned: {{ request.user.is_chat_banned|yesno:"true,false" }},
+
+            };
+        </script>
+        <script src="{% static 'js/chatFrontEnd.js' %}"></script>
+    {% endif %}
 {% endblock %}
 
 </body>

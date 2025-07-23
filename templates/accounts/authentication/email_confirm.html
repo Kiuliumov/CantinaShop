@@ -4,21 +4,22 @@
 {% block title %}Check Your Email{% endblock %}
 
 {% block content %}
-  <div class="bg-gray-800 p-10 rounded-2xl shadow-2xl w-full max-w-md text-center space-y-6">
-    <h2 class="text-4xl font-extrabold mb-8 text-gray-100 tracking-tight">
-      Verify Your Email
-    </h2>
-    <p class="text-gray-300">
-      Thanks for signing up! A confirmation email has been sent to your email address. Please check your inbox and click the link to activate your account.
-    </p>
-    <p class="text-gray-400 text-sm">
-      If you don’t see the email, check your spam folder or try resubmitting your email.
-    </p>
-    <a
-      href="{% url 'index' %}"
-      class="inline-block w-full bg-gray-600 hover:bg-gray-700 active:bg-gray-800 text-white font-bold py-3 rounded-lg shadow-lg transition"
-    >
-      Home Page
-    </a>
-  </div>
+    <div class="bg-gray-800 p-10 rounded-2xl shadow-2xl w-full max-w-md text-center space-y-6">
+        <h2 class="text-4xl font-extrabold mb-8 text-gray-100 tracking-tight">
+            Verify Your Email
+        </h2>
+        <p class="text-gray-300">
+            Thanks for signing up! A confirmation email has been sent to your email address. Please check your inbox and
+            click the link to activate your account.
+        </p>
+        <p class="text-gray-400 text-sm">
+            If you don’t see the email, check your spam folder or try resubmitting your email.
+        </p>
+        <a
+                href="{% url 'index' %}"
+                class="inline-block w-full bg-gray-600 hover:bg-gray-700 active:bg-gray-800 text-white font-bold py-3 rounded-lg shadow-lg transition"
+        >
+            Home Page
+        </a>
+    </div>
 {% endblock %}

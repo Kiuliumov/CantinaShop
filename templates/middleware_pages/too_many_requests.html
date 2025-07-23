@@ -2,19 +2,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>{% block title %}Too Many Requests{% endblock %}</title>
-  {% include 'partials/main/head.html' %}
+    <title>{% block title %}Too Many Requests{% endblock %}</title>
+    {% include 'partials/main/head.html' %}
 </head>
 <body class="bg-gradient-to-tr from-gray-900 via-gray-800 to-gray-900 text-gray-100 flex items-center justify-center min-h-screen px-4">
-  <div class="max-w-lg bg-gray-850 bg-opacity-90 backdrop-blur-md rounded-xl shadow-2xl p-10 text-center border border-gray-700">
+<div class="max-w-lg bg-gray-850 bg-opacity-90 backdrop-blur-md rounded-xl shadow-2xl p-10 text-center border border-gray-700">
     <h1 class="text-8xl font-extrabold mb-6 text-yellow-400 drop-shadow-lg select-none">429</h1>
     <p class="text-2xl font-semibold mb-4">Too Many Requests</p>
     <p class="mb-6 text-gray-300 max-w-md mx-auto">
-      You’ve made too many requests in a short period. Please try again in
-      <span class="text-white font-bold" id="countdown">{{ retry_after_seconds }}</span> seconds.
+        You’ve made too many requests in a short period. Please try again in
+        <span class="text-white font-bold" id="countdown">{{ retry_after_seconds }}</span> seconds.
     </p>
-  </div>
-    <script> window.redirectUrl = "{% url 'index' %}"</script>
-  <script src="{% static 'js/countdownForErrors.js' %}"></script>
+</div>
+<script> window.redirectUrl = "{% url 'index' %}"</script>
+<script src="{% static 'js/countdownForErrors.js' %}"></script>
 </body>
 </html>

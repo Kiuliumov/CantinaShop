@@ -62,6 +62,12 @@ function updateCartItem(slug, quantity) {
 
   setCartToCookie(cart);
   updateDisplayedPrices();
+
+  if (getCartFromCookie().length === 0) {
+    setTimeout(() => {
+      location.reload();
+    }, 1000);
+  }
 }
 
 
