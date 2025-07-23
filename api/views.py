@@ -42,8 +42,6 @@ class ChatMessagesAPIView(APIView):
 
 
 class ProductListAPIView(APIView):
-    permission_classes = [IsAuthenticated]
-
     def get(self, request, **kwargs):
         qs = Product.objects.filter(is_available=True)  # default filter, you can remove if you want all
 
