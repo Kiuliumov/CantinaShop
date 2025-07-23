@@ -50,6 +50,5 @@ class AddToCartView(LoginRequiredMixin, View):
             encoded_cart,
             max_age=60 * 60 * 24 * 7,
             samesite='Lax',
-            httponly=True,
         )
         return response

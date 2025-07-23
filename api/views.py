@@ -2,7 +2,8 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import CreateAPIView
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -97,3 +98,8 @@ class ProductListAPIView(APIView):
 
         serializer = ProductSerializer(qs, many=True, context={'request': request})
         return Response({'products': serializer.data})
+
+class ProductCreateView(CreateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    permission_classes = [IsAdminUser]

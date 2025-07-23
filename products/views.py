@@ -199,7 +199,6 @@ class CartView(View):
                 decoded_cookie = urllib.parse.unquote(cart_cookie)
                 cart_data = json.loads(decoded_cookie)
             except (json.JSONDecodeError, TypeError) as e:
-                print(f"Failed to decode cart cookie: {e}")
                 cart_data = []
 
         items = []
