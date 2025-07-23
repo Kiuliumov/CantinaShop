@@ -61,6 +61,7 @@ function updateCartItem(slug, quantity) {
   }
 
   setCartToCookie(cart);
+  updateDisplayedPrices();
 }
 
 
@@ -76,6 +77,28 @@ function showRemoveToast() {
   }, 3000);
 }
 
+
+function updateDisplayedPrices() {
+  let total = 0;
+  document.querySelectorAll('.product-subtotal').forEach(el => {
+    const slug = el.dataset.slug;
+    const price = parseFloat(el.dataset.price);
+    const quantityInput = document.querySelector(`.quantity-input[data-slug="${slug}"]`);
+    const quantity = parseInt(quantityInput?.value) || 0;
+    const subtotal = price * quantity;
+    total += subtotal;
+
+    const subtotalSpan = el.querySelector('.subtotal-amount');
+    if (subtotalSpan) {
+      subtotalSpan.textContent = subtotal.toFixed(2);
+    }
+  });
+
+  const totalEl = document.getElementById('cart-total');
+  if (totalEl) {
+    totalEl.textContent = total.toFixed(2);
+  }
+}
 
 
 document.addEventListener('DOMContentLoaded', () => {
