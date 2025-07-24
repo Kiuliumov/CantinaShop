@@ -29,7 +29,8 @@
                         {% endwith %}
                     </div>
 
-                    <p class="text-sm text-gray-400 mb-4">{{ product.category.name }}</p>
+                    <p class="text-sm text-gray-400 mb-4"><i
+                            class="fas fa-tag mr-1"></i>{{ product.category.name }}</p>
                     <p class="mb-6 text-lg">{{ product.description }}</p>
 
                     <div class="flex items-center gap-4 mb-4">
@@ -45,6 +46,10 @@
                         {% else %}
                             <span class="text-red-400">Out of Stock</span>
                         {% endif %}
+                    </p>
+
+                    <p class="text-sm text-gray-500">
+                        Order now to get it delivered within 2–4 business days.
                     </p>
                 </div>
 

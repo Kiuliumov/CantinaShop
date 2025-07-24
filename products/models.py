@@ -23,7 +23,6 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=5, decimal_places=2)
     is_available = models.BooleanField(default=True)
     image_url = models.CharField(max_length=255, blank=True)
-    quantity = models.PositiveIntegerField(default=1)
     slug = models.SlugField(unique=True, blank=True)
     has_discount = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
