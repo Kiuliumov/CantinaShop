@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (closeBtn) {
     closeBtn.addEventListener('click', () => {
-    localStorage.removeItem('showSuccessModal');
+      modal.classList.add('hidden');
+      localStorage.removeItem('showSuccessModal');
     });
   }
 });

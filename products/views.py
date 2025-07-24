@@ -10,7 +10,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, FormMixin, DeleteView, UpdateView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from common.mixins import AdminRequiredMixin
 from .forms import ProductForm, CommentForm, CategoryForm
 from products.models import Product, Category, Comment, Rating
@@ -110,8 +110,9 @@ class AddProductView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     template_name = 'products/new_product.html'
-    success_url = reverse_lazy('product-list')
 
+    def get_success_url(self):
+        return reverse('product-details', kwargs={'slug': self.object.slug})
 
 class ProductDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
     model = Product

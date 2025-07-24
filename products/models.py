@@ -42,7 +42,7 @@ class Product(models.Model):
         self.name = smart_censor(self.name)
         self.description = smart_censor(self.description)
 
-        if not self.slug:
+        if not self.pk and not self.slug:
             base_slug = slugify(self.name)
             slug = base_slug
             counter = 1

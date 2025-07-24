@@ -17,8 +17,6 @@ class ProductForm(forms.ModelForm):
 
     def save(self, commit=True):
         product = super().save(commit=False)
-        product.slug = self.cleaned_data.get('slug')
-
         image_file = self.cleaned_data.get('image_file')
 
         if product.image_url:
