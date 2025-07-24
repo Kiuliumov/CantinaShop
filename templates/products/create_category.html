@@ -28,23 +28,28 @@
 
                 {{ form.name }}
 
-                {% if form.category_name.help_text %}
+                {% if form.name.help_text %}
                     <p class="text-xs text-gray-400 mt-1">{{ form.name.help_text }}</p>
                 {% endif %}
 
-                {% if form.category_name.errors %}
+                {% if form.name.errors %}
                     <p class="text-red-500 text-sm mt-1">{{ form.name.errors|join:", " }}</p>
                 {% endif %}
             </div>
 
-            <div class="flex justify-end">
+            <div class="flex justify-center">
                 <button
                         type="submit"
-                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3 rounded-lg shadow-lg transition"
+                        class="create-btn bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3 rounded-lg shadow-lg transition"
                 >
                     Create
                 </button>
             </div>
         </form>
     </div>
+{% endblock %}
+
+{% block script %}
+    {{ block.super }}
+    <script src="{% static 'js/createButton.js' %}"></script>
 {% endblock %}

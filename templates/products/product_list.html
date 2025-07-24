@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% load page_range %}
 
 {% block content %}
@@ -123,4 +124,11 @@
                 back later.</p>
         {% endif %}
     </div>
+
+    {% include 'partials/pop-ups/create-popup.html' %}
+{% endblock %}
+
+{% block script %}
+    {{ block.super }}
+    <script src="{% static 'js/createPopUp.js' %}"></script>
 {% endblock %}

@@ -85,3 +85,8 @@ class CategoryForm(forms.ModelForm):
                 'placeholder': 'Enter category name',
             }),
         }
+        error_messages = {
+            'name': {
+                'unique': "This category name already exists. Please choose a different one.",
+            },
+        }
