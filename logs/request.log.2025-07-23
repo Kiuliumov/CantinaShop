@@ -1,0 +1,866 @@
+[2025-07-23 08:15:38,808] INFO django.request: GET / | Status: 200 | User: Anonymous | Duration: 164.56 ms
+[2025-07-23 08:15:39,967] INFO django.request: GET /accounts/login/ | Status: 200 | User: Anonymous | Duration: 18.22 ms
+[2025-07-23 08:15:41,400] INFO django.request: GET /accounts/register/ | Status: 200 | User: Anonymous | Duration: 5.48 ms
+[2025-07-23 08:15:52,023] ERROR django.request: Internal Server Error: /accounts/register/
+Traceback (most recent call last):
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\kombu\utils\functional.py", line 32, in __call__
+    return self.__value__
+           ^^^^^^^^^^^^^^
+AttributeError: 'ChannelPromise' object has no attribute '__value__'. Did you mean: '__call__'?
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\kombu\connection.py", line 472, in _reraise_as_library_errors
+    yield
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\kombu\connection.py", line 459, in _ensure_connection
+    return retry_over_time(
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\kombu\utils\functional.py", line 318, in retry_over_time
+    return fun(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\kombu\connection.py", line 938, in _connection_factory
+    self._connection = self._establish_connection()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\kombu\connection.py", line 860, in _establish_connection
+    conn = self.transport.establish_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\kombu\transport\pyamqp.py", line 203, in establish_connection
+    conn.connect()
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\amqp\connection.py", line 324, in connect
+    self.transport.connect()
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\amqp\transport.py", line 132, in connect
+    self._connect(self.host, self.port, self.connect_timeout)
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\amqp\transport.py", line 187, in _connect
+    self.sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\asgiref\sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\asgiref\sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\django\core\handlers\base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\asgiref\sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\asgiref\current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\asgiref\sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\CantinaShop\common\mixins.py", line 17, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\django\views\generic\base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\django\views\generic\edit.py", line 151, in post
+    return self.form_valid(form)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\CantinaShop\accounts\views.py", line 29, in form_valid
+    EmailService.send_confirmation_email(self.request, user)
+  File "C:\Users\admin\Documents\GitHub\CantinaShop\common\email_service.py", line 33, in send_confirmation_email
+    send_email_async.delay(subject, html_content, user.email)
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\celery\app\task.py", line 444, in delay
+    return self.apply_async(args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\celery\app\task.py", line 601, in apply_async
+    return app.send_task(
+           ^^^^^^^^^^^^^^
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\celery\app\base.py", line 930, in send_task
+    amqp.send_task_message(P, name, message, **options)
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\celery\app\amqp.py", line 523, in send_task_message
+    ret = producer.publish(
+          ^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\kombu\messaging.py", line 190, in publish
+    return _publish(
+           ^^^^^^^^^
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\kombu\connection.py", line 556, in _ensured
+    return fun(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\kombu\messaging.py", line 200, in _publish
+    channel = self.channel
+              ^^^^^^^^^^^^
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\kombu\messaging.py", line 224, in _get_channel
+    channel = self._channel = channel()
+                              ^^^^^^^^^
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\kombu\utils\functional.py", line 34, in __call__
+    value = self.__value__ = self.__contract__()
+                             ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\kombu\messaging.py", line 240, in <lambda>
+    channel = ChannelPromise(lambda: connection.default_channel)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\kombu\connection.py", line 957, in default_channel
+    self._ensure_connection(**conn_opts)
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\kombu\connection.py", line 458, in _ensure_connection
+    with ctx():
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "C:\Users\admin\PycharmProjects\CantinaShop\.venv\Lib\site-packages\kombu\connection.py", line 476, in _reraise_as_library_errors
+    raise ConnectionError(str(exc)) from exc
+kombu.exceptions.OperationalError: [WinError 10061] No connection could be made because the target machine actively refused it
+[2025-07-23 08:15:52,037] INFO django.request: POST /accounts/register/ | Status: 500 | User: Anonymous | Duration: 4537.89 ms
+[2025-07-23 08:15:52,106] INFO django.request: GET /favicon.ico | Status: 404 | User: Anonymous | Duration: 4.76 ms
+[2025-07-23 08:15:52,106] WARNING django.request: Not Found: /favicon.ico
+[2025-07-23 08:17:09,187] INFO django.request: POST /accounts/register/ | Status: 302 | User: Anonymous | Duration: 445.64 ms
+[2025-07-23 08:17:09,195] INFO django.request: GET /accounts/email-confirmation-sent/ | Status: 200 | User: Anonymous | Duration: 4.18 ms
+[2025-07-23 08:17:14,002] INFO django.request: GET /accounts/register/ | Status: 200 | User: Anonymous | Duration: 4.67 ms
+[2025-07-23 08:17:19,208] INFO django.request: POST /accounts/register/ | Status: 302 | User: Anonymous | Duration: 426.11 ms
+[2025-07-23 08:17:19,213] INFO django.request: GET /accounts/email-confirmation-sent/ | Status: 200 | User: Anonymous | Duration: 2.00 ms
+[2025-07-23 08:20:36,730] INFO django.request: POST /accounts/register/ | Status: 302 | User: Anonymous | Duration: 1724.88 ms
+[2025-07-23 08:20:36,737] INFO django.request: GET /accounts/email-confirmation-sent/ | Status: 200 | User: Anonymous | Duration: 4.01 ms
+[2025-07-23 08:22:27,505] INFO django.request: GET /accounts/activate/NQ/ctdwib-b8d81d6ca66ad680153fc3b300adbc36/ | Status: 302 | User: DimitarKiuliumov1234 | Duration: 27.05 ms
+[2025-07-23 08:22:27,515] INFO django.request: GET /accounts/activation-success/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 4.44 ms
+[2025-07-23 08:22:28,288] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov1234 | Duration: 33.48 ms
+[2025-07-23 08:22:31,260] INFO django.request: GET /accounts/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 11.65 ms
+[2025-07-23 08:22:34,442] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov1234 | Duration: 6.76 ms
+[2025-07-23 08:22:36,599] INFO django.request: GET /api/messages/5/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 6.89 ms
+[2025-07-23 08:22:39,891] INFO django.request: POST /accounts/logout/ | Status: 302 | User: Anonymous | Duration: 7.13 ms
+[2025-07-23 08:22:39,897] INFO django.request: GET / | Status: 200 | User: Anonymous | Duration: 3.92 ms
+[2025-07-23 08:22:40,345] INFO django.request: GET /accounts/login/ | Status: 200 | User: Anonymous | Duration: 5.77 ms
+[2025-07-23 08:22:42,323] INFO django.request: POST /accounts/login/ | Status: 302 | User: DimitarKiuliumov | Duration: 393.14 ms
+[2025-07-23 08:22:42,337] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 9.96 ms
+[2025-07-23 08:22:43,074] INFO django.request: GET /chat/admin/ | Status: 200 | User: DimitarKiuliumov | Duration: 6.83 ms
+[2025-07-23 08:22:43,960] INFO django.request: GET /api/messages/5/ | Status: 200 | User: DimitarKiuliumov | Duration: 8.87 ms
+[2025-07-23 08:22:51,417] INFO django.request: GET /api/messages/2/?limit=100 | Status: 404 | User: DimitarKiuliumov | Duration: 10.54 ms
+[2025-07-23 08:22:51,417] WARNING django.request: Not Found: /api/messages/2/
+[2025-07-23 08:23:09,184] INFO django.request: GET /api/messages/1/?limit=100 | Status: 200 | User: DimitarKiuliumov | Duration: 7.68 ms
+[2025-07-23 08:23:15,122] INFO django.request: GET /api/messages/3/?limit=100 | Status: 404 | User: DimitarKiuliumov | Duration: 7.27 ms
+[2025-07-23 08:23:15,122] WARNING django.request: Not Found: /api/messages/3/
+[2025-07-23 08:23:18,722] INFO django.request: GET /api/messages/1/?limit=100 | Status: 200 | User: DimitarKiuliumov | Duration: 8.43 ms
+[2025-07-23 08:23:33,784] INFO django.request: GET /api/messages/5/?limit=100 | Status: 200 | User: DimitarKiuliumov | Duration: 8.03 ms
+[2025-07-23 08:23:44,730] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 6.70 ms
+[2025-07-23 08:23:46,016] INFO django.request: GET /chat/admin/ | Status: 200 | User: DimitarKiuliumov | Duration: 6.28 ms
+[2025-07-23 08:23:46,743] INFO django.request: GET /api/messages/5/ | Status: 200 | User: DimitarKiuliumov | Duration: 8.75 ms
+[2025-07-23 08:23:50,723] INFO django.request: GET /api/messages/5/?limit=100 | Status: 200 | User: DimitarKiuliumov | Duration: 9.59 ms
+[2025-07-23 08:23:54,320] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 5.96 ms
+[2025-07-23 08:23:55,865] INFO django.request: GET /accounts/ | Status: 200 | User: DimitarKiuliumov | Duration: 8.18 ms
+[2025-07-23 12:10:36,513] INFO django.request: GET /api/products | Status: 404 | User: DimitarKiuliumov | Duration: 34.15 ms
+[2025-07-23 12:10:36,513] WARNING django.request: Not Found: /api/products
+[2025-07-23 12:10:47,171] INFO django.request: GET /api/products | Status: 301 | User: DimitarKiuliumov | Duration: 42.12 ms
+[2025-07-23 12:10:47,207] INFO django.request: GET /api/products/ | Status: 200 | User: DimitarKiuliumov | Duration: 31.64 ms
+[2025-07-23 12:14:17,596] INFO django.request: GET /api/products/ | Status: 200 | User: DimitarKiuliumov | Duration: 64.59 ms
+[2025-07-23 12:14:56,629] INFO django.request: GET /api/products/json | Status: 404 | User: DimitarKiuliumov | Duration: 5.90 ms
+[2025-07-23 12:14:56,629] WARNING django.request: Not Found: /api/products/json
+[2025-07-23 12:15:02,035] INFO django.request: GET /api/products?json | Status: 301 | User: DimitarKiuliumov | Duration: 5.80 ms
+[2025-07-23 12:15:02,045] INFO django.request: GET /api/products/?json | Status: 200 | User: DimitarKiuliumov | Duration: 6.25 ms
+[2025-07-23 12:15:19,207] INFO django.request: GET /api/products/?format=json | Status: 200 | User: DimitarKiuliumov | Duration: 8.65 ms
+[2025-07-23 12:19:25,815] INFO django.request: POST /products/create/ | Status: 404 | User: Anonymous | Duration: 6.73 ms
+[2025-07-23 12:19:25,815] WARNING django.request: Not Found: /products/create/
+[2025-07-23 12:19:46,387] INFO django.request: GET /api/products/create/ | Status: 404 | User: Anonymous | Duration: 0.00 ms
+[2025-07-23 12:19:46,387] WARNING django.request: Not Found: /api/products/create/
+[2025-07-23 12:20:00,557] INFO django.request: GET /api/products/create/ | Status: 404 | User: Anonymous | Duration: 11.40 ms
+[2025-07-23 12:20:00,557] WARNING django.request: Not Found: /api/products/create/
+[2025-07-23 13:53:44,204] INFO django.request: POST /products/create/ | Status: 404 | User: Anonymous | Duration: 47.87 ms
+[2025-07-23 13:53:44,204] WARNING django.request: Not Found: /products/create/
+[2025-07-23 13:54:10,340] INFO django.request: GET /api/products/create/ | Status: 403 | User: Anonymous | Duration: 0.00 ms
+[2025-07-23 13:54:10,340] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:54:11,530] INFO django.request: GET /api/products/create/ | Status: 403 | User: Anonymous | Duration: 0.00 ms
+[2025-07-23 13:54:11,530] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:54:12,730] INFO django.request: GET /api/products/create/ | Status: 403 | User: Anonymous | Duration: 0.00 ms
+[2025-07-23 13:54:12,730] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:54:12,803] INFO django.request: GET /api/products/create/ | Status: 403 | User: Anonymous | Duration: 0.00 ms
+[2025-07-23 13:54:12,803] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:54:12,870] INFO django.request: GET /api/products/create/ | Status: 403 | User: Anonymous | Duration: 3.10 ms
+[2025-07-23 13:54:12,870] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:54:12,930] INFO django.request: GET /api/products/create/ | Status: 403 | User: Anonymous | Duration: 0.00 ms
+[2025-07-23 13:54:12,930] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:54:13,000] INFO django.request: GET /api/products/create/ | Status: 403 | User: Anonymous | Duration: 0.00 ms
+[2025-07-23 13:54:13,000] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:54:13,062] INFO django.request: GET /api/products/create/ | Status: 403 | User: Anonymous | Duration: 0.00 ms
+[2025-07-23 13:54:13,070] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:54:13,130] INFO django.request: GET /api/products/create/ | Status: 403 | User: Anonymous | Duration: 2.87 ms
+[2025-07-23 13:54:13,130] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:54:13,190] INFO django.request: GET /api/products/create/ | Status: 403 | User: Anonymous | Duration: 0.50 ms
+[2025-07-23 13:54:13,190] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:54:13,253] INFO django.request: GET /api/products/create/ | Status: 403 | User: Anonymous | Duration: 3.26 ms
+[2025-07-23 13:54:13,253] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:54:13,319] INFO django.request: GET /api/products/create/ | Status: 403 | User: Anonymous | Duration: 2.72 ms
+[2025-07-23 13:54:13,319] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:54:13,390] INFO django.request: GET /api/products/create/ | Status: 403 | User: Anonymous | Duration: 10.00 ms
+[2025-07-23 13:54:13,390] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:54:13,450] INFO django.request: GET /api/products/create/ | Status: 403 | User: Anonymous | Duration: 0.00 ms
+[2025-07-23 13:54:13,450] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:54:13,509] INFO django.request: GET /api/products/create/ | Status: 403 | User: Anonymous | Duration: 0.00 ms
+[2025-07-23 13:54:13,509] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:54:13,580] INFO django.request: GET /api/products/create/ | Status: 403 | User: Anonymous | Duration: 9.94 ms
+[2025-07-23 13:54:13,580] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:54:13,650] INFO django.request: GET /api/products/create/ | Status: 403 | User: Anonymous | Duration: 10.10 ms
+[2025-07-23 13:54:13,650] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:54:13,709] INFO django.request: GET /api/products/create/ | Status: 403 | User: Anonymous | Duration: 9.77 ms
+[2025-07-23 13:54:13,711] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:54:13,770] INFO django.request: GET /api/products/create/ | Status: 403 | User: Anonymous | Duration: 0.00 ms
+[2025-07-23 13:54:13,775] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:54:13,840] INFO django.request: GET /api/products/create/ | Status: 403 | User: Anonymous | Duration: 0.00 ms
+[2025-07-23 13:54:13,840] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:54:13,902] INFO django.request: GET /api/products/create/ | Status: 403 | User: Anonymous | Duration: 2.01 ms
+[2025-07-23 13:54:13,902] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:54:13,960] INFO django.request: GET /api/products/create/ | Status: 403 | User: Anonymous | Duration: 0.00 ms
+[2025-07-23 13:54:13,960] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:54:41,301] INFO django.request: POST /api/products/create/ | Status: 403 | User: Anonymous | Duration: 0.00 ms
+[2025-07-23 13:54:41,301] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:55:15,098] INFO django.request: POST /api/products/create/ | Status: 403 | User: Anonymous | Duration: 2.03 ms
+[2025-07-23 13:55:15,098] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:55:23,703] INFO django.request: POST /api/products/create/ | Status: 403 | User: Anonymous | Duration: 3.04 ms
+[2025-07-23 13:55:23,703] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:55:25,256] INFO django.request: POST /api/products/create/ | Status: 403 | User: Anonymous | Duration: 2.12 ms
+[2025-07-23 13:55:25,256] WARNING django.request: Forbidden: /api/products/create/
+[2025-07-23 13:55:29,200] INFO django.request: POST /api/products/create/ | Status: 201 | User: Anonymous | Duration: 77.37 ms
+[2025-07-23 13:57:03,464] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 64.46 ms
+[2025-07-23 13:57:04,613] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov | Duration: 10.55 ms
+[2025-07-23 13:57:06,105] INFO django.request: GET /products/details/new-product/ | Status: 200 | User: DimitarKiuliumov | Duration: 37.52 ms
+[2025-07-23 13:57:08,637] INFO django.request: GET /orders/add-to-cart/new-product/?quantity=1 | Status: 302 | User: DimitarKiuliumov | Duration: 5.67 ms
+[2025-07-23 13:57:08,649] INFO django.request: GET /products/details/new-product/ | Status: 200 | User: DimitarKiuliumov | Duration: 9.99 ms
+[2025-07-23 13:57:09,710] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 5.81 ms
+[2025-07-23 13:57:11,862] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov | Duration: 8.28 ms
+[2025-07-23 13:57:13,463] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 9.96 ms
+[2025-07-23 13:57:33,321] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.67 ms
+[2025-07-23 13:57:33,322] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 13:57:52,513] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 8.05 ms
+[2025-07-23 13:57:52,557] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 6.80 ms
+[2025-07-23 13:57:52,557] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:00:08,152] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 66.74 ms
+[2025-07-23 14:00:08,208] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 6.00 ms
+[2025-07-23 14:00:08,210] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:00:14,443] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.04 ms
+[2025-07-23 14:00:14,444] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:00:16,824] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 8.45 ms
+[2025-07-23 14:00:16,849] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 9.43 ms
+[2025-07-23 14:00:16,849] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:02:00,487] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 89.80 ms
+[2025-07-23 14:02:00,515] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 11.44 ms
+[2025-07-23 14:02:00,516] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:02:09,535] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 8.11 ms
+[2025-07-23 14:02:17,507] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 11.12 ms
+[2025-07-23 14:02:33,178] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 65.40 ms
+[2025-07-23 14:03:47,557] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.07 ms
+[2025-07-23 14:03:47,558] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:03:48,608] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 8.15 ms
+[2025-07-23 14:03:48,628] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 4.52 ms
+[2025-07-23 14:03:48,629] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:05:34,361] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 64.90 ms
+[2025-07-23 14:05:34,408] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 6.40 ms
+[2025-07-23 14:05:34,408] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:05:39,529] INFO django.request: GET /accounts/login/ | Status: 302 | User: DimitarKiuliumov | Duration: 5.29 ms
+[2025-07-23 14:05:39,538] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 6.11 ms
+[2025-07-23 14:05:53,901] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 66.09 ms
+[2025-07-23 14:05:58,732] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 6.00 ms
+[2025-07-23 14:05:58,734] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:06:52,300] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 8.64 ms
+[2025-07-23 14:06:52,354] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 4.75 ms
+[2025-07-23 14:06:52,355] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:08:08,555] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 6.31 ms
+[2025-07-23 14:08:10,654] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 2.54 ms
+[2025-07-23 14:09:00,369] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 60.37 ms
+[2025-07-23 14:09:01,181] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 8.01 ms
+[2025-07-23 14:09:06,456] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.04 ms
+[2025-07-23 14:09:06,459] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:09:11,526] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 6.15 ms
+[2025-07-23 14:09:11,562] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 4.55 ms
+[2025-07-23 14:09:11,562] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:09:14,119] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov | Duration: 9.40 ms
+[2025-07-23 14:09:15,114] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 15.07 ms
+[2025-07-23 14:09:19,405] INFO django.request: GET /orders/add-to-cart/test/ | Status: 302 | User: DimitarKiuliumov | Duration: 5.96 ms
+[2025-07-23 14:09:19,417] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 9.36 ms
+[2025-07-23 14:09:22,104] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov | Duration: 7.51 ms
+[2025-07-23 14:09:25,524] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 6.53 ms
+[2025-07-23 14:09:29,253] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 2.73 ms
+[2025-07-23 14:09:29,258] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:10:45,937] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 63.15 ms
+[2025-07-23 14:10:45,989] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 7.95 ms
+[2025-07-23 14:10:45,989] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:10:52,759] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 8.87 ms
+[2025-07-23 14:10:59,592] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 64.99 ms
+[2025-07-23 14:11:04,204] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.57 ms
+[2025-07-23 14:11:04,205] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:11:05,360] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 6.84 ms
+[2025-07-23 14:11:05,388] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 6.07 ms
+[2025-07-23 14:11:05,388] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:11:36,336] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 4.03 ms
+[2025-07-23 14:11:36,336] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:11:36,379] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.03 ms
+[2025-07-23 14:11:36,379] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:11:36,987] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 7.75 ms
+[2025-07-23 14:11:36,987] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:11:37,042] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 32.49 ms
+[2025-07-23 14:11:37,043] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:11:40,716] INFO django.request: GET /orders/add-to-cart/test/ | Status: 302 | User: DimitarKiuliumov | Duration: 4.86 ms
+[2025-07-23 14:11:40,739] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 15.15 ms
+[2025-07-23 14:11:42,099] INFO django.request: GET /orders/add-to-cart/test/ | Status: 302 | User: DimitarKiuliumov | Duration: 5.71 ms
+[2025-07-23 14:11:42,110] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 7.84 ms
+[2025-07-23 14:11:42,400] INFO django.request: GET /orders/add-to-cart/test/ | Status: 302 | User: DimitarKiuliumov | Duration: 4.78 ms
+[2025-07-23 14:11:42,413] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 9.98 ms
+[2025-07-23 14:11:42,679] INFO django.request: GET /orders/add-to-cart/test/ | Status: 302 | User: DimitarKiuliumov | Duration: 2.00 ms
+[2025-07-23 14:11:42,694] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 11.56 ms
+[2025-07-23 14:11:42,960] INFO django.request: GET /orders/add-to-cart/test/ | Status: 302 | User: DimitarKiuliumov | Duration: 5.39 ms
+[2025-07-23 14:11:42,971] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 10.66 ms
+[2025-07-23 14:11:44,175] INFO django.request: POST /products/rate/test | Status: 302 | User: DimitarKiuliumov | Duration: 7.76 ms
+[2025-07-23 14:11:44,188] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 9.68 ms
+[2025-07-23 14:11:51,584] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.51 ms
+[2025-07-23 14:11:51,585] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:12:04,459] INFO django.request: GET /orders/add-to-cart/test/ | Status: 302 | User: DimitarKiuliumov | Duration: 5.74 ms
+[2025-07-23 14:12:04,472] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 9.82 ms
+[2025-07-23 14:12:06,029] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.01 ms
+[2025-07-23 14:12:06,030] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:12:23,031] INFO django.request: GET /orders/add-to-cart/test/ | Status: 302 | User: DimitarKiuliumov | Duration: 4.54 ms
+[2025-07-23 14:12:23,045] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 9.61 ms
+[2025-07-23 14:12:23,112] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.52 ms
+[2025-07-23 14:12:23,113] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:12:34,804] INFO django.request: GET /orders/add-to-cart/test/ | Status: 302 | User: DimitarKiuliumov | Duration: 4.55 ms
+[2025-07-23 14:12:34,817] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 9.37 ms
+[2025-07-23 14:12:34,869] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 11.34 ms
+[2025-07-23 14:12:34,870] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:14:39,500] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 9.62 ms
+[2025-07-23 14:14:39,551] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.47 ms
+[2025-07-23 14:14:39,553] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:14:44,190] INFO django.request: GET /orders/add-to-cart/test/?quantity=164 | Status: 302 | User: DimitarKiuliumov | Duration: 2.78 ms
+[2025-07-23 14:14:44,206] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 11.73 ms
+[2025-07-23 14:14:44,253] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.40 ms
+[2025-07-23 14:14:44,253] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:16:50,928] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 114.40 ms
+[2025-07-23 14:16:51,021] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 36.36 ms
+[2025-07-23 14:16:51,022] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:16:55,116] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 7.90 ms
+[2025-07-23 14:16:59,619] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 4.49 ms
+[2025-07-23 14:17:02,657] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 3.95 ms
+[2025-07-23 14:20:10,810] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 4.39 ms
+[2025-07-23 14:20:10,810] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:20:51,810] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 88.49 ms
+[2025-07-23 14:20:51,869] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 10.83 ms
+[2025-07-23 14:20:51,871] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:20:55,071] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 6.44 ms
+[2025-07-23 14:21:02,857] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 5.04 ms
+[2025-07-23 14:21:09,496] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 61.08 ms
+[2025-07-23 14:21:13,669] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 7.22 ms
+[2025-07-23 14:21:14,396] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 5.07 ms
+[2025-07-23 14:21:14,545] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 5.50 ms
+[2025-07-23 14:21:14,701] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 6.00 ms
+[2025-07-23 14:21:19,574] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 33.31 ms
+[2025-07-23 14:21:19,575] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:22:48,048] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 65.29 ms
+[2025-07-23 14:22:48,074] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 6.05 ms
+[2025-07-23 14:22:48,075] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:22:50,980] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 6.59 ms
+[2025-07-23 14:22:52,569] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.03 ms
+[2025-07-23 14:22:52,570] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:23:06,234] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 6.16 ms
+[2025-07-23 14:23:06,260] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 6.90 ms
+[2025-07-23 14:23:06,260] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:24:26,457] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 64.23 ms
+[2025-07-23 14:24:26,478] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.05 ms
+[2025-07-23 14:24:26,479] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:24:35,807] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 2.91 ms
+[2025-07-23 14:24:35,834] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 9.54 ms
+[2025-07-23 14:24:35,834] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:24:36,479] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 5.54 ms
+[2025-07-23 14:24:36,508] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 7.41 ms
+[2025-07-23 14:24:36,509] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:24:36,642] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 7.15 ms
+[2025-07-23 14:24:36,690] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 34.98 ms
+[2025-07-23 14:24:36,690] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:26:49,570] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 49.97 ms
+[2025-07-23 14:26:49,606] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.63 ms
+[2025-07-23 14:26:49,607] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:26:52,920] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 6.05 ms
+[2025-07-23 14:26:55,591] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.02 ms
+[2025-07-23 14:26:55,591] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:27:56,374] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.19 ms
+[2025-07-23 14:27:56,374] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:28:49,133] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 89.61 ms
+[2025-07-23 14:28:49,242] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 34.83 ms
+[2025-07-23 14:28:49,243] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:28:54,612] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 5.97 ms
+[2025-07-23 14:28:56,973] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 5.63 ms
+[2025-07-23 14:28:58,608] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.91 ms
+[2025-07-23 14:28:58,609] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:32:18,076] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 67.62 ms
+[2025-07-23 14:32:18,108] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 7.43 ms
+[2025-07-23 14:32:18,109] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:32:24,284] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 5.54 ms
+[2025-07-23 14:32:24,312] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 6.63 ms
+[2025-07-23 14:32:24,313] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:32:30,462] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 83.71 ms
+[2025-07-23 14:32:30,485] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.34 ms
+[2025-07-23 14:32:30,486] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:32:33,351] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 4.41 ms
+[2025-07-23 14:32:33,378] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 8.00 ms
+[2025-07-23 14:32:33,378] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:32:38,790] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 4.00 ms
+[2025-07-23 14:32:38,790] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:32:38,840] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 6.39 ms
+[2025-07-23 14:32:38,840] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:32:40,412] INFO django.request: GET /orders/add-to-cart/test/?quantity=2 | Status: 302 | User: DimitarKiuliumov | Duration: 2.31 ms
+[2025-07-23 14:32:40,457] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 39.05 ms
+[2025-07-23 14:32:40,494] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.24 ms
+[2025-07-23 14:32:40,494] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:32:44,984] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 7.73 ms
+[2025-07-23 14:32:45,028] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 4.56 ms
+[2025-07-23 14:32:45,028] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:32:49,017] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 5.50 ms
+[2025-07-23 14:32:49,055] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.60 ms
+[2025-07-23 14:32:49,055] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 14:32:54,606] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 6.50 ms
+[2025-07-23 14:41:33,486] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 71.48 ms
+[2025-07-23 14:41:53,265] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 64.47 ms
+[2025-07-23 14:41:55,709] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 7.08 ms
+[2025-07-23 14:42:26,968] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 6.14 ms
+[2025-07-23 14:43:11,888] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 65.66 ms
+[2025-07-23 14:43:12,846] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 8.04 ms
+[2025-07-23 14:43:15,231] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 6.03 ms
+[2025-07-23 14:43:16,220] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 7.53 ms
+[2025-07-23 14:43:20,013] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 6.87 ms
+[2025-07-23 14:43:21,983] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov | Duration: 33.86 ms
+[2025-07-23 15:08:21,295] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov | Duration: 69.18 ms
+[2025-07-23 15:08:22,266] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 8.29 ms
+[2025-07-23 15:08:31,018] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 5.18 ms
+[2025-07-23 15:17:43,406] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 67.72 ms
+[2025-07-23 15:38:41,086] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 62.65 ms
+[2025-07-23 15:38:53,395] INFO django.request: GET /accounts/ | Status: 200 | User: DimitarKiuliumov | Duration: 14.06 ms
+[2025-07-23 15:38:54,080] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 8.05 ms
+[2025-07-23 15:38:59,074] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov | Duration: 33.09 ms
+[2025-07-23 15:39:01,257] INFO django.request: GET /products/?category=Rings | Status: 200 | User: DimitarKiuliumov | Duration: 7.17 ms
+[2025-07-23 15:39:01,960] INFO django.request: GET /products/?category=Glasses | Status: 200 | User: DimitarKiuliumov | Duration: 6.52 ms
+[2025-07-23 15:39:02,777] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov | Duration: 7.72 ms
+[2025-07-23 15:39:11,971] INFO django.request: GET /admin/accounts/usermodel/ | Status: 302 | User: DimitarKiuliumov | Duration: 4.54 ms
+[2025-07-23 15:39:11,992] INFO django.request: GET /admin/login/?next=/admin/accounts/usermodel/ | Status: 200 | User: DimitarKiuliumov | Duration: 17.82 ms
+[2025-07-23 15:39:52,198] INFO django.request: GET /admin/login/?next=/admin/accounts/usermodel/ | Status: 302 | User: DimitarKiuliumov | Duration: 5.39 ms
+[2025-07-23 15:39:52,214] INFO django.request: GET /admin/ | Status: 200 | User: DimitarKiuliumov | Duration: 12.76 ms
+[2025-07-23 15:39:55,802] INFO django.request: GET /admin/orders/order/ | Status: 200 | User: DimitarKiuliumov | Duration: 15.65 ms
+[2025-07-23 15:39:55,842] INFO django.request: GET /admin/jsi18n/ | Status: 200 | User: DimitarKiuliumov | Duration: 17.23 ms
+[2025-07-23 15:39:58,762] INFO django.request: GET /admin/accounts/usermodel/ | Status: 200 | User: DimitarKiuliumov | Duration: 19.36 ms
+[2025-07-23 15:39:58,809] INFO django.request: GET /admin/jsi18n/ | Status: 200 | User: DimitarKiuliumov | Duration: 20.83 ms
+[2025-07-23 15:40:05,349] INFO django.request: GET /admin/accounts/usermodel/?is_chat_banned__exact=1 | Status: 200 | User: DimitarKiuliumov | Duration: 11.31 ms
+[2025-07-23 15:40:05,386] INFO django.request: GET /admin/jsi18n/ | Status: 200 | User: DimitarKiuliumov | Duration: 18.10 ms
+[2025-07-23 15:40:07,511] INFO django.request: GET /admin/accounts/usermodel/?is_active__exact=0&is_chat_banned__exact=1 | Status: 200 | User: DimitarKiuliumov | Duration: 12.98 ms
+[2025-07-23 15:40:07,553] INFO django.request: GET /admin/jsi18n/ | Status: 200 | User: DimitarKiuliumov | Duration: 18.58 ms
+[2025-07-23 15:40:08,875] INFO django.request: GET /admin/accounts/usermodel/ | Status: 200 | User: DimitarKiuliumov | Duration: 13.60 ms
+[2025-07-23 15:40:08,914] INFO django.request: GET /admin/jsi18n/ | Status: 200 | User: DimitarKiuliumov | Duration: 19.59 ms
+[2025-07-23 15:40:09,208] INFO django.request: GET /admin/accounts/usermodel/?_facets=True | Status: 200 | User: DimitarKiuliumov | Duration: 15.61 ms
+[2025-07-23 15:40:09,247] INFO django.request: GET /admin/jsi18n/ | Status: 200 | User: DimitarKiuliumov | Duration: 15.85 ms
+[2025-07-23 15:40:11,212] INFO django.request: GET /admin/accounts/usermodel/ | Status: 200 | User: DimitarKiuliumov | Duration: 12.47 ms
+[2025-07-23 15:40:11,252] INFO django.request: GET /admin/jsi18n/ | Status: 200 | User: DimitarKiuliumov | Duration: 21.09 ms
+[2025-07-23 15:40:12,552] INFO django.request: GET /admin/accounts/usermodel/5/change/ | Status: 200 | User: DimitarKiuliumov | Duration: 37.15 ms
+[2025-07-23 15:40:12,600] INFO django.request: GET /admin/jsi18n/ | Status: 200 | User: DimitarKiuliumov | Duration: 19.17 ms
+[2025-07-23 15:40:46,386] INFO django.request: GET /admin/auth/group/ | Status: 200 | User: DimitarKiuliumov | Duration: 11.27 ms
+[2025-07-23 15:40:46,430] INFO django.request: GET /admin/jsi18n/ | Status: 200 | User: DimitarKiuliumov | Duration: 23.09 ms
+[2025-07-23 15:40:47,463] INFO django.request: GET /admin/auth/group/add/ | Status: 200 | User: DimitarKiuliumov | Duration: 15.59 ms
+[2025-07-23 15:40:47,502] INFO django.request: GET /admin/jsi18n/ | Status: 200 | User: DimitarKiuliumov | Duration: 16.89 ms
+[2025-07-23 15:42:13,502] INFO django.request: POST /admin/auth/group/add/ | Status: 302 | User: DimitarKiuliumov | Duration: 3.54 ms
+[2025-07-23 15:42:13,528] INFO django.request: GET /admin/auth/group/ | Status: 200 | User: DimitarKiuliumov | Duration: 11.66 ms
+[2025-07-23 15:42:13,560] INFO django.request: GET /admin/jsi18n/ | Status: 200 | User: DimitarKiuliumov | Duration: 6.86 ms
+[2025-07-23 15:42:14,645] INFO django.request: GET /admin/auth/group/1/change/ | Status: 200 | User: DimitarKiuliumov | Duration: 16.33 ms
+[2025-07-23 15:42:14,689] INFO django.request: GET /admin/jsi18n/ | Status: 200 | User: DimitarKiuliumov | Duration: 21.82 ms
+[2025-07-23 15:42:23,663] INFO django.request: GET /admin/auth/group/ | Status: 200 | User: DimitarKiuliumov | Duration: 7.78 ms
+[2025-07-23 15:42:24,168] INFO django.request: GET /admin/auth/group/add/ | Status: 200 | User: DimitarKiuliumov | Duration: 8.65 ms
+[2025-07-23 15:50:14,515] INFO django.request: GET /admin/auth/group/ | Status: 200 | User: DimitarKiuliumov | Duration: 11.20 ms
+[2025-07-23 15:50:15,677] INFO django.request: GET /admin/accounts/usermodel/5/change/ | Status: 200 | User: DimitarKiuliumov | Duration: 16.56 ms
+[2025-07-23 15:50:15,815] INFO django.request: GET /admin/accounts/usermodel/ | Status: 200 | User: DimitarKiuliumov | Duration: 11.13 ms
+[2025-07-23 15:50:15,975] INFO django.request: GET /admin/accounts/usermodel/?_facets=True | Status: 200 | User: DimitarKiuliumov | Duration: 10.85 ms
+[2025-07-23 15:50:16,121] INFO django.request: GET /admin/accounts/usermodel/ | Status: 200 | User: DimitarKiuliumov | Duration: 12.73 ms
+[2025-07-23 15:50:16,215] INFO django.request: GET /admin/accounts/usermodel/?is_active__exact=0&is_chat_banned__exact=1 | Status: 200 | User: DimitarKiuliumov | Duration: 7.07 ms
+[2025-07-23 15:50:16,364] INFO django.request: GET /admin/accounts/usermodel/?is_chat_banned__exact=1 | Status: 200 | User: DimitarKiuliumov | Duration: 11.95 ms
+[2025-07-23 15:50:16,490] INFO django.request: GET /admin/accounts/usermodel/ | Status: 200 | User: DimitarKiuliumov | Duration: 12.64 ms
+[2025-07-23 15:50:16,626] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov | Duration: 4.80 ms
+[2025-07-23 15:50:16,775] INFO django.request: GET /products/?category=Glasses | Status: 200 | User: DimitarKiuliumov | Duration: 6.91 ms
+[2025-07-23 15:50:16,894] INFO django.request: GET /products/?category=Rings | Status: 200 | User: DimitarKiuliumov | Duration: 4.91 ms
+[2025-07-23 15:50:17,454] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 6.08 ms
+[2025-07-23 15:50:17,760] INFO django.request: GET /accounts/ | Status: 200 | User: DimitarKiuliumov | Duration: 10.02 ms
+[2025-07-23 15:50:18,287] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 7.79 ms
+[2025-07-23 15:50:19,386] INFO django.request: POST /accounts/logout/ | Status: 302 | User: Anonymous | Duration: 9.74 ms
+[2025-07-23 15:50:19,393] INFO django.request: GET / | Status: 200 | User: Anonymous | Duration: 3.01 ms
+[2025-07-23 15:50:22,815] INFO django.request: GET /products/ | Status: 200 | User: Anonymous | Duration: 6.95 ms
+[2025-07-23 15:50:49,467] INFO django.request: GET /products/?search=Test&category=&availability=&sort= | Status: 200 | User: Anonymous | Duration: 5.81 ms
+[2025-07-23 15:50:56,651] INFO django.request: GET /products/?search=&category=1&availability=&sort= | Status: 200 | User: Anonymous | Duration: 7.33 ms
+[2025-07-23 15:50:58,649] INFO django.request: GET /products/details/test/ | Status: 200 | User: Anonymous | Duration: 13.36 ms
+[2025-07-23 15:51:11,676] INFO django.request: GET /products/cart/ | Status: 200 | User: Anonymous | Duration: 5.11 ms
+[2025-07-23 15:51:14,565] INFO django.request: GET / | Status: 200 | User: Anonymous | Duration: 1.50 ms
+[2025-07-23 15:51:15,904] INFO django.request: GET /products/cart/ | Status: 200 | User: Anonymous | Duration: 6.27 ms
+[2025-07-23 15:51:38,753] INFO django.request: GET /products/ | Status: 200 | User: Anonymous | Duration: 6.60 ms
+[2025-07-23 15:51:39,326] INFO django.request: GET /accounts/login/ | Status: 200 | User: Anonymous | Duration: 4.79 ms
+[2025-07-23 15:51:41,900] INFO django.request: POST /accounts/login/ | Status: 302 | User: DimitarKiuliumov | Duration: 426.57 ms
+[2025-07-23 15:51:41,909] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 6.48 ms
+[2025-07-23 15:51:44,012] INFO django.request: GET /accounts/ | Status: 200 | User: DimitarKiuliumov | Duration: 10.02 ms
+[2025-07-23 15:52:16,974] INFO django.request: POST /accounts/ | Status: 302 | User: DimitarKiuliumov | Duration: 1049.74 ms
+[2025-07-23 15:52:16,987] INFO django.request: GET /accounts/ | Status: 200 | User: DimitarKiuliumov | Duration: 8.32 ms
+[2025-07-23 15:52:21,726] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov | Duration: 7.45 ms
+[2025-07-23 15:52:22,461] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 10.53 ms
+[2025-07-23 15:52:23,409] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov | Duration: 4.82 ms
+[2025-07-23 15:52:23,417] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 5.49 ms
+[2025-07-23 15:52:24,070] INFO django.request: GET /accounts/ | Status: 200 | User: DimitarKiuliumov | Duration: 8.98 ms
+[2025-07-23 15:52:25,208] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 8.35 ms
+[2025-07-23 15:52:29,822] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov | Duration: 7.53 ms
+[2025-07-23 15:52:30,500] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 11.09 ms
+[2025-07-23 15:52:51,198] INFO django.request: POST /products/rate/test | Status: 302 | User: DimitarKiuliumov | Duration: 7.46 ms
+[2025-07-23 15:52:51,211] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 9.88 ms
+[2025-07-23 15:53:04,178] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 6.97 ms
+[2025-07-23 15:53:04,178] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 15:53:12,123] INFO django.request: POST /products/rate/test | Status: 302 | User: DimitarKiuliumov | Duration: 9.42 ms
+[2025-07-23 15:53:12,135] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 9.64 ms
+[2025-07-23 15:53:15,578] INFO django.request: POST /products/rate/test | Status: 302 | User: DimitarKiuliumov | Duration: 9.24 ms
+[2025-07-23 15:53:15,590] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 10.22 ms
+[2025-07-23 15:53:18,461] INFO django.request: POST /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 28.18 ms
+[2025-07-23 15:53:25,438] INFO django.request: POST /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 31.03 ms
+[2025-07-23 15:53:46,382] INFO django.request: GET /chat/admin/ | Status: 200 | User: DimitarKiuliumov | Duration: 7.82 ms
+[2025-07-23 15:53:47,561] INFO django.request: GET /api/messages/5/ | Status: 200 | User: DimitarKiuliumov | Duration: 10.43 ms
+[2025-07-23 15:53:52,262] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 5.42 ms
+[2025-07-23 15:53:53,176] INFO django.request: POST /accounts/logout/ | Status: 302 | User: Anonymous | Duration: 7.29 ms
+[2025-07-23 15:53:53,182] INFO django.request: GET / | Status: 200 | User: Anonymous | Duration: 3.14 ms
+[2025-07-23 15:53:53,956] INFO django.request: GET /accounts/login/ | Status: 200 | User: Anonymous | Duration: 4.73 ms
+[2025-07-23 15:53:57,571] INFO django.request: POST /accounts/login/ | Status: 302 | User: DimitarKiuliumov1234 | Duration: 395.41 ms
+[2025-07-23 15:53:57,577] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov1234 | Duration: 5.63 ms
+[2025-07-23 15:53:58,798] INFO django.request: GET /api/messages/5/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 8.11 ms
+[2025-07-23 15:54:08,621] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 6.21 ms
+[2025-07-23 15:54:09,569] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 7.85 ms
+[2025-07-23 15:54:45,677] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 8.48 ms
+[2025-07-23 15:54:46,981] INFO django.request: GET /products/?category=Rings | Status: 200 | User: DimitarKiuliumov1234 | Duration: 8.85 ms
+[2025-07-23 15:54:47,464] INFO django.request: GET /about/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 5.61 ms
+[2025-07-23 15:54:48,310] INFO django.request: GET /contact/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 7.42 ms
+[2025-07-23 15:54:50,460] INFO django.request: GET /about/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 5.77 ms
+[2025-07-23 15:54:52,125] INFO django.request: GET /contact/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 8.02 ms
+[2025-07-23 18:13:38,559] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 7.02 ms
+[2025-07-23 18:13:42,708] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 7.48 ms
+[2025-07-23 18:13:43,519] INFO django.request: GET /products/details/new-product/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 12.59 ms
+[2025-07-23 18:13:46,788] INFO django.request: GET /orders/add-to-cart/new-product/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 1.00 ms
+[2025-07-23 18:13:46,805] INFO django.request: GET /products/details/new-product/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 9.34 ms
+[2025-07-23 18:13:49,368] INFO django.request: POST /products/rate/new-product | Status: 302 | User: DimitarKiuliumov1234 | Duration: 844.15 ms
+[2025-07-23 18:13:49,380] INFO django.request: GET /products/details/new-product/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 8.41 ms
+[2025-07-23 18:13:53,267] INFO django.request: POST /products/rate/new-product | Status: 302 | User: DimitarKiuliumov1234 | Duration: 8.06 ms
+[2025-07-23 18:13:53,277] INFO django.request: GET /products/details/new-product/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 7.00 ms
+[2025-07-23 18:13:54,836] INFO django.request: GET /accounts/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 8.66 ms
+[2025-07-23 18:13:56,296] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 7.75 ms
+[2025-07-23 18:14:53,215] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 6.03 ms
+[2025-07-23 18:14:55,360] INFO django.request: GET /accounts/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 9.23 ms
+[2025-07-23 18:14:56,520] INFO django.request: GET /contact/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 7.48 ms
+[2025-07-23 18:14:59,740] INFO django.request: POST /contact/ | Status: 302 | User: DimitarKiuliumov1234 | Duration: 45.09 ms
+[2025-07-23 18:14:59,740] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov1234 | Duration: 0.00 ms
+[2025-07-23 18:15:13,466] INFO django.request: GET /products/?category=Glasses | Status: 200 | User: DimitarKiuliumov1234 | Duration: 8.90 ms
+[2025-07-23 18:15:13,789] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 8.22 ms
+[2025-07-23 18:15:14,914] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov1234 | Duration: 6.80 ms
+[2025-07-23 18:15:17,115] INFO django.request: GET /products/?category=Necklaces | Status: 200 | User: DimitarKiuliumov1234 | Duration: 7.57 ms
+[2025-07-23 18:15:17,775] INFO django.request: GET /products/?category=Bracelets | Status: 200 | User: DimitarKiuliumov1234 | Duration: 2.76 ms
+[2025-07-23 18:15:18,175] INFO django.request: GET /about/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 6.37 ms
+[2025-07-23 18:15:26,668] INFO django.request: GET /contact/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 8.46 ms
+[2025-07-23 18:15:35,158] INFO django.request: GET /accounts/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 8.37 ms
+[2025-07-23 18:15:38,957] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov1234 | Duration: 5.93 ms
+[2025-07-23 18:15:43,181] INFO django.request: GET /api/messages/5/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 7.28 ms
+[2025-07-23 18:19:09,001] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov1234 | Duration: 63.86 ms
+[2025-07-23 18:19:09,797] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 8.11 ms
+[2025-07-23 18:20:30,151] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 62.04 ms
+[2025-07-23 18:20:56,618] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 59.91 ms
+[2025-07-23 18:20:57,072] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 10.77 ms
+[2025-07-23 18:20:57,891] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 17.80 ms
+[2025-07-23 18:20:58,676] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 4.32 ms
+[2025-07-23 18:20:58,689] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 9.34 ms
+[2025-07-23 18:20:59,582] INFO django.request: GET /accounts/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 9.16 ms
+[2025-07-23 18:21:00,752] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 6.45 ms
+[2025-07-23 18:21:46,911] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 56.31 ms
+[2025-07-23 18:21:48,499] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 12.20 ms
+[2025-07-23 18:21:49,239] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 17.75 ms
+[2025-07-23 18:21:52,666] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 3.48 ms
+[2025-07-23 18:21:52,679] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 8.13 ms
+[2025-07-23 18:21:54,417] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 8.01 ms
+[2025-07-23 18:22:03,805] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 8.23 ms
+[2025-07-23 18:22:04,836] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 10.57 ms
+[2025-07-23 18:22:06,011] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 5.24 ms
+[2025-07-23 18:22:06,025] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 11.10 ms
+[2025-07-23 18:22:07,386] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 5.93 ms
+[2025-07-23 18:22:54,787] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov1234 | Duration: 5.72 ms
+[2025-07-23 18:22:54,788] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:23:17,134] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 57.12 ms
+[2025-07-23 18:23:20,647] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 10.38 ms
+[2025-07-23 18:23:21,567] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 17.87 ms
+[2025-07-23 18:23:22,378] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 3.36 ms
+[2025-07-23 18:23:22,391] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 8.57 ms
+[2025-07-23 18:23:30,558] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 7.84 ms
+[2025-07-23 18:25:10,082] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 58.97 ms
+[2025-07-23 18:25:11,339] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 10.20 ms
+[2025-07-23 18:25:12,088] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 17.59 ms
+[2025-07-23 18:25:12,843] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 4.40 ms
+[2025-07-23 18:25:12,856] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 10.15 ms
+[2025-07-23 18:25:14,505] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 7.37 ms
+[2025-07-23 18:25:15,456] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 5.10 ms
+[2025-07-23 18:25:17,081] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 7.61 ms
+[2025-07-23 18:25:18,183] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 12.24 ms
+[2025-07-23 18:25:19,077] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 5.72 ms
+[2025-07-23 18:25:19,089] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 9.88 ms
+[2025-07-23 18:25:21,117] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 5.60 ms
+[2025-07-23 18:25:21,131] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 11.00 ms
+[2025-07-23 18:25:21,400] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 0.00 ms
+[2025-07-23 18:25:21,416] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 10.67 ms
+[2025-07-23 18:25:21,672] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 3.46 ms
+[2025-07-23 18:25:21,688] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 10.62 ms
+[2025-07-23 18:25:21,918] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 6.16 ms
+[2025-07-23 18:25:21,933] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 11.62 ms
+[2025-07-23 18:25:22,205] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 4.89 ms
+[2025-07-23 18:25:22,220] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 15.10 ms
+[2025-07-23 18:25:22,500] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 4.48 ms
+[2025-07-23 18:25:22,511] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 8.59 ms
+[2025-07-23 18:25:22,802] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 3.86 ms
+[2025-07-23 18:25:22,810] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 5.26 ms
+[2025-07-23 18:25:23,083] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 4.48 ms
+[2025-07-23 18:25:23,098] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 10.48 ms
+[2025-07-23 18:25:23,378] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 4.61 ms
+[2025-07-23 18:25:23,392] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 9.38 ms
+[2025-07-23 18:25:23,923] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 3.85 ms
+[2025-07-23 18:25:23,933] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 6.06 ms
+[2025-07-23 18:25:24,722] INFO django.request: GET /accounts/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 8.87 ms
+[2025-07-23 18:25:25,655] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 5.47 ms
+[2025-07-23 18:25:27,163] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 6.42 ms
+[2025-07-23 18:25:29,960] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 9.08 ms
+[2025-07-23 18:25:31,009] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 12.37 ms
+[2025-07-23 18:25:31,870] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 5.71 ms
+[2025-07-23 18:25:31,883] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 9.78 ms
+[2025-07-23 18:25:32,156] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 4.67 ms
+[2025-07-23 18:25:32,167] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 7.83 ms
+[2025-07-23 18:25:33,263] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 5.98 ms
+[2025-07-23 18:25:34,063] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 5.51 ms
+[2025-07-23 18:26:17,129] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 61.34 ms
+[2025-07-23 18:26:17,964] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 17.19 ms
+[2025-07-23 18:26:18,793] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 5.14 ms
+[2025-07-23 18:26:18,825] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 29.25 ms
+[2025-07-23 18:26:20,927] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 5.72 ms
+[2025-07-23 18:26:20,940] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 9.11 ms
+[2025-07-23 18:26:21,727] INFO django.request: GET /accounts/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 11.49 ms
+[2025-07-23 18:26:22,045] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 8.56 ms
+[2025-07-23 18:26:23,704] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 3.01 ms
+[2025-07-23 18:26:35,708] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 7.66 ms
+[2025-07-23 18:26:36,557] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 12.34 ms
+[2025-07-23 18:26:37,419] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 4.19 ms
+[2025-07-23 18:26:37,433] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 10.31 ms
+[2025-07-23 18:26:37,705] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 4.06 ms
+[2025-07-23 18:26:37,716] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 8.53 ms
+[2025-07-23 18:26:37,943] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 4.88 ms
+[2025-07-23 18:26:37,954] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 10.24 ms
+[2025-07-23 18:26:39,140] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 5.33 ms
+[2025-07-23 18:26:41,017] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 7.09 ms
+[2025-07-23 18:26:49,595] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 7.08 ms
+[2025-07-23 18:26:50,915] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 11.58 ms
+[2025-07-23 18:26:51,760] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 4.75 ms
+[2025-07-23 18:26:51,773] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 10.03 ms
+[2025-07-23 18:26:52,115] INFO django.request: GET /orders/add-to-cart/test/?quantity=1 | Status: 302 | User: DimitarKiuliumov1234 | Duration: 4.15 ms
+[2025-07-23 18:26:52,125] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 6.90 ms
+[2025-07-23 18:26:52,977] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 6.68 ms
+[2025-07-23 18:26:57,822] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov1234 | Duration: 8.24 ms
+[2025-07-23 18:26:58,820] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov1234 | Duration: 7.05 ms
+[2025-07-23 18:26:58,821] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:27:42,514] INFO django.request: POST /accounts/logout/ | Status: 302 | User: Anonymous | Duration: 8.22 ms
+[2025-07-23 18:27:42,519] INFO django.request: GET / | Status: 200 | User: Anonymous | Duration: 1.55 ms
+[2025-07-23 18:27:42,552] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: Anonymous | Duration: 6.69 ms
+[2025-07-23 18:27:42,553] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:27:56,545] INFO django.request: GET /products/ | Status: 200 | User: Anonymous | Duration: 6.36 ms
+[2025-07-23 18:27:56,576] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: Anonymous | Duration: 5.05 ms
+[2025-07-23 18:27:56,576] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:27:59,909] INFO django.request: GET /products/cart/ | Status: 200 | User: Anonymous | Duration: 4.28 ms
+[2025-07-23 18:27:59,940] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: Anonymous | Duration: 5.03 ms
+[2025-07-23 18:27:59,941] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:28:15,727] INFO django.request: GET /products/cart/ | Status: 200 | User: Anonymous | Duration: 3.01 ms
+[2025-07-23 18:28:15,745] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: Anonymous | Duration: 7.43 ms
+[2025-07-23 18:28:15,745] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:28:27,444] INFO django.request: GET /products/cart/ | Status: 200 | User: Anonymous | Duration: 3.12 ms
+[2025-07-23 18:28:27,464] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: Anonymous | Duration: 8.18 ms
+[2025-07-23 18:28:27,464] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:29:34,489] INFO django.request: GET / | Status: 200 | User: Anonymous | Duration: 1.50 ms
+[2025-07-23 18:29:34,527] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: Anonymous | Duration: 5.71 ms
+[2025-07-23 18:29:34,527] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:30:09,776] INFO django.request: GET /accounts/login/ | Status: 200 | User: Anonymous | Duration: 2.69 ms
+[2025-07-23 18:30:09,812] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: Anonymous | Duration: 6.39 ms
+[2025-07-23 18:30:09,813] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:30:12,539] INFO django.request: POST /accounts/login/ | Status: 302 | User: DimitarKiuliumov | Duration: 388.16 ms
+[2025-07-23 18:30:12,554] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 9.59 ms
+[2025-07-23 18:30:12,609] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.63 ms
+[2025-07-23 18:30:12,610] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:30:14,137] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 2.67 ms
+[2025-07-23 18:30:14,174] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.61 ms
+[2025-07-23 18:30:14,176] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:30:35,249] INFO django.request: GET /products/cart/ | Status: 200 | User: DimitarKiuliumov | Duration: 64.34 ms
+[2025-07-23 18:30:35,286] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.03 ms
+[2025-07-23 18:30:35,287] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:30:38,497] INFO django.request: GET /about/ | Status: 200 | User: DimitarKiuliumov | Duration: 5.88 ms
+[2025-07-23 18:30:38,537] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 4.02 ms
+[2025-07-23 18:30:38,538] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:30:40,989] INFO django.request: GET /products/?category=Bracelets | Status: 200 | User: DimitarKiuliumov | Duration: 10.29 ms
+[2025-07-23 18:30:41,024] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.57 ms
+[2025-07-23 18:30:41,025] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:30:44,684] INFO django.request: GET /products/?category=Bracelets | Status: 200 | User: DimitarKiuliumov | Duration: 5.90 ms
+[2025-07-23 18:30:44,711] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 8.11 ms
+[2025-07-23 18:30:44,712] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:30:49,899] INFO django.request: GET /about/ | Status: 200 | User: DimitarKiuliumov | Duration: 5.51 ms
+[2025-07-23 18:30:49,939] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.78 ms
+[2025-07-23 18:30:49,940] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:30:51,434] INFO django.request: GET /products/?category=Necklaces | Status: 200 | User: DimitarKiuliumov | Duration: 8.13 ms
+[2025-07-23 18:30:51,469] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 4.24 ms
+[2025-07-23 18:30:51,471] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:30:53,672] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov | Duration: 8.87 ms
+[2025-07-23 18:30:53,709] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.02 ms
+[2025-07-23 18:30:53,710] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:30:55,992] INFO django.request: GET /products/details/test/ | Status: 200 | User: DimitarKiuliumov | Duration: 17.25 ms
+[2025-07-23 18:30:56,029] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 6.47 ms
+[2025-07-23 18:30:56,030] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:31:01,970] INFO django.request: GET /admin/accounts/usermodel/ | Status: 200 | User: DimitarKiuliumov | Duration: 22.74 ms
+[2025-07-23 18:31:02,019] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 8.76 ms
+[2025-07-23 18:31:02,020] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:31:02,046] INFO django.request: GET /admin/jsi18n/ | Status: 200 | User: DimitarKiuliumov | Duration: 19.66 ms
+[2025-07-23 18:31:12,608] INFO django.request: GET /admin/ | Status: 200 | User: DimitarKiuliumov | Duration: 8.25 ms
+[2025-07-23 18:31:12,640] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 12.66 ms
+[2025-07-23 18:31:12,641] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:31:14,197] INFO django.request: GET /admin/accounts/usermodel/ | Status: 200 | User: DimitarKiuliumov | Duration: 11.53 ms
+[2025-07-23 18:31:14,220] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 6.35 ms
+[2025-07-23 18:31:14,220] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:31:14,617] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 7.50 ms
+[2025-07-23 18:31:14,618] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:31:14,636] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 7.47 ms
+[2025-07-23 18:31:14,636] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:31:15,242] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 7.06 ms
+[2025-07-23 18:31:15,243] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:31:15,294] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 6.30 ms
+[2025-07-23 18:31:15,295] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:31:15,774] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.15 ms
+[2025-07-23 18:31:15,774] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:31:15,793] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.35 ms
+[2025-07-23 18:31:15,793] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:31:18,131] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 7.25 ms
+[2025-07-23 18:31:18,169] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 7.65 ms
+[2025-07-23 18:31:18,170] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:31:20,758] INFO django.request: GET /products/ | Status: 200 | User: DimitarKiuliumov | Duration: 9.64 ms
+[2025-07-23 18:31:20,793] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 6.62 ms
+[2025-07-23 18:31:20,794] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:31:21,645] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.08 ms
+[2025-07-23 18:31:21,647] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:31:21,663] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 2.54 ms
+[2025-07-23 18:31:21,664] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:32:57,375] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 4.49 ms
+[2025-07-23 18:32:57,376] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:33:39,683] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 63.13 ms
+[2025-07-23 18:33:39,705] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 6.07 ms
+[2025-07-23 18:33:39,706] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:36:59,948] INFO django.request: GET /chat/admin/ | Status: 200 | User: DimitarKiuliumov | Duration: 6.03 ms
+[2025-07-23 18:36:59,986] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.18 ms
+[2025-07-23 18:36:59,987] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:37:01,197] INFO django.request: GET /api/messages/5/ | Status: 200 | User: DimitarKiuliumov | Duration: 11.69 ms
+[2025-07-23 18:38:13,199] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 7.55 ms
+[2025-07-23 18:38:13,272] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 36.75 ms
+[2025-07-23 18:38:13,272] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:40:02,694] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 62.35 ms
+[2025-07-23 18:40:02,734] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 8.14 ms
+[2025-07-23 18:40:02,735] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:40:09,088] INFO django.request: GET /chat/admin/ | Status: 200 | User: DimitarKiuliumov | Duration: 7.82 ms
+[2025-07-23 18:40:09,130] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 5.01 ms
+[2025-07-23 18:40:09,131] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:40:10,334] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 6.71 ms
+[2025-07-23 18:40:10,366] INFO django.request: GET /.well-known/appspecific/com.chrome.devtools.json | Status: 404 | User: DimitarKiuliumov | Duration: 4.96 ms
+[2025-07-23 18:40:10,367] WARNING django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-07-23 18:40:17,284] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 5.60 ms
+[2025-07-23 18:40:18,004] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 4.52 ms
+[2025-07-23 18:40:29,230] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 62.94 ms
+[2025-07-23 18:40:44,173] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 64.96 ms
+[2025-07-23 18:40:51,926] INFO django.request: GET / | Status: 200 | User: DimitarKiuliumov | Duration: 62.33 ms
+[2025-07-23 19:03:26,089] INFO django.request: POST /accounts/deactivate/ | Status: 302 | User: Anonymous | Duration: 3.06 ms
+[2025-07-23 19:03:26,096] INFO django.request: GET / | Status: 200 | User: Anonymous | Duration: 6.12 ms
+[2025-07-23 19:03:29,814] INFO django.request: POST /accounts/login/ | Status: 302 | User: testuser | Duration: 339.32 ms
+[2025-07-23 19:03:29,818] INFO django.request: GET / | Status: 200 | User: testuser | Duration: 3.02 ms
+[2025-07-23 19:03:30,834] WARNING django.request: Method Not Allowed (GET): /accounts/logout/
+[2025-07-23 19:03:30,835] INFO django.request: GET /accounts/logout/ | Status: 405 | User: testuser | Duration: 1.01 ms
+[2025-07-23 19:03:33,169] INFO django.request: POST /accounts/register/ | Status: 302 | User: Anonymous | Duration: 1656.87 ms
+[2025-07-23 19:03:33,171] INFO django.request: GET /accounts/email-confirmation-sent/ | Status: 200 | User: Anonymous | Duration: 0.00 ms
+[2025-07-23 19:06:35,079] INFO django.request: POST /accounts/register/ | Status: 302 | User: Anonymous | Duration: 1657.76 ms
+[2025-07-23 19:06:36,097] INFO django.request: POST /accounts/login/ | Status: 200 | User: Anonymous | Duration: 339.21 ms
+[2025-07-23 19:06:37,110] WARNING django.request: Method Not Allowed (GET): /accounts/logout/
+[2025-07-23 19:06:37,111] INFO django.request: GET /accounts/logout/ | Status: 405 | User: normaluser | Duration: 0.00 ms
+[2025-07-23 19:06:39,152] INFO django.request: GET /accounts/register/ | Status: 302 | User: normaluser | Duration: 1.00 ms
+[2025-07-23 19:06:39,831] INFO django.request: POST /accounts/register/ | Status: 200 | User: Anonymous | Duration: 7.07 ms
+[2025-07-23 19:06:40,850] INFO django.request: POST /accounts/register/ | Status: 302 | User: Anonymous | Duration: 342.19 ms
+[2025-07-23 19:06:40,851] INFO django.request: GET /accounts/email-confirmation-sent/ | Status: 200 | User: Anonymous | Duration: 1.00 ms
+[2025-07-23 19:07:04,481] INFO django.request: POST /accounts/ | Status: 200 | User: normaluser | Duration: 16.16 ms
+[2025-07-23 19:07:05,153] INFO django.request: GET /accounts/ | Status: 302 | User: Anonymous | Duration: 1.01 ms
+[2025-07-23 19:07:05,155] INFO django.request: GET /accounts/login/?next=%2Faccounts%2F | Status: 200 | User: Anonymous | Duration: 2.04 ms
+[2025-07-23 19:07:06,168] INFO django.request: GET /accounts/activate/Mw/cteqfu-3f613b495535db4ae43130f78dac475f/ | Status: 302 | User: pendinguser | Duration: 3.09 ms
+[2025-07-23 19:07:06,170] INFO django.request: GET /accounts/activation-success/ | Status: 200 | User: pendinguser | Duration: 1.40 ms
+[2025-07-23 19:07:08,523] INFO django.request: POST /accounts/register/ | Status: 302 | User: Anonymous | Duration: 1649.95 ms
+[2025-07-23 19:07:09,535] INFO django.request: POST /accounts/login/ | Status: 200 | User: Anonymous | Duration: 335.33 ms
+[2025-07-23 19:07:10,554] WARNING django.request: Method Not Allowed (GET): /accounts/logout/
+[2025-07-23 19:07:10,555] INFO django.request: GET /accounts/logout/ | Status: 405 | User: normaluser | Duration: 1.00 ms
+[2025-07-23 19:07:11,565] INFO django.request: GET /accounts/register/ | Status: 302 | User: normaluser | Duration: 1.00 ms
+[2025-07-23 19:07:12,255] INFO django.request: POST /accounts/register/ | Status: 200 | User: Anonymous | Duration: 7.13 ms
+[2025-07-23 19:07:13,271] INFO django.request: POST /accounts/register/ | Status: 302 | User: Anonymous | Duration: 338.39 ms
+[2025-07-23 19:07:13,272] INFO django.request: GET /accounts/email-confirmation-sent/ | Status: 200 | User: Anonymous | Duration: 0.00 ms
+[2025-07-23 19:07:54,548] INFO django.request: GET /accounts/ | Status: 200 | User: normaluser | Duration: 14.40 ms
+[2025-07-23 19:07:55,558] INFO django.request: POST /accounts/ | Status: 302 | User: normaluser | Duration: 5.05 ms
+[2025-07-23 19:07:55,562] INFO django.request: GET /accounts/ | Status: 200 | User: updateduser | Duration: 4.02 ms
+[2025-07-23 19:07:56,234] INFO django.request: GET /accounts/ | Status: 302 | User: Anonymous | Duration: 1.00 ms
+[2025-07-23 19:07:56,236] INFO django.request: GET /accounts/login/?next=%2Faccounts%2F | Status: 200 | User: Anonymous | Duration: 2.03 ms
+[2025-07-23 19:07:57,238] INFO django.request: GET /accounts/activate/Mw/invalid-token/ | Status: 302 | User: Anonymous | Duration: 1.00 ms
+[2025-07-23 19:07:57,239] INFO django.request: GET /accounts/activation-invalid/ | Status: 200 | User: Anonymous | Duration: 1.00 ms
+[2025-07-23 19:07:58,242] INFO django.request: GET /accounts/activate/Mw/cteqha-548bbc81e75e25225325a1a341c1df0b/ | Status: 302 | User: pendinguser | Duration: 3.05 ms
+[2025-07-23 19:07:58,243] INFO django.request: GET /accounts/activation-success/ | Status: 200 | User: pendinguser | Duration: 0.00 ms
+[2025-07-23 19:07:59,257] INFO django.request: POST /accounts/login/ | Status: 200 | User: Anonymous | Duration: 346.13 ms
+[2025-07-23 19:08:00,263] INFO django.request: POST /accounts/login/ | Status: 302 | User: normaluser | Duration: 335.55 ms
+[2025-07-23 19:08:00,265] INFO django.request: GET / | Status: 200 | User: normaluser | Duration: 2.07 ms
+[2025-07-23 19:08:01,270] WARNING django.request: Method Not Allowed (GET): /accounts/logout/
+[2025-07-23 19:08:01,270] INFO django.request: GET /accounts/logout/ | Status: 405 | User: normaluser | Duration: 1.00 ms
+[2025-07-23 19:08:01,976] INFO django.request: POST /accounts/register/ | Status: 200 | User: Anonymous | Duration: 35.09 ms
+[2025-07-23 19:08:02,654] INFO django.request: POST /accounts/register/ | Status: 200 | User: Anonymous | Duration: 5.07 ms
+[2025-07-23 19:08:04,959] INFO django.request: POST /accounts/register/ | Status: 302 | User: Anonymous | Duration: 1629.10 ms
+[2025-07-23 19:08:06,007] INFO django.request: POST /accounts/register/ | Status: 302 | User: Anonymous | Duration: 347.65 ms
+[2025-07-23 19:08:06,008] INFO django.request: GET /accounts/email-confirmation-sent/ | Status: 200 | User: Anonymous | Duration: 1.01 ms
+[2025-07-23 19:10:00,897] INFO django.request: GET /accounts/ | Status: 200 | User: normaluser | Duration: 16.29 ms
+[2025-07-23 19:10:01,914] INFO django.request: POST /accounts/ | Status: 302 | User: normaluser | Duration: 5.14 ms
+[2025-07-23 19:10:01,919] INFO django.request: GET /accounts/ | Status: 200 | User: normaluser | Duration: 4.67 ms
+[2025-07-23 19:10:02,595] INFO django.request: GET /accounts/activate/invalid/invalid-token/ | Status: 302 | User: Anonymous | Duration: 1.00 ms
+[2025-07-23 19:10:02,596] INFO django.request: GET /accounts/activation-invalid/ | Status: 200 | User: Anonymous | Duration: 1.06 ms
+[2025-07-23 19:10:03,274] INFO django.request: GET /accounts/activate/MQ/cteqkr-9467d87134ca56f8bb7a9c29df843859/ | Status: 302 | User: normaluser | Duration: 2.01 ms
+[2025-07-23 19:10:03,276] INFO django.request: GET /accounts/activation-success/ | Status: 200 | User: normaluser | Duration: 1.00 ms
+[2025-07-23 19:10:03,945] INFO django.request: GET /accounts/login/ | Status: 200 | User: Anonymous | Duration: 2.01 ms
+[2025-07-23 19:10:04,948] INFO django.request: POST /accounts/login/ | Status: 200 | User: Anonymous | Duration: 333.24 ms
+[2025-07-23 19:10:05,952] INFO django.request: POST /accounts/login/ | Status: 302 | User: normaluser | Duration: 334.43 ms
+[2025-07-23 19:10:05,955] INFO django.request: GET / | Status: 200 | User: normaluser | Duration: 2.04 ms
+[2025-07-23 19:10:06,958] WARNING django.request: Method Not Allowed (GET): /accounts/logout/
+[2025-07-23 19:10:06,958] INFO django.request: GET /accounts/logout/ | Status: 405 | User: normaluser | Duration: 1.00 ms
+[2025-07-23 19:10:07,629] INFO django.request: GET /accounts/register/ | Status: 200 | User: Anonymous | Duration: 2.03 ms
+[2025-07-23 19:10:09,955] INFO django.request: POST /accounts/register/ | Status: 302 | User: Anonymous | Duration: 1656.09 ms
+[2025-07-23 19:10:09,957] INFO django.request: GET /accounts/email-confirmation-sent/ | Status: 200 | User: Anonymous | Duration: 0.00 ms
+[2025-07-23 19:10:49,664] INFO django.request: GET /accounts/ | Status: 200 | User: testuser | Duration: 15.57 ms
+[2025-07-23 19:10:50,346] INFO django.request: POST /accounts/ | Status: 302 | User: testuser | Duration: 4.03 ms
+[2025-07-23 19:10:50,351] INFO django.request: GET /accounts/ | Status: 200 | User: testuser | Duration: 4.22 ms
+[2025-07-23 19:10:50,690] INFO django.request: GET /accounts/activate/invalid/invalidtoken/ | Status: 302 | User: Anonymous | Duration: 1.06 ms
+[2025-07-23 19:10:50,691] INFO django.request: GET /accounts/activation-invalid/ | Status: 200 | User: Anonymous | Duration: 1.01 ms
+[2025-07-23 19:10:51,031] INFO django.request: GET /accounts/activate/MQ/cteqm3-25a2f6b5e8b6923384dc850f31045646/ | Status: 302 | User: testuser | Duration: 3.01 ms
+[2025-07-23 19:10:51,032] INFO django.request: GET /accounts/activation-success/ | Status: 200 | User: testuser | Duration: 1.00 ms
+[2025-07-23 19:10:51,373] INFO django.request: GET /accounts/login/ | Status: 200 | User: Anonymous | Duration: 2.02 ms
+[2025-07-23 19:10:52,051] INFO django.request: POST /accounts/login/ | Status: 200 | User: Anonymous | Duration: 338.54 ms
+[2025-07-23 19:10:52,731] INFO django.request: POST /accounts/login/ | Status: 302 | User: testuser | Duration: 340.61 ms
+[2025-07-23 19:10:52,734] INFO django.request: GET / | Status: 200 | User: testuser | Duration: 3.05 ms
+[2025-07-23 19:10:53,411] WARNING django.request: Method Not Allowed (GET): /accounts/logout/
+[2025-07-23 19:10:53,412] INFO django.request: GET /accounts/logout/ | Status: 405 | User: testuser | Duration: 0.00 ms
+[2025-07-23 19:10:53,752] INFO django.request: GET /accounts/register/ | Status: 200 | User: Anonymous | Duration: 2.02 ms
+[2025-07-23 19:10:55,754] INFO django.request: POST /accounts/register/ | Status: 302 | User: Anonymous | Duration: 1665.61 ms
+[2025-07-23 19:10:55,755] INFO django.request: GET /accounts/email-confirmation-sent/ | Status: 200 | User: Anonymous | Duration: 0.00 ms
+[2025-07-23 19:11:26,129] INFO django.request: POST /accounts/logout/ | Status: 302 | User: Anonymous | Duration: 3.02 ms
+[2025-07-23 19:11:26,135] INFO django.request: GET / | Status: 200 | User: Anonymous | Duration: 6.04 ms
+[2025-07-23 19:11:32,097] INFO django.request: GET /accounts/ | Status: 200 | User: testuser | Duration: 15.14 ms
+[2025-07-23 19:11:32,775] INFO django.request: POST /accounts/ | Status: 302 | User: testuser | Duration: 4.01 ms
+[2025-07-23 19:11:32,780] INFO django.request: GET /accounts/ | Status: 200 | User: testuser | Duration: 4.01 ms
+[2025-07-23 19:11:33,117] INFO django.request: GET /accounts/activate/invalid/invalidtoken/ | Status: 302 | User: Anonymous | Duration: 0.00 ms
+[2025-07-23 19:11:33,118] INFO django.request: GET /accounts/activation-invalid/ | Status: 200 | User: Anonymous | Duration: 1.00 ms
+[2025-07-23 19:11:33,458] INFO django.request: GET /accounts/activate/MQ/cteqn9-f685240e9994c0574da2ac14adbccc89/ | Status: 302 | User: testuser | Duration: 3.02 ms
+[2025-07-23 19:11:33,459] INFO django.request: GET /accounts/activation-success/ | Status: 200 | User: testuser | Duration: 1.00 ms
+[2025-07-23 19:11:33,800] INFO django.request: GET /accounts/login/ | Status: 200 | User: Anonymous | Duration: 2.04 ms
+[2025-07-23 19:11:34,470] INFO django.request: POST /accounts/login/ | Status: 200 | User: Anonymous | Duration: 333.42 ms
+[2025-07-23 19:11:35,144] INFO django.request: POST /accounts/login/ | Status: 302 | User: testuser | Duration: 336.73 ms
+[2025-07-23 19:11:35,146] INFO django.request: GET / | Status: 200 | User: testuser | Duration: 2.01 ms
+[2025-07-23 19:11:35,823] INFO django.request: POST /accounts/logout/ | Status: 302 | User: Anonymous | Duration: 1.01 ms
+[2025-07-23 19:11:35,824] INFO django.request: GET / | Status: 200 | User: Anonymous | Duration: 1.00 ms
+[2025-07-23 19:11:36,164] INFO django.request: GET /accounts/register/ | Status: 200 | User: Anonymous | Duration: 2.03 ms
+[2025-07-23 19:11:38,160] INFO django.request: POST /accounts/register/ | Status: 302 | User: Anonymous | Duration: 1659.07 ms
+[2025-07-23 19:11:38,161] INFO django.request: GET /accounts/email-confirmation-sent/ | Status: 200 | User: Anonymous | Duration: 0.00 ms
