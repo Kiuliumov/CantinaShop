@@ -1,194 +1,203 @@
 {% extends "base.html" %}
 {% load static %}
-{% block header %}   <link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.min.css"
-/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
+{% block header %}
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
 {% endblock %}
 {% block title %}Account Details{% endblock %}
 
 {% block content %}
-<div
-  class="max-w-2xl mx-auto p-10 rounded-3xl shadow-2xl border border-gray-700"
-  style="background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);"
->
-  <h1 class="text-3xl font-semibold mb-10 text-center text-gray-100 tracking-wide">Update Account</h1>
-
-  <div class="flex flex-col items-center mb-10">
-    {% if form.instance.profile_picture_url %}
-      <img
-        src="{{ form.instance.profile_picture_url }}"
-        alt="{{ form.instance.user.username }}'s profile picture"
-        class="w-28 h-28 rounded-full object-cover shadow-xl border-4 border-indigo-600 hover:border-indigo-400 transition cursor-pointer"
-        title="Profile Picture"
-      />
-    {% else %}
-      <div class="w-28 h-28 rounded-full bg-gray-700 flex items-center justify-center text-gray-400 text-4xl font-semibold shadow-xl border-4 border-indigo-600">
-        {{ form.instance.user.username|slice:":1"|upper }}
-      </div>
-    {% endif %}
-    <p class="mt-5 text-gray-300 font-medium text-lg tracking-wide">{{ form.instance.user.username }}</p>
-  </div>
-
-  <form method="POST" enctype="multipart/form-data" class="space-y-8" novalidate>
-    {% csrf_token %}
-
-    {% if form.non_field_errors %}
-      <div class="bg-red-700 bg-opacity-90 rounded-md p-4 mb-6 shadow-inner">
-        {% for error in form.non_field_errors %}
-          <p class="text-red-200 text-sm">{{ error }}</p>
-        {% endfor %}
-      </div>
-    {% endif %}
-
-    <div class="space-y-6">
-      <div>
-        <label for="{{ form.username.id_for_label }}" class="flex items-center text-gray-300 mb-2 font-semibold tracking-wide space-x-2">
-          <i class="fa-solid fa-user text-indigo-400"></i>
-          <span>Username</span>
-        </label>
-        {{ form.username }}
-        {% for error in form.username.errors %}
-          <p class="text-red-500 text-sm mt-1">{{ error }}</p>
-        {% endfor %}
-      </div>
-
-    <div>
-        <label for="{{ form.first_name.id_for_label }}" class="flex items-center text-gray-300 mb-2 font-semibold tracking-wide space-x-2">
-        <i class="fa-solid fa-user text-indigo-400"></i>
-        <span>First Name</span>
-        </label>
-        {{ form.first_name }}
-        {% for error in form.first_name.errors %}
-        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
-        {% endfor %}
-    </div>
-
-    <div>
-        <label for="{{ form.last_name.id_for_label }}" class="flex items-center text-gray-300 mb-2 font-semibold tracking-wide space-x-2">
-        <i class="fa-solid fa-user text-indigo-400"></i>
-        <span>Last Name</span>
-        </label>
-        {{ form.last_name }}
-        {% for error in form.last_name.errors %}
-        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
-        {% endfor %}
-    </div>
-    <div class="flex space-x-4 items-center">
-      <div class="w-1/3">
-        <label for="country_code" class="flex items-center text-gray-300 mb-2 font-semibold tracking-wide space-x-2">
-          <i class="fa-solid fa-flag text-indigo-400"></i>
-          <span>Country Code</span>
-        </label>
-        <select
-          id="country_code"
-          name="country_code"
-          data-initial="{{ form.country_code.value|default_if_none:'' }}"
-          class="w-full rounded-md bg-gray-700 border border-gray-600 text-gray-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        >
-        </select>
-        {% if form.country_code.errors %}
-          {% for error in form.country_code.errors %}
-            <p class="text-red-500 text-sm mt-1">{{ error }}</p>
-          {% endfor %}
-        {% endif %}
-      </div>
-    
-      <div class="flex-1">
-        <label for="{{ form.phone_number.id_for_label }}" class="flex items-center text-gray-300 mb-2 font-semibold tracking-wide space-x-2">
-          <i class="fa-solid fa-phone text-indigo-400"></i>
-          <span>Phone Number</span>
-        </label>
-        {{ form.phone_number }}
-        {% for error in form.phone_number.errors %}
-          <p class="text-red-500 text-sm mt-1">{{ error }}</p>
-        {% endfor %}
-      </div>
-    </div>
-      <div>
-        <label for="{{ form.profile_picture.id_for_label }}" class="flex items-center text-gray-300 mb-2 font-semibold tracking-wide space-x-2">
-          <i class="fa-solid fa-upload text-indigo-400"></i>
-          <span>Upload Profile Picture</span>
-        </label>
-        <input
-          type="file"
-          name="{{ form.profile_picture.name }}"
-          id="{{ form.profile_picture.id_for_label }}"
-          accept="image/*"
-          class="w-full rounded-md bg-gray-700 border border-gray-600 text-gray-200 text-sm py-3 px-4 file:mr-4 file:py-3 file:px-5 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 transition cursor-pointer"
-        />
-        {% for error in form.profile_picture.errors %}
-          <p class="text-red-500 text-sm mt-1">{{ error }}</p>
-        {% endfor %}
-      </div>
-    </div>
-
-    <hr class="my-8 border-gray-700">
-
-    <h2 class="flex items-center text-2xl font-semibold text-gray-100 mb-8 tracking-wide space-x-3">
-      <i class="fa-solid fa-location-dot text-indigo-400 text-lg"></i>
-      <span>Shipping Address</span>
-    </h2>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
-      {% for field in address_fields %}
-        <div>
-          <label for="{{ field.id_for_label }}" class="flex items-center text-gray-300 mb-2 font-semibold tracking-wide space-x-2">
-            <i class="fa-solid fa-square-plus text-indigo-400 text-xs"></i>
-            <span>{{ field.label }}</span>
-          </label>
-          {{ field }}
-          {% for error in field.errors %}
-            <p class="text-red-500 text-sm mt-1">{{ error }}</p>
-          {% endfor %}
-        </div>
-      {% endfor %}
-    </div>
-
-    <button
-      type="submit"
-      class="w-full mt-10 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-semibold py-3 rounded-xl shadow-lg transition focus:outline-none focus:ring-4 focus:ring-indigo-500"
+    <div
+            class="max-w-2xl mx-auto p-10 rounded-3xl shadow-2xl border border-gray-700"
+            style="background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);"
     >
-      Save Changes
-    </button>
-  </form>
+        <h1 class="text-3xl font-semibold mb-10 text-center text-gray-100 tracking-wide">Update Account</h1>
 
-  <div class="mt-14">
-    <div class="flex flex-col sm:flex-row gap-6">
-      <form method="POST" action="{% url 'account_deactivate' %}" class="flex-1">
-        {% csrf_token %}
-        <button
-          type="submit"
-          class="delete-btn w-full bg-red-700 hover:bg-red-800 active:bg-red-900 text-white font-semibold py-3 rounded-xl shadow-md transition focus:outline-none focus:ring-4 focus:ring-red-600 flex items-center justify-center"
-        >
-          <i class="fa-solid fa-trash mr-2"></i>
-          Deactivate Account
-        </button>
-      </form>
+        <div class="flex flex-col items-center mb-10">
+            {% if form.instance.profile_picture_url %}
+                <img
+                        src="{{ form.instance.profile_picture_url }}"
+                        alt="{{ form.instance.user.username }}'s profile picture"
+                        class="w-28 h-28 rounded-full object-cover shadow-xl border-4 border-indigo-600 hover:border-indigo-400 transition cursor-pointer"
+                        title="Profile Picture"
+                />
+            {% else %}
+                <div class="w-28 h-28 rounded-full bg-gray-700 flex items-center justify-center text-gray-400 text-4xl font-semibold shadow-xl border-4 border-indigo-600">
+                    {{ form.instance.user.username|slice:":1"|upper }}
+                </div>
+            {% endif %}
+            <p class="mt-5 text-gray-300 font-medium text-lg tracking-wide">{{ form.instance.user.username }}</p>
+        </div>
 
-      <form method="GET" action="{% url 'product-list' %}" class="flex-1">
-        <button
-          type="submit"
-          class="w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 rounded-xl shadow-md transition focus:outline-none focus:ring-4 focus:ring-gray-500 flex items-center justify-center"
-        >
-          <i class="fa-solid fa-file-export mr-2"></i>
-          Export Account Data
-        </button>
-      </form>
+        <form method="POST" enctype="multipart/form-data" class="space-y-8" novalidate>
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="bg-red-700 bg-opacity-90 rounded-md p-4 mb-6 shadow-inner">
+                    {% for error in form.non_field_errors %}
+                        <p class="text-red-200 text-sm">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="space-y-6">
+                <div>
+                    <label for="{{ form.username.id_for_label }}"
+                           class="flex items-center text-gray-300 mb-2 font-semibold tracking-wide space-x-2">
+                        <i class="fa-solid fa-user text-indigo-400"></i>
+                        <span>Username</span>
+                    </label>
+                    {{ form.username }}
+                    {% for error in form.username.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <div>
+                    <label for="{{ form.first_name.id_for_label }}"
+                           class="flex items-center text-gray-300 mb-2 font-semibold tracking-wide space-x-2">
+                        <i class="fa-solid fa-user text-indigo-400"></i>
+                        <span>First Name</span>
+                    </label>
+                    {{ form.first_name }}
+                    {% for error in form.first_name.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <div>
+                    <label for="{{ form.last_name.id_for_label }}"
+                           class="flex items-center text-gray-300 mb-2 font-semibold tracking-wide space-x-2">
+                        <i class="fa-solid fa-user text-indigo-400"></i>
+                        <span>Last Name</span>
+                    </label>
+                    {{ form.last_name }}
+                    {% for error in form.last_name.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                <div class="flex space-x-4 items-center">
+                    <div class="w-1/3">
+                        <label for="country_code"
+                               class="flex items-center text-gray-300 mb-2 font-semibold tracking-wide space-x-2">
+                            <i class="fa-solid fa-flag text-indigo-400"></i>
+                            <span>Country Code</span>
+                        </label>
+                        <select
+                                id="country_code"
+                                name="country_code"
+                                data-initial="{{ form.country_code.value|default_if_none:'' }}"
+                                class="w-full rounded-md bg-gray-700 border border-gray-600 text-gray-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        >
+                        </select>
+                        {% if form.country_code.errors %}
+                            {% for error in form.country_code.errors %}
+                                <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div class="flex-1">
+                        <label for="{{ form.phone_number.id_for_label }}"
+                               class="flex items-center text-gray-300 mb-2 font-semibold tracking-wide space-x-2">
+                            <i class="fa-solid fa-phone text-indigo-400"></i>
+                            <span>Phone Number</span>
+                        </label>
+                        {{ form.phone_number }}
+                        {% for error in form.phone_number.errors %}
+                            <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div>
+                    <label for="{{ form.profile_picture.id_for_label }}"
+                           class="flex items-center text-gray-300 mb-2 font-semibold tracking-wide space-x-2">
+                        <i class="fa-solid fa-upload text-indigo-400"></i>
+                        <span>Upload Profile Picture</span>
+                    </label>
+                    <input
+                            type="file"
+                            name="{{ form.profile_picture.name }}"
+                            id="{{ form.profile_picture.id_for_label }}"
+                            accept="image/*"
+                            class="w-full rounded-md bg-gray-700 border border-gray-600 text-gray-200 text-sm py-3 px-4 file:mr-4 file:py-3 file:px-5 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 transition cursor-pointer"
+                    />
+                    {% for error in form.profile_picture.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <hr class="my-8 border-gray-700">
+
+            <h2 class="flex items-center text-2xl font-semibold text-gray-100 mb-8 tracking-wide space-x-3">
+                <i class="fa-solid fa-location-dot text-indigo-400 text-lg"></i>
+                <span>Shipping Address</span>
+            </h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                {% for field in address_fields %}
+                    <div>
+                        <label for="{{ field.id_for_label }}"
+                               class="flex items-center text-gray-300 mb-2 font-semibold tracking-wide space-x-2">
+                            <i class="fa-solid fa-square-plus text-indigo-400 text-xs"></i>
+                            <span>{{ field.label }}</span>
+                        </label>
+                        {{ field }}
+                        {% for error in field.errors %}
+                            <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <button
+                    type="submit"
+                    class="w-full mt-10 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-semibold py-3 rounded-xl shadow-lg transition focus:outline-none focus:ring-4 focus:ring-indigo-500"
+            >
+                Save Changes
+            </button>
+        </form>
+
+        <div class="mt-14">
+            <div class="flex flex-col sm:flex-row gap-6">
+                <form method="POST" action="{% url 'account_deactivate' %}" class="flex-1">
+                    {% csrf_token %}
+                    <button
+                            type="submit"
+                            class="delete-btn w-full bg-red-700 hover:bg-red-800 active:bg-red-900 text-white font-semibold py-3 rounded-xl shadow-md transition focus:outline-none focus:ring-4 focus:ring-red-600 flex items-center justify-center"
+                    >
+                        <i class="fa-solid fa-trash mr-2"></i>
+                        Deactivate Account
+                    </button>
+                </form>
+
+                <form method="GET" action="{% url 'product-list' %}" class="flex-1">
+                    <button
+                            type="submit"
+                            class="w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 rounded-xl shadow-md transition focus:outline-none focus:ring-4 focus:ring-gray-500 flex items-center justify-center"
+                    >
+                        <i class="fa-solid fa-file-export mr-2"></i>
+                        Export Account Data
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
-    {% include 'chat/partials/user-chat.html' %}
     {% include 'partials/pop-ups/confirm_delete.html' %}
 {% endblock %}
+
+
 {% block script %}
     {{ block.super }}
     <script>
-  window.SelectConfig = {
-    countryCodesUrl: "{% static 'json/countryCodes.json' %}"
-  };
-</script>
+        window.SelectConfig = {
+            countryCodesUrl: "{% static 'json/countryCodes.json' %}"
+        };
+    </script>
     <script src="{% static 'js/countryCodeSelector.js' %}"></script>
-    <script src="{% static 'js/confirmDelete.js' %}"> </script>
+    <script src="{% static 'js/confirmDelete.js' %}"></script>
 {% endblock %}
