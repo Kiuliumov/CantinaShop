@@ -23,6 +23,7 @@
             window.chatConfig = {
                 userId: {{ request.user.id|default:'null' }},
                 wsProtocol: "{{ request.is_secure|yesno:'wss,ws'|escapejs }}",
+                host: "{{ request.get_host|escapejs }}",
                 apiMessagesUrl: "{% url 'chat-messages-api-base' request.user.id %}",
                 adminAvatarUrl: "{% static 'images/admin.jpg' %}",
                 defaultAvatarUrl: "{% static 'images/avatar.png' %}",
