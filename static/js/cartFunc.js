@@ -156,6 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('remove-toast-close')?.addEventListener('click', () => {
     const toast = document.getElementById('cart-remove-toast');
     if (!toast) return;
+    toast.classList.remove('opacity-100');
     toast.classList.add('opacity-0', 'pointer-events-none');
   });
 });
