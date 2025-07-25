@@ -228,7 +228,7 @@ class CartView(View):
             'cart_items': items,
             'cart_total': total,
         }
-        return render(request, 'products/shopping_cart_list.html', context)
+        return render(request, 'shopping_cart/shopping_cart_list.html', context)
 
 class CreateCategory(CreateView):
     template_name = 'products/create_category.html'

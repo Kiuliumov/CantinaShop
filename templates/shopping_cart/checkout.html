@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="max-w-screen-2xl mx-auto px-6 md:px-12 lg:px-20 py-16 bg-gray-800 text-white rounded-2xl shadow-xl">
+
+    {% include "shopping_cart/partials/common/_breadcrumb.html" %}
+
+    <div class="flex items-center gap-4 mb-12">
+        <i class="fas fa-shopping-cart text-indigo-500 text-5xl"></i>
+        <h1 class="text-5xl font-extrabold text-indigo-400 tracking-tight">Checkout</h1>
+    </div>
+
+    {% include "shopping_cart/partials/checkout/_checkout_steps.html" %}
+
+    {% if cart_items %}
+        {% include "shopping_cart/partials/checkout/_item_list.html" %}
+        {% include "shopping_cart/partials/checkout/_summary.html" %}
+        {% include "shopping_cart/partials/checkout/_payment_form.html" %}
+    {% endif %}
+</div>
+
+{% include "shopping_cart/partials/checkout/_registration_modal.html" %}
+{% endblock %}
+
+{% block script %}
+    {{ block.super }}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const isComplete = {{ isRegistrationComplete|yesno:"true,false" }};
+            if (!isComplete) {
+                const modal = document.getElementById('registrationModal');
+                const okBtn = document.getElementById('modalOkBtn');
+                modal.classList.remove('hidden');
+                okBtn.addEventListener('click', () => {
+                    window.location.href = "{% url 'account' %}";
+                });
+            }
+        });
+    </script>
+{% endblock %}

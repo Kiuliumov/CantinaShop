@@ -1,0 +1,25 @@
+<section class="bg-gray-700 rounded-3xl p-10 max-w-4xl mx-auto mb-12 shadow-inner relative">
+    <div class="flex justify-between items-start mb-8">
+        <h2 class="text-3xl font-semibold text-indigo-400">Account Information</h2>
+        <a href="{% url 'account' %}"
+           class="text-indigo-300 hover:text-indigo-500 font-semibold rounded-lg px-4 py-2 border border-indigo-400 hover:bg-indigo-600 transition shadow-sm text-sm">
+            Edit
+        </a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-indigo-200 text-lg leading-relaxed">
+        <div class="space-y-5 bg-gray-800 rounded-xl p-6 shadow-sm">
+            <p><span class="font-semibold">Name:</span> {{ account.first_name }} {{ account.last_name }}</p>
+            <p><span class="font-semibold">Phone:</span> {% if account.country_code %}{{ account.country_code }} {% endif %}{{ account.phone_number }}</p>
+            <p><span class="font-semibold">Email:</span> {{ request.user.email }}</p>
+        </div>
+        <div class="space-y-5 bg-gray-800 rounded-xl p-6 shadow-sm">
+            <p class="font-semibold">Shipping Address:</p>
+            <address class="not-italic ml-4 space-y-1">
+                <p>{{ account.default_shipping.street_address }}</p>
+                <p>{{ account.default_shipping.city }}, {{ account.default_shipping.state }}</p>
+                <p>{{ account.default_shipping.postal_code }}</p>
+                <p>{{ account.default_shipping.country }}</p>
+            </address>
+        </div>
+    </div>
+</section>

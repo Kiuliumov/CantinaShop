@@ -100,4 +100,4 @@ class CheckoutView(LoginRequiredMixin, View):
             'isRegistrationComplete': is_registration_complete,
         }
 
-        return render(request, 'orders/checkout.html', context)
+        return render(request, 'shopping_cart/checkout.html', context)

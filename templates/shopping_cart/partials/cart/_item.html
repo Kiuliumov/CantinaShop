@@ -1,0 +1,46 @@
+<div class="cart-item flex flex-col lg:flex-row items-center gap-8 bg-gray-700 rounded-xl p-8 shadow-md"
+     data-slug="{{ item.product.slug }}">
+    <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}"
+         class="w-36 h-36 object-cover rounded-lg shadow">
+
+    <div class="flex-1 w-full">
+        <h2 class="text-2xl font-semibold text-indigo-300 mb-2">{{ item.product.name }}</h2>
+        <p class="text-gray-400 text-sm mb-2">
+            <i class="fas fa-tag mr-1"></i> {{ item.product.category.name }}</p>
+        <p class="text-sm mb-4">{{ item.product.description|truncatewords:20 }}</p>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <label class="text-sm text-indigo-200 font-medium select-none"><i
+                        class="fas fa-sort-numeric-up-alt mr-1"></i> Quantity:</label>
+                <div class="flex items-center border rounded-lg overflow-hidden bg-gray-600 text-white">
+                    <button class="quantity-decrement px-3 py-1 hover:bg-gray-500"
+                            data-slug="{{ item.product.slug }}">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <input
+                            type="number"
+                            min="0"
+                            value="{{ item.quantity }}"
+                            class="quantity-input w-16 text-center bg-gray-600 outline-none font-semibold"
+                            data-slug="{{ item.product.slug }}"
+                    />
+                    <button class="quantity-increment px-3 py-1 hover:bg-gray-500"
+                            data-slug="{{ item.product.slug }}">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <button class="remove-btn ml-4 px-4 py-2 bg-red-600 hover:bg-red-700 text-sm rounded shadow"
+                        data-slug="{{ item.product.slug }}">
+                    <i class="fas fa-trash-alt mr-1"></i> Remove
+                </button>
+            </div>
+
+            <p class="text-xl font-bold text-indigo-300 product-subtotal"
+               data-price="{{ item.product.price }}" data-slug="{{ item.product.slug }}">
+                <i class="fas fa-dollar-sign mr-1"></i><span
+                    class="subtotal-amount">{{ item.subtotal|floatformat:2 }}</span>
+            </p>
+        </div>
+    </div>
+</div>
