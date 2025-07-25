@@ -157,6 +157,9 @@ class CommentUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('product-details', kwargs={'slug': self.object.product.slug})
 
+    def form_invalid(self, form):
+        product_slug = self.get_object().product.slug
+        return redirect('product-details', slug=product_slug)
 
 class SetRatingView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
