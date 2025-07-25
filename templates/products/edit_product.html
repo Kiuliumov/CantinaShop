@@ -51,5 +51,7 @@
 
 {% block script %}
     {{ block.super }}
-    <script src="{% static 'js/editSuccess.js' %}"></script>
+    {% if not form.errors or form.non_field_errors %}
+        <script src="{% static 'js/editSuccess.js' %}"></script>
+    {% endif %}
 {% endblock %}

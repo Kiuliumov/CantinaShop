@@ -65,7 +65,7 @@ class Rating(models.Model):
 class Comment(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments')
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    content = models.TextField(max_length=500)
+    content = models.TextField(max_length=500, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
