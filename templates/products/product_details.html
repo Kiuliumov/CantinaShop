@@ -231,14 +231,14 @@
 
 {% block script %}
     {{ block.super }}
-    <script src="{% static 'js/toggleEdit.js' %}"></script>
-    <script src="{% static 'js/confirmDelete.js' %}"></script>
-    <script src="{% static 'js/quantityButtonPlus.js' %}"></script>
+    <script src="{% static 'js/cart/toggleEdit.js' %}"></script>
+    <script src="{% static 'js/boxes/confirmDelete.js' %}"></script>
+    <script src="{% static 'js/utils/quantityButtonPlus.js' %}"></script>
     {% if request.user.is_authenticated %}
-        <script src="{% static 'js/starRating.js' %}"></script>
-        <script src="{% static 'js/orderPopUp.js' %}"></script>
-        <script src="{% static 'js/orderCookieQuantity.js' %}"></script>
-        <script src="{% static 'js/createPopUp.js' %}"></script>
-        <script src="{% static 'js/editSuccess.js' %}"></script>
+        <script src="{% static 'js/cart/starRating.js' %}"></script>
+        <script src="{% static 'js/boxes/orderPopUp.js' %}"></script>
+        <script src="{% static 'js/cart/orderCookieQuantity.js' %}"></script>
+        <script src="{% static 'js/boxes/createPopUp.js' %}"></script>
+        <script src="{% static 'js/boxes/editSuccess.js' %}"></script>
     {% endif %}
 {% endblock %}

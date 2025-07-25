@@ -199,9 +199,9 @@
             countryCodesUrl: "{% static 'json/countryCodes.json' %}"
         };
     </script>
-    <script src="{% static 'js/countryCodeSelector.js' %}"></script>
-    <script src="{% static 'js/confirmDelete.js' %}"></script>
+    <script src="{% static 'js/account/countryCodeSelector.js' %}"></script>
+    <script src="{% static 'js/boxes/confirmDelete.js' %}"></script>
     {% if not form.errors and not form.non_field_errors %}
-        <script src="{% static 'js/editSuccess.js' %}"></script>
+        <script src="{% static 'js/boxes/editSuccess.js' %}"></script>
     {% endif %}
 {% endblock %}

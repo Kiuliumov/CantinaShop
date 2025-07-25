@@ -16,7 +16,7 @@
 {% include 'chat/partials/user-chat.html' %}
 
 {% block script %}
-    <script src="{% static 'js/iconsLoad.js' %}"></script>
+    <script src="{% static 'js/utils/iconsLoad.js' %}"></script>
 
     {% if user.is_authenticated %}
         <script>
@@ -32,7 +32,7 @@
 
             };
         </script>
-        <script src="{% static 'js/chatFrontEnd.js' %}"></script>
+        <script src="{% static 'js/chat/chatFrontEnd.js' %}"></script>
     {% endif %}
 {% endblock %}
 
