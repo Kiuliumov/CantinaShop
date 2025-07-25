@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.core.validators import MinLengthValidator
 from accounts.validators import NoProfanityValidator, PhoneNumberValidator
 
 
@@ -22,15 +23,25 @@ class UserModel(AbstractUser):
 
 class Account(models.Model):
     user = models.OneToOneField(UserModel, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=150, blank=True, null=True)
-    last_name = models.CharField(max_length=150, blank=True, null=True)
+    first_name = models.CharField(
+        max_length=150,
+        blank=True,
+        null=True,
+        validators=[MinLengthValidator(2)]
+    )
+    last_name = models.CharField(
+        max_length=150,
+        blank=True,
+        null=True,
+        validators=[MinLengthValidator(2)]
+    )
     profile_picture_url = models.CharField(max_length=255, blank=True, null=True)
     country_code = models.CharField(max_length=15, blank=True, null=True)
     phone_number = models.CharField(
         max_length=20,
         blank=True,
         null=True,
-        validators=[PhoneNumberValidator()],
+        validators=[PhoneNumberValidator(), MinLengthValidator(7)]
     )
 
     default_shipping = models.ForeignKey(
@@ -49,14 +60,50 @@ class Account(models.Model):
 
 
 class Address(models.Model):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='addresses', blank=True, null=True)
-    label = models.CharField(max_length=30, blank=True, null=True, validators=[NoProfanityValidator()])
+    account = models.ForeignKey(
+        Account,
+        on_delete=models.CASCADE,
+        related_name='addresses',
+        blank=True,
+        null=True
+    )
+    label = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True,
+        validators=[NoProfanityValidator()]
+    )
 
-    street_address = models.CharField(max_length=100, blank=True, null=True, validators=[NoProfanityValidator()])
-    city = models.CharField(max_length=50, blank=True, null=True, validators=[NoProfanityValidator()])
-    state = models.CharField(max_length=50, blank=True, null=True, validators=[NoProfanityValidator()])
-    postal_code = models.CharField(max_length=20, blank=True, null=True)
-    country = models.CharField(max_length=50, blank=True, null=True, validators=[NoProfanityValidator()])
+    street_address = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        validators=[NoProfanityValidator(), MinLengthValidator(5)]
+    )
+    city = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+        validators=[NoProfanityValidator(), MinLengthValidator(2)]
+    )
+    state = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+        validators=[NoProfanityValidator(), MinLengthValidator(2)]
+    )
+    postal_code = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True,
+        validators=[MinLengthValidator(3)]
+    )
+    country = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+        validators=[NoProfanityValidator(), MinLengthValidator(2)]
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -66,4 +113,4 @@ class Address(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.label or self.address_type} address for {self.account.user.username}"
+        return f"{self.label or 'Address'} for {self.account.user.username}"
