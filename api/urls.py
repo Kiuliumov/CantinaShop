@@ -1,8 +1,14 @@
 from django.urls import path
-from api.views import ChatMessagesAPIView, ProductListAPIView, ProductCreateView
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 
+from api.views import ChatMessagesAPIView, ProductListAPIView, ProductCreateView
+drf_spectacular = [
+    path('schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+]
 urlpatterns = [
     path('messages/<int:user_id>/', ChatMessagesAPIView.as_view(), name='chat-messages-api-base'),
     path('products/', ProductListAPIView.as_view(), name='product-list-api-base'),
     path('products/create/', ProductCreateView.as_view(), name='product-create-api-base'),
-]
+] + drf_spectacular

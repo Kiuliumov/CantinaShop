@@ -26,7 +26,8 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 ALLOWED_HOSTS = ['*']
 THIRD_PARTY_APPS = [
-    'rest_framework'
+    'rest_framework',
+    'drf_spectacular',
 ]
 
 DJANGO_APPS = [
@@ -59,6 +60,10 @@ AUTHENTICATION_BACKENDS = [
 LOGIN_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
