@@ -1,6 +1,6 @@
 # CantinaShop
 
-![CantinaShop Logo](screenshots/course-logo.png)
+![SoftUni](screenshots/course-logo.png)
 
 ## Въведение
 
