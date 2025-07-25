@@ -1,4 +1,4 @@
-<form method="post" action="{% url 'checkout' %}" class="mt-16 max-w-4xl mx-auto bg-gray-900 rounded-3xl p-12 shadow-lg">
+<form method="post" action="{% url 'order' %}" class="mt-16 max-w-4xl mx-auto bg-gray-900 rounded-3xl p-12 shadow-lg">
     {% csrf_token %}
     <div class="mb-10">
         <label for="payment_method" class="block mb-4 text-indigo-400 font-semibold text-xl">Select Payment Method</label>
