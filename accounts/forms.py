@@ -31,23 +31,27 @@ class RegistrationForm(UserCreationForm):
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        existing_users = UserModel.objects.filter(email=email)
-        for user in existing_users:
-            if not user.is_active:
-                user.delete()
-            else:
+        try:
+            user = UserModel.objects.get(email=email)
+            if user.is_active:
                 raise forms.ValidationError("This email is already taken.")
+            else:
+                user.delete()
+        except UserModel.DoesNotExist:
+            pass
         return email
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
         NoProfanityValidator()(username)
-        existing_users = UserModel.objects.filter(username=username)
-        for user in existing_users:
-            if not user.is_active:
-                user.delete()
-            else:
+        try:
+            user = UserModel.objects.get(username=username)
+            if user.is_active:
                 raise forms.ValidationError("This username is already taken.")
+            else:
+                user.delete()
+        except UserModel.DoesNotExist:
+            pass
         return username
 
 
