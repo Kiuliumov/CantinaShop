@@ -1,3 +1,5 @@
+import asyncio
+
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMultiAlternatives
@@ -32,3 +34,31 @@ class EmailService:
         email = EmailMultiAlternatives(subject, '', EMAIL_SENDER, [user.email])
         email.attach_alternative(html_content, "text/html")
         email.send(fail_silently=False)
+
+    @staticmethod
+    async def send_order_confirmation_email_async(request, user, order):
+        """
+        Asynchronously send order confirmation email to user.
+        """
+        subject = f"Your Order #{order.id} Confirmation"
+        context = {
+            'user': user,
+            'order': order,
+            'request': request,
+        }
+
+        html_content = render_to_string('orders/order_confirmation_email.html', context)
+        text_content = 'Thank you for your order!'
+
+        email = EmailMultiAlternatives(subject, text_content, EMAIL_SENDER, [user.email])
+        email.attach_alternative(html_content, "text/html")
+
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, email.send, False)
+
+    @staticmethod
+    def send_order_confirmation_email(request, user, order):
+        """
+        Synchronous wrapper to call the async method.
+        """
+        asyncio.run(EmailService.send_order_confirmation_email_async(request, user, order))

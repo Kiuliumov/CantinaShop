@@ -4,6 +4,8 @@ from django.utils import timezone
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
+
+from common.email_service import EmailService
 from products.models import Product
 from django.views import View
 from django.shortcuts import render, redirect
@@ -102,26 +104,9 @@ class CheckoutView(LoginRequiredMixin, View):
         return render(request, 'shopping_cart/checkout.html', context)
 
 
+
 class OrderCreateView(LoginRequiredMixin, View):
-    COOLDOWN_SECONDS = 60
-
     def post(self, request, *args, **kwargs):
-        last_order_time = request.session.get('last_order_time')
-        now = timezone.now()
-
-        if last_order_time:
-            try:
-                last_time = timezone.datetime.fromisoformat(last_order_time)
-                if timezone.is_naive(last_time):
-                    last_time = timezone.make_aware(last_time, timezone.get_current_timezone())
-            except ValueError:
-                last_time = None
-
-            if last_time:
-                elapsed = (now - last_time).total_seconds()
-                if elapsed < self.COOLDOWN_SECONDS:
-                    raise PermissionDenied("Please wait before placing another order.")
-
         try:
             account = request.user.account
         except AttributeError:
@@ -157,16 +142,17 @@ class OrderCreateView(LoginRequiredMixin, View):
                 total_price += product.price * quantity
                 product_data.append({
                     'product_id': product.id,
-                    'quantity': quantity,
                     'name': product.name,
                     'slug': product.slug,
                     'price': str(product.price),
+                    'quantity': quantity,
+                    'image_url': product.image_url
                 })
             except Product.DoesNotExist:
                 continue
 
         if not product_data:
-            raise PermissionDenied()
+            raise PermissionDenied("No valid products in cart.")
 
         order = Order.objects.create(
             account=account,
@@ -176,7 +162,7 @@ class OrderCreateView(LoginRequiredMixin, View):
             status='pending'
         )
 
-        request.session['last_order_time'] = now.isoformat()
+        EmailService.send_order_confirmation_email(request, request.user, order)
 
         response = render(request, 'orders/order-confirmation.html', {'order': order})
         response.delete_cookie('cart')
