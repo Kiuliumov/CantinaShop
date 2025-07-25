@@ -17,7 +17,7 @@ class Order(models.Model):
 
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     payment_option = models.CharField(max_length=50)
-    product_quantities = models.JSONField()
+    order_data = models.JSONField()
 
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')

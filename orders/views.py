@@ -145,7 +145,7 @@ class OrderCreateView(LoginRequiredMixin, View):
             raise PermissionDenied("Payment method required.")
 
         total_price = 0
-        product_quantities = []
+        product_data = []
 
         for item in raw_cart:
             slug = item.get('slug')
@@ -155,21 +155,24 @@ class OrderCreateView(LoginRequiredMixin, View):
             try:
                 product = Product.objects.get(slug=slug)
                 total_price += product.price * quantity
-                product_quantities.append({
+                product_data.append({
                     'product_id': product.id,
-                    'quantity': quantity
+                    'quantity': quantity,
+                    'name': product.name,
+                    'slug': product.slug,
+                    'price': str(product.price),
                 })
             except Product.DoesNotExist:
                 continue
 
-        if not product_quantities:
-            raise PermissionDenied("No valid products in cart.")
+        if not product_data:
+            raise PermissionDenied()
 
         order = Order.objects.create(
             account=account,
             payment_option=payment_option,
             total_price=total_price,
-            product_quantities=product_quantities,
+            order_data=product_data,
             status='pending'
         )
 
