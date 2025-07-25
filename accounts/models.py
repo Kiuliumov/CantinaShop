@@ -67,12 +67,6 @@ class Address(models.Model):
         blank=True,
         null=True
     )
-    label = models.CharField(
-        max_length=30,
-        blank=True,
-        null=True,
-        validators=[NoProfanityValidator()]
-    )
 
     street_address = models.CharField(
         max_length=100,
