@@ -226,6 +226,7 @@
     {% include 'partials/pop-ups/confirm_delete.html' %}
     {% include 'partials/pop-ups/cart-pop-up.html' %}
     {% include 'partials/pop-ups/create-popup.html' %}
+    {% include 'partials/pop-ups/update-success.html' %}
 {% endblock %}
 
 {% block script %}
@@ -238,5 +239,6 @@
         <script src="{% static 'js/orderPopUp.js' %}"></script>
         <script src="{% static 'js/orderCookieQuantity.js' %}"></script>
         <script src="{% static 'js/createPopUp.js' %}"></script>
+        <script src="{% static 'js/editSuccess.js' %}"></script>
     {% endif %}
 {% endblock %}

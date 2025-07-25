@@ -41,7 +41,7 @@
                 <a href="{% url 'product-details' product.slug %}" class="text-indigo-400 hover:underline">&larr; Back
                     to Product</a>
                 <button type="submit"
-                        class="bg-indigo-600 hover:bg-indigo-700 px-6 py-3 rounded-lg text-white font-semibold shadow transition">
+                        class="edit-btn bg-indigo-600 hover:bg-indigo-700 px-6 py-3 rounded-lg text-white font-semibold shadow transition">
                     Edit
                 </button>
             </div>
@@ -49,3 +49,7 @@
     </div>
 {% endblock %}
 
+{% block script %}
+    {{ block.super }}
+    <script src="{% static 'js/editSuccess.js' %}"></script>
+{% endblock %}

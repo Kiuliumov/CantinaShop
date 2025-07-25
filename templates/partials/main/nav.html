@@ -11,7 +11,7 @@
             />
         </a>
 
-        <ul class="hidden md:flex items-center space-x-6 lg:space-x-8">
+        <ul class="hidden xl:flex items-center space-x-6 xl:space-x-8">
             {% if user.is_staff or user.is_superuser %}
                 <li>
                     <a href="{% url 'admin:accounts_usermodel_changelist' %}"
@@ -83,12 +83,12 @@
             {% endif %}
         </ul>
 
-        <button id="menu-btn" class="block md:hidden text-gray-300 focus:outline-none" aria-label="Toggle menu">
+        <button id="menu-btn" class="block xl:hidden text-gray-300 focus:outline-none" aria-label="Toggle menu">
             <i data-lucide="menu" class="w-7 h-7"></i>
         </button>
     </div>
 
-    <div id="mobile-menu" class="md:hidden hidden px-4 pb-4">
+    <div id="mobile-menu" class="xl:hidden hidden px-4 pb-4">
         <ul class="space-y-4 text-base text-gray-300">
             {% if user.is_staff or user.is_superuser %}
                 <li>
@@ -134,4 +134,3 @@
         </ul>
     </div>
 </nav>
-

@@ -5,7 +5,6 @@
 {% block content %}
     <div class="container mx-auto px-4 py-6">
 
-
         <form method="GET"
               class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8 w-full max-w-full">
             {% if request.user.is_staff or request.user.is_superuser %}
@@ -74,18 +73,18 @@
                         {% endif %}
                         <h2 class="text-xl font-semibold text-white mb-1">{{ product.name }}</h2>
                         <p class="text-gray-400 text-sm mb-4 flex-grow">{{ product.description|truncatewords:20 }}</p>
-                        <div class="flex items-center justify-between mt-auto">
-                            <div>
-                                <span class="text-indigo-400 font-bold">${{ product.price }}</span>
+                        <div class="flex items-center flex-wrap mt-auto justify-between">
+                            <div class="flex items-center flex-wrap">
+                                <span class="text-indigo-400 font-bold whitespace-nowrap">${{ product.price }}</span>
                                 {% if product.has_discount %}
-                                    <span class="ml-2 inline-block bg-yellow-400 text-yellow-900 text-xs font-semibold px-2 py-1 rounded">
-                  🔥 Discount available!
-                </span>
+                                    <span class="ml-2 inline-block bg-yellow-400 text-yellow-900 text-xs font-semibold px-2 py-1 rounded whitespace-nowrap hidden md:inline-block">
+                                        🔥 Discount available!
+                                    </span>
                                 {% endif %}
                             </div>
-                            <span class="{% if product.is_available %}text-green-400{% else %}text-red-400{% endif %} text-sm">
-              {% if product.is_available %}In Stock{% else %}Out of Stock{% endif %}
-            </span>
+                            <span class="{% if product.is_available %}text-green-400{% else %}text-red-400{% endif %} text-sm whitespace-nowrap">
+                                {% if product.is_available %}In Stock{% else %}Out of Stock{% endif %}
+                            </span>
                         </div>
                         <div class="mt-4 text-center">
                             <a href="{% url 'product-details' product.slug %}"
@@ -117,7 +116,6 @@
                        class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">Next</a>
                 {% endif %}
             </div>
-
 
         {% else %}
             <p class="text-center text-gray-400 italic mt-12 text-lg">No products available at the moment. Please check

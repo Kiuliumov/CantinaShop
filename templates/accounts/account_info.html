@@ -156,7 +156,7 @@
 
             <button
                     type="submit"
-                    class="w-full mt-10 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-semibold py-3 rounded-xl shadow-lg transition focus:outline-none focus:ring-4 focus:ring-indigo-500"
+                    class="edit-btn w-full mt-10 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-semibold py-3 rounded-xl shadow-lg transition focus:outline-none focus:ring-4 focus:ring-indigo-500"
             >
                 Save Changes
             </button>
@@ -188,6 +188,7 @@
         </div>
     </div>
     {% include 'partials/pop-ups/confirm_delete.html' %}
+    {% include 'partials/pop-ups/update-success.html' %}
 {% endblock %}
 
 
@@ -200,4 +201,5 @@
     </script>
     <script src="{% static 'js/countryCodeSelector.js' %}"></script>
     <script src="{% static 'js/confirmDelete.js' %}"></script>
+    <script src="{% static 'js/editSuccess.js' %}"></script>
 {% endblock %}
