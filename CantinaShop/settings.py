@@ -6,6 +6,7 @@ import cloudinary.uploader
 import cloudinary.api
 from dotenv import load_dotenv
 from django.template.context_processors import static
+
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,10 +22,11 @@ cloudinary.config(
 )
 
 STATIC_URL = '/static/'
-
 STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfilesSh'
 
 ALLOWED_HOSTS = ['*']
+
 THIRD_PARTY_APPS = [
     'rest_framework',
     'drf_spectacular',
@@ -39,7 +41,6 @@ DJANGO_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-
 ] + THIRD_PARTY_APPS
 
 INSTALLED_APPS = [
@@ -59,7 +60,15 @@ AUTHENTICATION_BACKENDS = [
 
 LOGIN_REDIRECT_URL = '/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.example.com')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
+EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', 'False') == 'True'
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
@@ -80,8 +89,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'CantinaShop.urls'
+
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 ASGI_APPLICATION = 'CantinaShop.asgi.application'
+
+WSGI_APPLICATION = 'CantinaShop.wsgi.application'
 
 CHANNEL_LAYERS = {
     "default": {
@@ -106,8 +119,7 @@ TEMPLATES = [
     },
 ]
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
+# Logging setup
 LOG_DIR = BASE_DIR / 'logs'
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -124,7 +136,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': 'logs/request.log',
+            'filename': LOG_DIR / 'request.log',
             'when': 'midnight',
             'backupCount': 7,
             'formatter': 'verbose',
@@ -138,9 +150,6 @@ LOGGING = {
         },
     },
 }
-WSGI_APPLICATION = 'CantinaShop.wsgi.application'
-
-STATIC_ROOT = BASE_DIR / 'staticfilesSh'
 
 DATABASES = {
     'default': {
@@ -165,12 +174,13 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
-
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://localhost:6379/0')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', 'redis://localhost:6379/0')
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
