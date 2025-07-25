@@ -1,0 +1,17 @@
+<div class="mt-14">
+    <h2 class="text-2xl font-semibold mb-4 text-indigo-300">Rate this product</h2>
+    <form method="post" action="{% url 'rate' product.slug %}" class="inline-block">
+        {% csrf_token %}
+        <div class="flex space-x-1 text-yellow-400 text-3xl select-none cursor-pointer" id="star-rating">
+            {% for i in "12345" %}
+                <input type="radio" name="rating" id="star{{ i }}" value="{{ i }}"
+                       class="hidden pointer-events-none"/>
+                <label for="star{{ i }}" title="{{ i }} star{% if i|add:'-1' != '0' %}s{% endif %}">&#9733;</label>
+            {% endfor %}
+        </div>
+        <button type="submit"
+                class="mt-4 px-6 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-lg text-white font-semibold transition">
+            Submit Rating
+        </button>
+    </form>
+</div>
