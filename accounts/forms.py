@@ -1,6 +1,4 @@
-from better_profanity import profanity
 from django.contrib.auth import authenticate
-from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from common.image_cloud_storage import upload_to_cloud_storage, get_public_id_from_url, delete_cloudinary_image
@@ -163,7 +161,6 @@ class AccountForm(forms.ModelForm):
             'state': self.cleaned_data.get('state', ''),
             'postal_code': self.cleaned_data.get('postal_code', ''),
             'country': self.cleaned_data.get('country', ''),
-            'address_type': 'shipping',
             'account': account,
         }
 
@@ -179,3 +176,5 @@ class AccountForm(forms.ModelForm):
                 account.save()
 
         return account
+
+

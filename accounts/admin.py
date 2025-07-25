@@ -41,13 +41,13 @@ class AccountAdmin(admin.ModelAdmin):
     inlines = [AddressInline]
 
     readonly_fields = ('created_at', 'updated_at')
-    raw_id_fields = ('user', 'default_shipping', 'default_billing')
+    raw_id_fields = ('user', 'default_shipping')
 
 
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):
-    list_display = ('account', 'label', 'address_type', 'city', 'state', 'is_default')
-    list_filter = ('address_type', 'is_default', 'country')
+    list_display = ('account', 'label', 'city', 'state')
+    list_filter = ('country', 'city', 'state')
     search_fields = ('label', 'city', 'state', 'postal_code', 'country')
 
     readonly_fields = ('created_at', 'updated_at')

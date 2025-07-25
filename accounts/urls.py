@@ -1,6 +1,5 @@
 from django.urls import path
-from .views import RegisterView, ActivateAccount, Login, Logout, AccountUpdateView, AccountDeactivateView, \
-    AccountBanView
+from .views import RegisterView, ActivateAccount, Login, Logout, AccountUpdateView, AccountDeactivateView
 from django.views.generic import TemplateView
 
 urlpatterns = [
@@ -21,5 +20,4 @@ urlpatterns = [
 
     path('', AccountUpdateView.as_view(), name='account'),
     path('deactivate/', AccountDeactivateView.as_view(), name='account_deactivate'),
-    path('ban/<int:user_id>/', AccountBanView.as_view(), name='account_deactivate_user'),
 ]

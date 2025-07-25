@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(data => {
       data.forEach(({ code, name, dial_code}) => {
         const option = document.createElement('option');
-        option.value = code;
+        option.value = dial_code;
         option.textContent = `${name} (${dial_code})`;
         select.appendChild(option);
       });

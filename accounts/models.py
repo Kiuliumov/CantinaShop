@@ -40,13 +40,6 @@ class Account(models.Model):
         null=True,
         related_name='shipping_for'
     )
-    default_billing = models.ForeignKey(
-        'Address',
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        related_name='billing_for'
-    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -56,14 +49,7 @@ class Account(models.Model):
 
 
 class Address(models.Model):
-    ADDRESS_TYPE_CHOICES = [
-        ('shipping', 'Shipping'),
-        ('billing', 'Billing'),
-        ('other', 'Other'),
-    ]
-
     account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='addresses', blank=True, null=True)
-    address_type = models.CharField(max_length=10, choices=ADDRESS_TYPE_CHOICES, default='shipping', blank=True, null=True)
     label = models.CharField(max_length=30, blank=True, null=True, validators=[NoProfanityValidator()])
 
     street_address = models.CharField(max_length=100, blank=True, null=True, validators=[NoProfanityValidator()])
@@ -71,8 +57,6 @@ class Address(models.Model):
     state = models.CharField(max_length=50, blank=True, null=True, validators=[NoProfanityValidator()])
     postal_code = models.CharField(max_length=20, blank=True, null=True)
     country = models.CharField(max_length=50, blank=True, null=True, validators=[NoProfanityValidator()])
-
-    is_default = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

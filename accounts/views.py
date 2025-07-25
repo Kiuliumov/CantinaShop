@@ -97,23 +97,3 @@ class AccountDeactivateView(LoginRequiredMixin, View):
         messages.success(request, "Your account has been deactivated.")
         return redirect('index')
 
-
-class AccountBanView(LoginRequiredMixin, UserPassesTestMixin, View):
-    def test_func(self):
-        return self.request.user.is_superuser
-
-    def handle_no_permission(self):
-        raise PermissionError
-
-    def post(self, request, *args, **kwargs):
-        target_user_id = kwargs.get('user_id')
-        target_user = get_object_or_404(User, id=target_user_id)
-
-        if target_user.is_superuser:
-            messages.error(request, "You cannot ban another superuser.")
-            return redirect('admin_dashboard')
-
-        target_user.is_active = False
-        target_user.save()
-        messages.success(request, f"{target_user.username} has been banned.")
-        return redirect('admin_dashboard')
