@@ -22,6 +22,7 @@ This project showcases the application of modern web development techniques and 
 
 The platform supports essential e-commerce features such as product management, shopping cart functionality, and user registration, making it a fully functional and practical application.
 
+Additionally, CantinaShop is built to be fully responsive, delivering a seamless and consistent user experience across desktops, tablets, and mobile devices.
 ---
 
 ## Important Notes
@@ -118,6 +119,11 @@ Addresses are stored in the `Address` model and linked to the `Account` model, w
 
 ---
 
+### Image Storage and Handling
+The project uses Cloudinary for secure image storage and management. User profile pictures uploaded via forms utilize Django’s forms.ImageField(), which restricts uploads to image files only, preventing unsupported or potentially harmful file types. When a user updates their profile picture, the application uploads the new image to Cloudinary and automatically deletes the old image to avoid orphaned files and optimize storage. This ensures efficient media management and maintains data integrity.
+
+
+
 ### Account Deactivation
 
 - Users can deactivate their accounts using `AccountDeactivateView`.  
@@ -171,4 +177,69 @@ This role-based access control ensures appropriate separation of duties and enha
 - Phone numbers are validated with a custom phone validator to ensure correct format.
 
 ---
+### Screenshots
+![Register](screenshots/accounts/register)
+![Login](screenshots/accounts/login)
+![Activate](screenshots/accounts/activate)
+![Account](screenshots/accounts/account)
+![Email](screenshots/accounts/activation_email)
 
+
+## Real-Time Chat System
+CantinaShop includes a robust real-time messaging system that enables live communication between individual users and the entire administrative team. This group-based support model ensures that any available admin can assist users without delay.
+
+### System Architecture
+
+The chat system is built using:
+
+- **Django Channels:** Manages WebSocket connections and message routing.
+- **WebSocket Consumers:** Separate consumer classes handle admin and user interactions.
+- **REST API:** Provides recent message history per user.
+- **JavaScript Front-End:** Powers the chat interface with user-friendly, asynchronous updates.
+
+### Communication Model
+
+- Each **user** initiates a chat session with the **admin team**, not with a specific admin.
+- All admins connected to the dashboard can see and respond to user messages in real time.
+- Messages are synced across all active admin sessions, ensuring no support gaps.
+
+### Workflow Overview
+
+**1. Admin Dashboard Initialization**  
+Admins are presented with a searchable list of users. No chat is active until a user is selected.
+
+**2. Selecting a User**  
+When an admin selects a user:
+- The most recent 100 messages are retrieved via API.
+- A WebSocket connection is established for that user-admin group thread.
+- The chat input is enabled.
+
+**3. Real-Time Messaging**  
+All admins share the same conversation view for a user. Any admin can send a message, and all others (including the user) see it live. Message metadata includes:
+- Sender identity
+- Avatar and timestamp
+- Role-based bubble styling
+
+A de-duplication system prevents message duplication on re-renders or reconnections.
+
+**4. WebSocket Management**  
+A WebSocket session is tied to each user being viewed. Switching users closes the previous socket and opens a new one. Input fields are disabled if the socket disconnects.
+
+**5. Spam Protection**  
+To prevent abuse:
+- Users are rate-limited (e.g. 60 messages/minute).
+- Violators are flagged as banned and forcibly disconnected.
+- Banned users cannot re-initiate chats until unbanned by staff.
+
+### Configuration
+
+The JavaScript client supports dynamic configuration through a global object (`window.chatConfig`). Key parameters include:
+
+- `adminAvatarUrl` – Avatar for admin messages
+- `defaultAvatarUrl` – Fallback avatar
+- `messagesApiUrlBase` – Endpoint for fetching message history
+- `websocketBaseUrl` – Auto-detected `ws://` or `wss://` connection string
+
+### Summary
+
+This real-time support system allows the entire admin team to collaborate in assisting individual users. It supports message persistence, secure WebSocket channels, shared visibility across admins, and spam control—making it a scalable and effective solution for customer communication.
