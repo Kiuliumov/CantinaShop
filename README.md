@@ -314,4 +314,51 @@ The product app provides the following URL endpoints for managing products, comm
 - The cart view allows users to manage items they intend to purchase.
 - The category creation endpoint is for adding new product categories to the system.
 
+## Product Browsing and Searching
+- Browse through a comprehensive list of products, displayed in a paginated format for easy navigation.
+- Search products by name or description to quickly find what you need.
+- Filter products by category, availability status (available/unavailable), and sort by name or price in ascending or descending order.
+- View detailed information about each product, including images, descriptions, pricing, and user reviews.
 ---
+
+## Product Reviews and Ratings
+
+- View customer comments and reviews on each product, with the most recent feedback shown first.
+- Submit your own comments and feedback when logged in, contributing to the community’s product discussions.
+- Edit or delete your own comments, ensuring you can manage your feedback at any time.
+- Rate products on a scale from 1 to 5 stars, with average ratings displayed to help guide purchasing decisions.
+
+---
+
+## Product Management (Admin Only)
+
+- Add new products to the store, specifying details such as name, description, price, category, and availability.
+- Update existing product information to keep listings accurate and up to date.
+- Remove outdated or discontinued products from the catalog.
+
+---
+
+## Shopping Cart
+
+- Add products to a shopping cart that persists through browser sessions using cookies.
+- View the shopping cart at any time, showing selected items, quantities, individual subtotals, and total order value.
+- Modify the cart contents before proceeding to checkout (checkout functionality not included here).
+- Uses cookies to save data
+
+---
+
+## Category Management
+
+- Create new product categories to organize and classify items in the store (admin access required).
+- Filter and browse products by category to streamline product discovery.
+
+---
+
+## Access and Security
+
+- User authentication ensures that only registered users can comment, rate products, or manage their own reviews.
+- Administrative controls restrict product and category management to authorized personnel only.
+- Users can only edit or delete their own comments, maintaining privacy and content integrity.
+
+---
+
