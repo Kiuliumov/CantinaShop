@@ -365,4 +365,6 @@ The product app provides the following URL endpoints for managing products, comm
 ### Screenshots
 ![List](screenshots/products/list.png)
 ![Details](screenshots/products/details_body.png)
+![Comments](screenshots/products/details_comments.png)
+
 
