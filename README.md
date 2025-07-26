@@ -176,6 +176,8 @@ This role-based access control ensures appropriate separation of duties and enha
 ![Login](screenshots/accounts/login)
 ![Activate](screenshots/accounts/activate)
 ![Account](screenshots/accounts/account)
+![Email](screenshots/accounts/activation_email)
+
 
 ## Real-Time Chat System
 CantinaShop includes a robust real-time messaging system that enables live communication between individual users and the entire administrative team. This group-based support model ensures that any available admin can assist users without delay.
