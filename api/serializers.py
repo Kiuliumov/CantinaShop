@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from api.models import ChatMessage
-from products.models import Product
+from products.models import Product, Category
 
 
 class ChatMessageSerializer(serializers.ModelSerializer):
@@ -50,3 +50,8 @@ class ProductSerializer(serializers.ModelSerializer):
              'slug', 'has_discount', 'created_at', 'updated_at',
             'category', 'category_name', 'average_rating', 'rating_count',
         ]
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'name']

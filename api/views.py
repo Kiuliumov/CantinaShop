@@ -2,14 +2,14 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.generics import CreateAPIView
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.generics import ListCreateAPIView
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api.serializers import ChatMessageSerializer, ProductSerializer
+from api.serializers import ChatMessageSerializer, ProductSerializer, CategorySerializer
 from api.models import ChatMessage
-from products.models import Product
+from products.models import Product, Category
 
 
 class ChatMessagesAPIView(APIView):
@@ -42,9 +42,17 @@ class ChatMessagesAPIView(APIView):
         return Response({'messages': serializer.data})
 
 
-class ProductListAPIView(APIView):
-    def get(self, request, **kwargs):
-        qs = Product.objects.all()
+class ProductListCreateAPIView(ListCreateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [IsAdminUser()]
+        return [IsAuthenticatedOrReadOnly()]
+
+    def get(self, request, *args, **kwargs):
+        qs = self.filter_queryset(self.get_queryset())
 
         product_id = request.GET.get('id')
         if product_id:
@@ -96,10 +104,16 @@ class ProductListAPIView(APIView):
 
         qs = qs[:limit]
 
-        serializer = ProductSerializer(qs, many=True, context={'request': request})
+        serializer = self.get_serializer(qs, many=True)
         return Response({'products': serializer.data})
 
-class ProductCreateView(CreateAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    permission_classes = [IsAdminUser]
+
+
+class CategoryListCreateAPIView(ListCreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [IsAdminUser()]
+        return [IsAuthenticatedOrReadOnly()]
