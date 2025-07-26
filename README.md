@@ -244,5 +244,74 @@ The JavaScript client supports dynamic configuration through a global object (`w
 
 This real-time support system allows the entire admin team to collaborate in assisting individual users. It supports message persistence, secure WebSocket channels, shared visibility across admins, and spam control—making it a scalable and effective solution for customer communication.
 
-
 ![Chat](screenshots/chatDemo.png)
+
+
+## Product Management and Processing
+
+CantinaShop features a well-structured backend system for managing product data, customer feedback, and category organization. The system is designed with scalability and maintainability in mind, using Django's model architecture.
+
+### Category Model
+
+Products are organized into categories, each represented by a unique name. Category names are automatically filtered using a profanity-checking utility to ensure appropriate content.
+
+### Product Model
+
+The Product model supports a wide range of attributes and features, including:
+
+- Unique name and description fields, both sanitized for inappropriate content using a profanity filter
+- SEO-friendly `slug` field automatically generated and made unique
+- Optional image URL (typically hosted via Cloudinary)
+- Availability status and discount flag
+- Price represented as a decimal with two decimal places
+- Timestamps for creation and updates
+- Foreign key relationship to a Category
+
+#### Custom Logic
+
+- **Profanity Filtering:** Both the name and description fields are automatically cleaned on save.
+- **Slug Generation:** On initial creation, a unique slug is generated. If a conflict occurs, an incremental suffix is added until uniqueness is ensured.
+- **Rating Properties:** Products expose computed properties for average rating and rating count, derived from the related Rating model.
+
+### Rating Model
+
+The Rating model allows users to provide a score (1–5) for a given product. Features include:
+
+- Foreign key relationship to both the user (Account) and the product
+- Server-side validation using Django’s `MaxValueValidator`
+
+### Comment Model
+
+Users can submit textual comments on products. The model includes:
+
+- Foreign key relationships to both the product and the user (Account)
+- Profanity filtering for the comment content
+- Creation timestamp for chronological display
+
+
+# Product App URL Routing
+
+The product app provides the following URL endpoints for managing products, comments, ratings, and categories within CantinaShop:
+
+| Path                            | HTTP Method | Description                                | View Class                  | URL Name           |
+|--------------------------------|-------------|--------------------------------------------|-----------------------------|--------------------|
+| `/`                            | GET         | List all products                          | `ProductListView`           | `product-list`      |
+| `/new/`                        | GET, POST   | Add a new product                          | `AddProductView`            | `product-add`       |
+| `/details/<slug:slug>/`        | GET         | View details of a product                  | `ProductDetailView`         | `product-details`   |
+| `/delete/<slug:slug>/`         | POST, DELETE| Delete a product                           | `ProductDeleteView`         | `product-delete`    |
+| `/edit/<slug:slug>/`           | GET, POST   | Edit/update a product                      | `ProductUpdateView`         | `product-edit`      |
+| `/comments/<int:pk>/delete/`   | POST, DELETE| Delete a comment on a product              | `CommentDeleteView`         | `comment-delete`    |
+| `/comments/<int:pk>/edit/`     | GET, POST   | Edit/update a comment                      | `CommentUpdateView`         | `comment-edit`      |
+| `/rate/<slug:slug>`            | POST        | Set or update rating for a product        | `SetRatingView`             | `rate`              |
+| `/cart/`                      | GET, POST   | View and manage the shopping cart         | `CartView`                   | `cart`              |
+| `/category/create/`            | GET, POST   | Create a new product category              | `CreateCategory`            | `category-create`   |
+
+### Notes:
+
+- All views are class-based views imported from the `products.views` module.
+- Slugs are used as unique identifiers for product detail, edit, delete, and rating URLs.
+- Comment URLs use integer primary keys to uniquely identify comments for editing or deletion.
+- The cart view allows users to manage items they intend to purchase.
+- The category creation endpoint is for adding new product categories to the system.
+
+---
