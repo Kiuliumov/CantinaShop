@@ -73,8 +73,8 @@ class AccountAdmin(admin.ModelAdmin):
 
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):
-    list_display = ('account', 'label', 'city', 'state')
+    list_display = ('account',  'city', 'state')
     list_filter = ('country', 'city', 'state')
-    search_fields = ('label', 'city', 'state', 'postal_code', 'country')
+    search_fields = ( 'state', 'city', 'postal_code', 'country')
     readonly_fields = ('created_at', 'updated_at')
     raw_id_fields = ('account',)
