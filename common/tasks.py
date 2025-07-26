@@ -1,8 +1,8 @@
 from celery import shared_task
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
-
-EMAIL_SENDER = 'ikiuliumov@outlook.com'
+from CantinaShop import settings
+EMAIL_SENDER = settings.DEFAULT_FROM_EMAIL
 
 @shared_task
 def send_confirmation_email_task(user_id, domain, activation_link, subject):
