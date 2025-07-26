@@ -14,7 +14,7 @@ from .cart_utils import get_cart_items_and_total
 from .models import Order
 
 
-class AddToCartView(LoginRequiredMixin, View):
+class AddToCartView(View):
     def get(self, request, slug):
         product = get_object_or_404(Product, slug=slug)
 
