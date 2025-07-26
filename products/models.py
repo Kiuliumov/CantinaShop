@@ -4,18 +4,12 @@ from django.db.models import Avg, Count
 from django.template.defaultfilters import slugify
 
 from accounts.models import Account
-from common.profanity_utils import smart_censor
 
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return self.name
-
-    def save(self, *args, **kwargs):
-        self.name = smart_censor(self.name)
-        super().save(*args, **kwargs)
-
 
 class Product(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -39,9 +33,6 @@ class Product(models.Model):
         return self.rating_set.aggregate(count=Count('id'))['count'] or 0
 
     def save(self, *args, **kwargs):
-        self.name = smart_censor(self.name)
-        self.description = smart_censor(self.description)
-
         if not self.pk and not self.slug:
             base_slug = slugify(self.name)
             slug = base_slug
@@ -70,7 +61,3 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.account.user.username} on {self.product.name}"
-
-    def save(self, *args, **kwargs):
-        self.content = smart_censor(self.content)
-        super().save(*args, **kwargs)
