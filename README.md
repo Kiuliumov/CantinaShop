@@ -118,6 +118,11 @@ Addresses are stored in the `Address` model and linked to the `Account` model, w
 
 ---
 
+### Image Storage and Handling
+The project uses Cloudinary for secure image storage and management. User profile pictures uploaded via forms utilize Django’s forms.ImageField(), which restricts uploads to image files only, preventing unsupported or potentially harmful file types. When a user updates their profile picture, the application uploads the new image to Cloudinary and automatically deletes the old image to avoid orphaned files and optimize storage. This ensures efficient media management and maintains data integrity.
+
+
+
 ### Account Deactivation
 
 - Users can deactivate their accounts using `AccountDeactivateView`.  
