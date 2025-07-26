@@ -14,52 +14,52 @@
             {% if user.is_staff or user.is_superuser %}
                 <li>
                     <a href="{% url 'admin:accounts_usermodel_changelist' %}"
-                       class="px-4 py-2 bg-indigo-600 text-white font-bold text-sm sm:text-base rounded-lg shadow hover:bg-indigo-700 transition">
+                       class="px-4 py-2 bg-indigo-600 text-white font-bold text-sm sm:text-base rounded-lg shadow hover:bg-indigo-700 text-center transition">
                         Users
                     </a>
                 </li>
                 <li>
                     <a href="{% url 'admin:orders_order_changelist' %}"
-                       class="px-4 py-2 bg-indigo-600 text-white font-bold text-sm sm:text-base rounded-lg shadow hover:bg-indigo-700 transition">
+                       class="px-4 py-2 bg-indigo-600 text-white font-bold text-sm sm:text-base rounded-lg shadow hover:bg-indigo-700 text-center transition">
                         Orders
                     </a>
                 </li>
             {% endif %}
 
             <li><a href="{% url 'index' %}"
-                   class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Home</a>
+                   class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition text-center">Home</a>
             </li>
             <li><a href="{% url 'product-list' %}"
-                   class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">All
+                   class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition text-center">All
                 Products</a></li>
             <li><a href="{% url 'product-list' %}?category=Glasses"
-                   class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Glasses</a>
+                   class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition text-center">Glasses</a>
             </li>
             <li><a href="{% url 'product-list' %}?category=Rings"
-                   class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Rings</a>
+                   class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition text-center">Rings</a>
             </li>
             <li><a href="{% url 'product-list' %}?category=Necklaces"
-                   class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Necklaces</a>
+                   class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition text-center">Necklaces</a>
             </li>
             <li><a href="{% url 'product-list' %}?category=Bracelets"
-                   class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Bracelets</a>
+                   class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition text-center">Bracelets</a>
             </li>
             <li><a href="{% url 'about' %}"
-                   class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">About</a>
+                   class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition text-center">About</a>
             </li>
             <li><a href="{% url 'contact' %}"
-                   class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition">Contacts</a>
+                   class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition text-center">Contacts</a>
             </li>
 
             <li>
-                <a href="{% url 'cart' %}" class="text-gray-300 hover:text-indigo-400">
+                <a href="{% url 'cart' %}" class="text-gray-300 hover:text-indigo-400 text-center">
                     <i data-lucide="shopping-cart" class="w-5 h-5 sm:w-6 sm:h-6"></i>
                 </a>
             </li>
             {% if user.is_authenticated %}
 
                 <li>
-                    <a href="{% url 'account' %}" class="text-gray-300 hover:text-indigo-400">
+                    <a href="{% url 'account' %}" class="text-gray-300 hover:text-indigo-400 text-center">
                         <i data-lucide="user" class="w-5 h-5 sm:w-6 sm:h-6"></i>
                     </a>
                 </li>
@@ -82,7 +82,8 @@
             {% endif %}
         </ul>
 
-        <button id="menu-btn" class="block xl:hidden text-gray-300 focus:outline-none" aria-label="Toggle menu">
+        <button id="menu-btn" class="block xl:hidden text-gray-300 focus:outline-none text-center"
+                aria-label="Toggle menu">
             <i data-lucide="menu" class="w-7 h-7"></i>
         </button>
     </div>
@@ -92,42 +93,45 @@
             {% if user.is_staff or user.is_superuser %}
                 <li>
                     <a href="{% url 'admin:accounts_usermodel_changelist' %}"
-                       class="block px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg shadow hover:bg-indigo-700 transition">
+                       class="block px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg shadow hover:bg-indigo-700 text-center transition">
                         Users
                     </a>
                 </li>
                 <li>
                     <a href="{% url 'admin:orders_order_changelist' %}"
-                       class="block px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg shadow hover:bg-indigo-700 transition">
+                       class="block px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg shadow hover:bg-indigo-700 transition text-center">
                         Orders
                     </a>
                 </li>
             {% endif %}
-            <li><a href="{% url 'index' %}" class="block hover:text-indigo-400">Home</a></li>
-            <li><a href="{% url 'product-list' %}" class="block hover:text-indigo-400">All Products</a></li>
-            <li><a href="{% url 'product-list' %}?category=Glasses" class="block hover:text-indigo-400">Glasses</a></li>
-            <li><a href="{% url 'product-list' %}?category=Rings" class="block hover:text-indigo-400">Rings</a></li>
-            <li><a href="{% url 'product-list' %}?category=Necklaces" class="block hover:text-indigo-400">Necklaces</a>
+            <li><a href="{% url 'index' %}" class="block hover:text-indigo-400 text-center">Home</a></li>
+            <li><a href="{% url 'product-list' %}" class="block hover:text-indigo-400 text-center">All Products</a></li>
+            <li><a href="{% url 'product-list' %}?category=Glasses" class="block hover:text-indigo-400 text-center">Glasses</a>
             </li>
-            <li><a href="{% url 'product-list' %}?category=Bracelets" class="block hover:text-indigo-400">Bracelets</a>
+            <li><a href="{% url 'product-list' %}?category=Rings"
+                   class="block hover:text-indigo-400 text-center">Rings</a></li>
+            <li><a href="{% url 'product-list' %}?category=Necklaces" class="block hover:text-indigo-400 text-center">Necklaces</a>
             </li>
-            <li><a href="{% url 'about' %}" class="block hover:text-indigo-400">About</a></li>
-            <li><a href="{% url 'product-list' %}?category=Bracelets" class="block hover:text-indigo-400">Contacts</a>
+            <li><a href="{% url 'product-list' %}?category=Bracelets" class="block hover:text-indigo-400 text-center">Bracelets</a>
             </li>
-            <li><a href="{% url 'cart' %}" class="block hover:text-indigo-400">Cart</a></li>
+            <li><a href="{% url 'about' %}" class="block hover:text-indigo-400 text-center">About</a></li>
+            <li><a href="{% url 'contact' %}" class="block hover:text-indigo-400 text-center">Contacts</a></li>
+            <li><a href="{% url 'cart' %}" class="block hover:text-indigo-400 text-center">Cart</a></li>
 
             {% if user.is_authenticated %}
-                <li><a href="{% url 'account' %}" class="block hover:text-indigo-400">Account</a></li>
+                <li><a href="{% url 'account' %}" class="block hover:text-indigo-400 text-center">Account</a></li>
                 <li>
                     <form method="POST" action="{% url 'logout' %}">
                         {% csrf_token %}
-                        <button type="submit" class="block w-full text-left text-red-400 font-bold hover:text-red-500">
+                        <button type="submit"
+                                class="block w-full text-left text-red-400 font-bold hover:text-red-500 text-center">
                             Logout
                         </button>
                     </form>
                 </li>
             {% else %}
-                <li><a href="{% url 'login' %}" class="block text-indigo-500 font-bold hover:text-indigo-600">Login</a>
+                <li><a href="{% url 'login' %}"
+                       class="block text-indigo-500 font-bold hover:text-indigo-600 text-center">Login</a>
                 </li>
             {% endif %}
         </ul>
