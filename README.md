@@ -243,3 +243,6 @@ The JavaScript client supports dynamic configuration through a global object (`w
 ### Summary
 
 This real-time support system allows the entire admin team to collaborate in assisting individual users. It supports message persistence, secure WebSocket channels, shared visibility across admins, and spam control—making it a scalable and effective solution for customer communication.
+
+
+![Chat](screenshots/chatDemo.png)
