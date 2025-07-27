@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -117,6 +117,12 @@ class ProductListCreateAPIView(ListCreateAPIView):
         serializer = self.get_serializer(qs, many=True)
         return Response({'products': serializer.data})
 
+class ProductDetailAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    authentication_classes = [APIKeyAuthentication, SessionAuthentication]
+    permission_classes = [IsAdminUser]
+    lookup_field = 'id'
 
 class GenerateAPIKeyAPIView(AdminRequiredMixin, APIView):
     """
