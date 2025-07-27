@@ -25,12 +25,14 @@ def smart_censor(text):
     for bad_word in PROFANE_WORDS:
         bad_word = bad_word.lower()
 
-        for match in re.finditer(re.escape(bad_word), normalized):
-            start, end = match.start(), match.end()
+        pattern = r'\b' + re.escape(bad_word) + r'\b'
 
+        for match in re.finditer(pattern, normalized):
+            start, end = match.start(), match.end()
             for norm_idx in range(start, end):
-                orig_idx = normalized_to_original[norm_idx]
-                censor_mask[orig_idx] = True
+                if norm_idx < len(normalized_to_original):
+                    orig_idx = normalized_to_original[norm_idx]
+                    censor_mask[orig_idx] = True
 
     censored_chars = [
         '*' if censor_mask[i] else text_str[i]

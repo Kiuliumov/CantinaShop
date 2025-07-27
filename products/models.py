@@ -4,6 +4,8 @@ from django.db.models import Avg, Count
 from django.template.defaultfilters import slugify
 
 from accounts.models import Account
+from common.profanity_utils import smart_censor
+
 
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -58,6 +60,11 @@ class Comment(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     content = models.TextField(max_length=500, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if self.content:
+            self.content = smart_censor(self.content)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.account.user.username} on {self.product.name}"
