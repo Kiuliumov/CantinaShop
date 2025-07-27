@@ -1,5 +1,7 @@
 import secrets
+from datetime import timedelta
 
+from django.utils.timezone import now, localtime
 from rest_framework import status
 from django.contrib.auth import get_user_model
 from django.db.models import Q
@@ -114,19 +116,31 @@ class ProductListCreateAPIView(ListCreateAPIView):
         return Response({'products': serializer.data})
 
 
-
 class GenerateAPIKeyAPIView(AdminRequiredMixin, APIView):
     """
-    Generate a new API key for the authenticated admin user.
+    Generate a new API key for the authenticated admin user,
+    only once per day.
     """
 
     def post(self, request, *args, **kwargs):
         user = request.user
+        today = localtime(now()).date()
+
+        existing_key = APIKey.objects.filter(
+            user=user,
+            created_at__date=today
+        ).first()
+
+        if existing_key:
+            return Response({
+                'detail': 'You can only generate one API key per day.',
+                'api_key': existing_key.key,
+                'expires_at': existing_key.expires_at,
+                'user': user.username,
+            }, status=status.HTTP_429_TOO_MANY_REQUESTS)
 
         new_key = secrets.token_hex(20)
-
-        from datetime import timedelta, datetime
-        expiry = datetime.now() + timedelta(days=30)
+        expiry = now() + timedelta(days=30)
 
         api_key_obj = APIKey.objects.create(
             user=user,
