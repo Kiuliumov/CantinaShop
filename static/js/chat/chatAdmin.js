@@ -98,27 +98,26 @@
   }
 
   async function loadChatMessages(userId) {
-    clearChat();
-    try {
-      const url = messagesApiUrlBase + userId + '/';
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('Failed to fetch messages');
-      const data = await res.json();
-      const recentMessages = data.messages.slice(-100);
-      recentMessages.forEach(msg => {
-        addMessageSafe({
-          text: msg.message,
-          username: msg.sender_username,
-          avatarUrl: (msg.sender_id === 0 || msg.from_admin) ? adminAvatarUrl : (msg.avatar_url || defaultAvatarUrl),
-          timestamp: msg.timestamp,
-          fromAdmin: msg.sender_id === 0 || msg.from_admin,
-          sender_id: msg.sender_id,
-        });
+  clearChat();
+  try {
+    const url = `${messagesApiUrlBase}${userId}/?limit=100`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Failed to fetch messages');
+    const data = await res.json();
+    data.messages.forEach(msg => {
+      addMessageSafe({
+        text: msg.message,
+        username: msg.sender_username,
+        avatarUrl: (msg.sender_id === 0 || msg.from_admin) ? adminAvatarUrl : (msg.avatar_url || defaultAvatarUrl),
+        timestamp: msg.timestamp,
+        fromAdmin: msg.sender_id === 0 || msg.from_admin,
+        sender_id: msg.sender_id,
       });
-    } catch (err) {
-      console.error(err);
-    }
+    });
+  } catch (err) {
+    console.error(err);
   }
+}
 
   function connectSocket(userId) {
     if (chatSocket) {
