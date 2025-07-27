@@ -175,15 +175,17 @@
                     </button>
                 </form>
 
+                {% if user.is_staff or user.is_superuser %}
                 <form method="GET" action="{% url 'generate-api-key' %}" class="flex-1">
                     <button
                             type="submit"
-                            class="w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 rounded-xl shadow-md transition focus:outline-none focus:ring-4 focus:ring-gray-500 flex items-center justify-center"
+                            class="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 hover:from-purple-700 hover:via-pink-700 hover:to-red-700 text-white font-semibold py-3 rounded-xl shadow-lg transition focus:outline-none focus:ring-4 focus:ring-pink-500 flex items-center justify-center"
                     >
-                        <i class="fa-solid fa-file-export mr-2"></i>
+                        <i class="fa-solid fa-key mr-2"></i>
                         Generate API Key
                     </button>
                 </form>
+                {% endif %}
             </div>
         </div>
     </div>
