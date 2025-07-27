@@ -181,7 +181,7 @@ This role-based access control ensures appropriate separation of duties and enha
 ![Register](screenshots/accounts/register.png)
 ![Login](screenshots/accounts/login.png)
 ![Activate](screenshots/accounts/activate.png)
-![Account](screenshots/accounts/account.png)
+![Account](screenshots/accounts/account-details.png)
 ![Email](screenshots/accounts/activation_email.png)
 
 
