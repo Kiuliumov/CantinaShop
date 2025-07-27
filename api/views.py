@@ -42,7 +42,9 @@ class ChatMessagesAPIView(APIView):
                 limit = 100
         except ValueError:
             limit = 100
-        messages_qs = messages_qs[:limit]
+
+        messages_qs = messages_qs.order_by('-timestamp')[:limit]
+        messages_qs = reversed(messages_qs)
 
         serializer = ChatMessageSerializer(messages_qs, many=True, context={'request': request})
 
