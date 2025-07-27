@@ -13,11 +13,13 @@
 </main>
 
 {% include 'partials/main/footer.html' %}
-{% include 'chat/partials/user-chat.html' %}
+{% if user.is_authenticated %}
+    {% include 'chat/partials/user-chat.html' %}
+{% endif %}
 
 {% block script %}
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script src="{% static 'js/utils/iconsLoad.js' %}"></script>
-
     {% if user.is_authenticated %}
         <script>
             window.chatConfig = {
@@ -33,7 +35,6 @@
             };
         </script>
         <script src="{% static 'js/chat/chatFrontEnd.js' %}"></script>
-        <script src="https://unpkg.com/lucide@latest"></script>
     {% endif %}
 {% endblock %}
 
