@@ -1,16 +1,21 @@
+import secrets
+
+from rest_framework import status
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api.serializers import ChatMessageSerializer, ProductSerializer, CategorySerializer
-from api.models import ChatMessage
-from products.models import Product, Category
-
+from api.authentication import APIKeyAuthentication
+from api.serializers import ChatMessageSerializer, ProductSerializer
+from api.models import ChatMessage, APIKey
+from common.mixins import AdminRequiredMixin
+from products.models import Product
 
 class ChatMessagesAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -45,6 +50,7 @@ class ChatMessagesAPIView(APIView):
 class ProductListCreateAPIView(ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    authentication_classes = [APIKeyAuthentication, SessionAuthentication]
 
     def get_permissions(self):
         if self.request.method == 'POST':
@@ -109,11 +115,27 @@ class ProductListCreateAPIView(ListCreateAPIView):
 
 
 
-class CategoryListCreateAPIView(ListCreateAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+class GenerateAPIKeyAPIView(AdminRequiredMixin, APIView):
+    """
+    Generate a new API key for the authenticated admin user.
+    """
 
-    def get_permissions(self):
-        if self.request.method == 'POST':
-            return [IsAdminUser()]
-        return [IsAuthenticatedOrReadOnly()]
+    def post(self, request, *args, **kwargs):
+        user = request.user
+
+        new_key = secrets.token_hex(20)
+
+        from datetime import timedelta, datetime
+        expiry = datetime.now() + timedelta(days=30)
+
+        api_key_obj = APIKey.objects.create(
+            user=user,
+            key=new_key,
+            expires_at=expiry,
+        )
+
+        return Response({
+            'api_key': new_key,
+            'expires_at': expiry,
+            'user': user.username,
+        }, status=status.HTTP_201_CREATED)
