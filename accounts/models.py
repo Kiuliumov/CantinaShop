@@ -107,4 +107,4 @@ class Address(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.label or 'Address'} for {self.account.user.username}"
+        return f"{'Shipping Address'} for {self.account.user.username}"
