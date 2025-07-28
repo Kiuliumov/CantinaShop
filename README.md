@@ -423,3 +423,72 @@ Orders are created via a POST to `/checkout/place-order/`. The process includes:
 
 
 
+## Public API & Admin Endpoints
+
+CantinaShop exposes a secure REST API with read-only access for general users and administrative control via API keys. All endpoints support API key and session-based authentication.
+The API is used not only for internal rest components, but also for integrating the shop in other apps such as mobile apps, discrod bots, reddit bots and etc...
+---
+
+### API Schema & Documentation
+
+| Path             | Description                             |
+|------------------|-----------------------------------------|
+| `/api/schema/`   | OpenAPI schema (JSON)                   |
+| `/api/docs/`     | Swagger UI                              |
+| `/api/redoc/`    | ReDoc documentation                     |
+
+---
+
+## Authentication: API Key
+
+The platform supports stateless authentication via API keys:
+
+- **Header Format:** `Authorization: Api-Key <your-api-key>`
+- **Validation:** Keys must be active and not expired.
+- **Restrictions:** Keys are tied to admin users; general users are not allowed to create or use them.
+
+
+If the key is invalid, expired, or belongs to an inactive user, the request is rejected.
+
+---
+
+## Endpoints Overview
+
+### Generate API Key
+
+| Path               | Method | Access    | Description                            |
+|--------------------|--------|-----------|----------------------------------------|
+| `/api/generate_key`| POST   | Admin     | Generates a new API key (1/day/user)   |
+
+---
+
+### Products
+
+| Path                  | Method | Access               | Description                            |
+|-----------------------|--------|----------------------|----------------------------------------|
+| `/api/products/`      | GET    | Public               | List products with advanced filtering  |
+| `/api/products/`      | POST   | Admin                | Create a new product                   |
+| `/api/products/<id>/` | GET    | Admin                | Retrieve a single product              |
+| `/api/products/<id>/` | PUT    | Admin                | Update product details                 |
+| `/api/products/<id>/` | DELETE | Admin                | Delete a product                       |
+
+**Filtering Parameters:**
+- `search`, `category`, `availability`, `min_price`, `max_price`
+- Sorting by `name`, `price`, or `created_at`
+- Result limiting (`limit` param)
+
+---
+
+### Chat Messages
+
+| Path                      | Method | Access       | Description                              |
+|---------------------------|--------|--------------|------------------------------------------|
+| `/api/messages/<user_id>/`| GET    | User/Admin   | Fetch latest messages (default: 100)     |
+
+- Authenticated users can only fetch their own messages.
+- Staff and superusers can fetch any user's message history.
+- Messages are serialized with timestamp, sender, and recipient.
+
+---
+
+
