@@ -368,3 +368,56 @@ The product app provides the following URL endpoints for managing products, comm
 ![Comments](screenshots/products/details_comments.png)
 
 
+
+## Shopping Cart and Order Processing
+
+CantinaShop includes a lightweight, cookie-based shopping cart and a secure, authenticated order processing system.
+
+### Cart Functionality
+
+- **Client-Side Cart:** Items are stored in a JSON-encoded cookie (`cart`), with a 7-day lifetime. No login is required.
+- **Add to Cart:** `AddToCartView` parses product slug and quantity, merges duplicates, and updates the cookie.
+- **Persistent Across Sessions:** Uses `samesite='Lax'` to maintain cart state securely.
+
+### Checkout Flow
+
+- **Restricted Access:** Only authenticated users with a completed `Account` and valid shipping address may proceed.
+- **Validation:** Missing personal or address details prompt redirection to the profile page.
+- **Cart Validation:** Users are redirected if the cart is empty or malformed.
+
+### Order Submission
+
+Orders are created via a POST to `/checkout/place-order/`. The process includes:
+
+- **Validation:** Verifies cart data, user account, and selected payment option.
+- **Data Extraction:** Parses products from cookie, calculates total price, and compiles order details.
+- **Order Creation:** Saves the order via the `Order` model with status set to `pending`.
+- **Asynchronous Email Confirmation:** An order confirmation email is dispatched in the background using a Celery task via `EmailService.send_order_confirmation_email()`.
+- **Cart Cleanup:** The cart cookie is removed after successful order placement.
+
+### Order Model
+
+| Field            | Type          | Description                              |
+|------------------|---------------|------------------------------------------|
+| `account`        | FK to `Account` | Owner of the order                      |
+| `payment_option` | CharField     | Selected payment method                  |
+| `order_data`     | JSONField     | Serialized cart content                  |
+| `total_price`    | DecimalField  | Final calculated amount                  |
+| `status`         | ChoiceField   | Defaults to `'pending'`                  |
+| `created_at`     | DateTimeField | Timestamp of order creation              |
+
+### URL Endpoints
+
+| Path                         | Method | Description                         |
+|------------------------------|--------|-------------------------------------|
+| `/add-to-cart/<slug>/`       | GET    | Add a product to the cart           |
+| `/checkout/`                 | GET    | View checkout page                  |
+| `/checkout/place-order/`     | POST   | Finalize order and trigger email    |
+
+![Cart](screenshots/orders/cart.png)
+![Checkout](screenshots/orders/checkout.png)
+![Checkout](screenshots/orders/email_for_order.png)
+
+
+
+
