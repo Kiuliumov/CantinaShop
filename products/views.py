@@ -9,11 +9,12 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import CreateView, FormMixin, DeleteView, UpdateView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.urls import reverse_lazy, reverse
 from common.mixins import AdminRequiredMixin
 from .forms import ProductForm, CommentForm, CategoryForm
 from products.models import Product, Category, Comment, Rating
+from django.contrib import messages
 
 
 class ProductListView(ListView):
@@ -102,21 +103,40 @@ class ProductDetailView(DetailView):
             comment.product = self.object
             comment.account = request.user.account
             comment.save()
+            messages.success(request, "Comment added successfully.")
             form = CommentForm()
+        else:
+            messages.error(request, "Failed to add comment. Please correct the errors below.")
         context = self.get_context_data(form=form)
         return self.render_to_response(context)
+
 
 class AddProductView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     template_name = 'products/new_product.html'
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, "Product added successfully!")
+        return response
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Failed to add product. Please correct the errors below.")
+        return super().form_invalid(form)
+
     def get_success_url(self):
         return reverse('product-details', kwargs={'slug': self.object.slug})
+
 
 class ProductDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('product-list')
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, "Product deleted successfully.")
+        return super().delete(request, *args, **kwargs)
+
 
 class CommentDeleteView(LoginRequiredMixin, DeleteView):
     model = Comment
@@ -127,6 +147,10 @@ class CommentDeleteView(LoginRequiredMixin, DeleteView):
         if user != obj.account.user and not (user.is_staff or user.is_superuser):
             raise PermissionDenied
         return super().dispatch(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, "Comment deleted successfully.")
+        return super().delete(request, *args, **kwargs)
 
     def get_success_url(self):
         comment = self.get_object()
@@ -139,6 +163,15 @@ class ProductUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
     form_class = ProductForm
     template_name = 'products/edit_product.html'
     context_object_name = 'product'
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, "Product updated successfully.")
+        return response
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Failed to update product. Please correct the errors below.")
+        return super().form_invalid(form)
 
     def get_success_url(self):
         return reverse_lazy('product-details', kwargs={'slug': self.object.slug})
@@ -154,12 +187,19 @@ class CommentUpdateView(LoginRequiredMixin, UpdateView):
             raise PermissionDenied
         return super().dispatch(request, *args, **kwargs)
 
-    def get_success_url(self):
-        return reverse_lazy('product-details', kwargs={'slug': self.object.product.slug})
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, "Comment updated successfully.")
+        return response
 
     def form_invalid(self, form):
         product_slug = self.get_object().product.slug
+        messages.error(self.request, "Failed to update comment. Please correct the errors below.")
         return redirect('product-details', slug=product_slug)
+
+    def get_success_url(self):
+        return reverse_lazy('product-details', kwargs={'slug': self.object.product.slug})
+
 
 class SetRatingView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
@@ -167,6 +207,7 @@ class SetRatingView(LoginRequiredMixin, View):
         value = request.POST.get('rating')
 
         if not value:
+            messages.error(request, "Rating value is missing.")
             return redirect('product-details', slug=product_slug)
 
         if not product_slug:
@@ -177,7 +218,8 @@ class SetRatingView(LoginRequiredMixin, View):
             if not 1 <= value <= 5:
                 raise ValueError
         except ValueError:
-            return JsonResponse({'error': 'Rating must be an integer between 1 and 5.'}, status=400)
+            messages.error(request, "Rating must be an integer between 1 and 5.")
+            return redirect('product-details', slug=product_slug)
 
         product = get_object_or_404(Product, slug=product_slug)
 
@@ -186,11 +228,8 @@ class SetRatingView(LoginRequiredMixin, View):
             product=product,
             defaults={'rating': value}
         )
-        print(product.average_rating)
-        print(product.rating_set.first().rating)
+        messages.success(request, "Your rating has been submitted.")
         return redirect(reverse_lazy('product-details', kwargs={'slug': product.slug}))
-
-
 
 
 class CartView(View):
@@ -202,7 +241,8 @@ class CartView(View):
             try:
                 decoded_cookie = urllib.parse.unquote(cart_cookie)
                 cart_data = json.loads(decoded_cookie)
-            except (json.JSONDecodeError, TypeError) as e:
+            except (json.JSONDecodeError, TypeError):
+                messages.error(request, "Failed to load your cart data. Starting with an empty cart.")
                 cart_data = []
 
         items = []
@@ -230,7 +270,17 @@ class CartView(View):
         }
         return render(request, 'shopping_cart/shopping_cart_list.html', context)
 
+
 class CreateCategory(CreateView):
     template_name = 'products/create_category.html'
     success_url = reverse_lazy('product-list')
     form_class = CategoryForm
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, "Category created successfully.")
+        return response
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Failed to create category. Please correct the errors below.")
+        return super().form_invalid(form)

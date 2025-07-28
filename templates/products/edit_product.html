@@ -48,10 +48,3 @@
         </form>
     </div>
 {% endblock %}
-
-{% block script %}
-    {{ block.super }}
-    {% if not form.errors or form.non_field_errors %}
-        <script src="{% static 'js/boxes/editSuccess.js' %}"></script>
-    {% endif %}
-{% endblock %}

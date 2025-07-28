@@ -2,13 +2,13 @@ import json
 import urllib.parse
 from django.utils import timezone
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from common.tasks import send_order_confirmation_email_task
 from products.models import Product
 from django.views import View
-from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 from .cart_utils import get_cart_items_and_total
 from .models import Order
 
@@ -17,6 +17,7 @@ class AddToCartView(View):
     def get(self, request, slug):
         product = get_object_or_404(Product, slug=slug)
         if not product.is_available:
+            messages.error(request, "Product is not available for purchase.")
             return HttpResponseBadRequest("Product is not available for purchase.")
 
         try:
@@ -49,6 +50,8 @@ class AddToCartView(View):
             product_in_cart['quantity'] += quantity
         else:
             cart.append({'slug': slug, 'quantity': quantity})
+
+        messages.success(request, f"Added {quantity} x '{product.name}' to your cart.")
 
         response = HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
@@ -88,10 +91,12 @@ class CheckoutView(LoginRequiredMixin, View):
 
             if missing_fields:
                 is_registration_complete = False
+                messages.warning(request, f"Please complete your profile: missing {', '.join(missing_fields)}.")
 
         cart_items, cart_total = get_cart_items_and_total(request)
 
         if not cart_items:
+            messages.error(request, "Your cart is empty. Please add items before checking out.")
             return redirect('cart')
 
         context = {
@@ -110,24 +115,29 @@ class OrderCreateView(LoginRequiredMixin, View):
         try:
             account = request.user.account
         except AttributeError:
-            raise PermissionDenied("User account not found.")
+            messages.error(request, "User account not found.")
+            raise PermissionDenied()
 
         cart_cookie = request.COOKIES.get('cart')
         if not cart_cookie:
-            raise PermissionDenied("Cart is empty.")
+            messages.error(request, "Your cart is empty.")
+            raise PermissionDenied()
 
         try:
             decoded_cart = urllib.parse.unquote(cart_cookie)
             raw_cart = json.loads(decoded_cart)
         except json.JSONDecodeError:
-            raise PermissionDenied("Invalid cart data.")
+            messages.error(request, "Invalid cart data.")
+            raise PermissionDenied()
 
         if not raw_cart:
-            raise PermissionDenied("Cart is empty.")
+            messages.error(request, "Your cart is empty.")
+            raise PermissionDenied()
 
         payment_option = request.POST.get('payment_method')
         if not payment_option:
-            raise PermissionDenied("Payment method required.")
+            messages.error(request, "Please select a payment method.")
+            raise PermissionDenied()
 
         total_price = 0
         product_data = []
@@ -152,7 +162,8 @@ class OrderCreateView(LoginRequiredMixin, View):
                 continue
 
         if not product_data:
-            raise PermissionDenied("No valid products in cart.")
+            messages.error(request, "No valid products in your cart.")
+            raise PermissionDenied()
 
         order = Order.objects.create(
             account=account,
@@ -163,6 +174,8 @@ class OrderCreateView(LoginRequiredMixin, View):
         )
 
         send_order_confirmation_email_task.delay(request.user.id, order.id)
+
+        messages.success(request, "Your order has been placed successfully!")
 
         response = render(request, 'orders/order-confirmation.html', {'order': order})
         response.delete_cookie('cart')

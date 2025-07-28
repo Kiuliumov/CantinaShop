@@ -48,9 +48,6 @@
     {% endif %}
     {% if request.user.is_authenticated %}
         <script src="{% static 'js/cart/starRating.js' %}"></script>
-        <script src="{% static 'js/boxes/orderPopUp.js' %}"></script>
         <script src="{% static 'js/cart/orderCookieQuantity.js' %}"></script>
-        <script src="{% static 'js/boxes/createPopUp.js' %}"></script>
-        <script src="{% static 'js/boxes/editSuccess.js' %}"></script>
     {% endif %}
 {% endblock %}
