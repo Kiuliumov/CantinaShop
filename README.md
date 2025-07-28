@@ -491,4 +491,7 @@ If the key is invalid, expired, or belongs to an inactive user, the request is r
 
 ---
 
+CantinaShop represents a modern, feature-rich e-commerce platform built with scalability, security, and user experience in mind. From its robust authentication system and real-time chat support to seamless product management and order processing, the project integrates cutting-edge technologies like Django Channels, asynchronous programming, and cloud-based media handling. Its well-structured codebase and comprehensive documentation make it an excellent foundation for further customization and expansion, demonstrating best practices in Python web development for both learners and professionals alike.
 
+
+---- The Cantina 2025 ------
