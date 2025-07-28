@@ -68,6 +68,10 @@ class Login(ProfileProhibitedMixin, LoginView):
     def get_success_url(self):
         return self.success_url
 
+    def form_valid(self, form):
+        messages.success(self.request, "Login successful!")
+        return super().form_valid(form)
+
 class Logout(LogoutView):
     next_page = reverse_lazy('index')
 
