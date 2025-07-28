@@ -3,7 +3,7 @@ import urllib.parse
 from django.utils import timezone
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseBadRequest
 
 from common.email_service import EmailService
 from products.models import Product
@@ -17,6 +17,8 @@ from .models import Order
 class AddToCartView(View):
     def get(self, request, slug):
         product = get_object_or_404(Product, slug=slug)
+        if not product.is_available:
+            return HttpResponseBadRequest("Product is not available for purchase.")
 
         try:
             quantity = int(request.GET.get('quantity', 1))
