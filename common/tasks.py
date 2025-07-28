@@ -59,7 +59,7 @@ def send_password_reset_email_task(user_id, domain, reset_link, subject="Passwor
         'domain': domain,
         'reset_link': reset_link,
     }
-    html_content = render_to_string('accounts/email/password_reset_email.html', context)
+    html_content = render_to_string('accounts/reset/password_reset_email.html', context)
     email = EmailMultiAlternatives(subject, '', settings.DEFAULT_FROM_EMAIL, [user.email])
     email.attach_alternative(html_content, "text/html")
     email.send(fail_silently=False)

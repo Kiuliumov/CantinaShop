@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model, login, logout
@@ -12,7 +13,8 @@ from django.contrib import messages
 from common.mixins import ProfileProhibitedMixin
 from .forms import RegistrationForm, LoginForm, AccountForm
 from .models import Account
-from common.tasks import send_confirmation_email_task
+from common.tasks import send_confirmation_email_task, send_password_reset_email_task
+
 User = get_user_model()
 
 
@@ -106,12 +108,22 @@ class AccountDeactivateView(LoginRequiredMixin, View):
         return redirect('index')
 
 class CustomPasswordResetView(PasswordResetView):
-    template_name = 'accounts/password_reset_form.html'
+    template_name = 'accounts/reset/password_reset_form.html'
     email_template_name = None
     success_url = reverse_lazy('password_reset_done')
 
     def form_valid(self, form):
         for user in form.get_users(form.cleaned_data["email"]):
-            EmailService.send_password_reset_email(self.request, user)
-        messages.success(self.request, "If your email exists in our system, we've sent instructions to reset your password.")
-        return super().form_valid(form)
+            domain = self.request.get_host()
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+            reset_path = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
+            reset_link = f"http://{domain}{reset_path}"
+
+            send_password_reset_email_task.delay(user.id, domain, reset_link)
+
+        messages.success(
+            self.request,
+            "If your email exists in our system, we've sent instructions to reset your password."
+        )
+        return redirect(self.success_url)
