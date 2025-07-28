@@ -4,7 +4,7 @@ import urllib.parse
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.http import JsonResponse, Http404
+from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from django.views.generic import ListView, DetailView
@@ -106,7 +106,7 @@ class ProductDetailView(DetailView):
             messages.success(request, "Comment added successfully.")
             form = CommentForm()
         else:
-            messages.error(request, "Failed to add comment. Please correct the errors below.")
+            messages.error(request, "Failed to add comment.")
         context = self.get_context_data(form=form)
         return self.render_to_response(context)
 
@@ -170,7 +170,7 @@ class ProductUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
         return response
 
     def form_invalid(self, form):
-        messages.error(self.request, "Failed to update product. Please correct the errors below.")
+        messages.error(self.request, "Failed to update product.")
         return super().form_invalid(form)
 
     def get_success_url(self):
@@ -194,7 +194,7 @@ class CommentUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_invalid(self, form):
         product_slug = self.get_object().product.slug
-        messages.error(self.request, "Failed to update comment. Please correct the errors below.")
+        messages.error(self.request, "Failed to update comment!")
         return redirect('product-details', slug=product_slug)
 
     def get_success_url(self):
@@ -242,7 +242,7 @@ class CartView(View):
                 decoded_cookie = urllib.parse.unquote(cart_cookie)
                 cart_data = json.loads(decoded_cookie)
             except (json.JSONDecodeError, TypeError):
-                messages.error(request, "Failed to load your cart data. Starting with an empty cart.")
+                messages.error(request, "Failed to load your cart data. Starting with an empty cart!")
                 cart_data = []
 
         items = []
@@ -282,5 +282,5 @@ class CreateCategory(CreateView):
         return response
 
     def form_invalid(self, form):
-        messages.error(self.request, "Failed to create category. Please correct the errors below.")
+        messages.error(self.request, "Failed to create category!")
         return super().form_invalid(form)

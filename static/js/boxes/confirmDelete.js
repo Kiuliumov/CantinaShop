@@ -23,14 +23,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  confirmYes.addEventListener('click', () => {
-    modal.classList.add('hidden');
-    if (formToSubmit) {
-      formToSubmit.submit();
-    } else if (linkToFollow) {
-      window.location.href = linkToFollow;
-    }
-  });
+confirmYes.addEventListener('click', () => {
+  modal.classList.add('hidden');
+  if (formToSubmit) {
+    formToSubmit.submit();
+  } else if (linkToFollow) {
+    window.location.href = linkToFollow;
+  }
+});
+
 
   confirmNo.addEventListener('click', () => {
     modal.classList.add('hidden');
