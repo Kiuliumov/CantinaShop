@@ -104,7 +104,6 @@ class CheckoutView(LoginRequiredMixin, View):
         return render(request, 'shopping_cart/checkout.html', context)
 
 
-
 class OrderCreateView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         try:
