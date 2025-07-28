@@ -42,3 +42,24 @@ def send_order_confirmation_email_task(user_id, order_id):
     email = EmailMultiAlternatives(subject, text_content, EMAIL_SENDER, [user.email])
     email.attach_alternative(html_content, "text/html")
     email.send(fail_silently=False)
+
+
+@shared_task
+def send_password_reset_email_task(user_id, domain, reset_link, subject="Password Reset Request"):
+    from django.contrib.auth import get_user_model
+    from django.template.loader import render_to_string
+    from django.core.mail import EmailMultiAlternatives
+    from CantinaShop import settings
+
+    User = get_user_model()
+    user = User.objects.get(pk=user_id)
+
+    context = {
+        'user': user,
+        'domain': domain,
+        'reset_link': reset_link,
+    }
+    html_content = render_to_string('accounts/email/password_reset_email.html', context)
+    email = EmailMultiAlternatives(subject, '', settings.DEFAULT_FROM_EMAIL, [user.email])
+    email.attach_alternative(html_content, "text/html")
+    email.send(fail_silently=False)

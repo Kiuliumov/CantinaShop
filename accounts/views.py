@@ -1,19 +1,18 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model, login, logout
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.utils.encoding import force_str
-from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_str, force_bytes
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views import View
 from django.views.generic.edit import FormView, UpdateView
 from django.contrib import messages
-from common.email_service import EmailService
 from common.mixins import ProfileProhibitedMixin
 from .forms import RegistrationForm, LoginForm, AccountForm
 from .models import Account
-
+from common.tasks import send_confirmation_email_task
 User = get_user_model()
 
 
@@ -26,10 +25,19 @@ class RegisterView(ProfileProhibitedMixin, FormView):
         user = form.save(commit=False)
         user.is_active = False
         user.save()
-        EmailService.send_confirmation_email(self.request, user)
+
+        domain = self.request.get_host()
+        uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+        token = default_token_generator.make_token(user)
+        activation_link = self.request.build_absolute_uri(
+            reverse_lazy('activate', kwargs={'uidb64': uidb64, 'token': token})
+        )
+        subject = "Activate your account"
+
+        send_confirmation_email_task.delay(user.id, domain, activation_link, subject)
+
         messages.success(self.request, "Registration successful. Please check your email to activate your account.")
         return super().form_valid(form)
-
 
 class ActivateAccount(View):
     def get(self, request, uidb64: str, token: str):
@@ -97,3 +105,13 @@ class AccountDeactivateView(LoginRequiredMixin, View):
         messages.success(request, "Your account has been deactivated.")
         return redirect('index')
 
+class CustomPasswordResetView(PasswordResetView):
+    template_name = 'accounts/password_reset_form.html'
+    email_template_name = None
+    success_url = reverse_lazy('password_reset_done')
+
+    def form_valid(self, form):
+        for user in form.get_users(form.cleaned_data["email"]):
+            EmailService.send_password_reset_email(self.request, user)
+        messages.success(self.request, "If your email exists in our system, we've sent instructions to reset your password.")
+        return super().form_valid(form)

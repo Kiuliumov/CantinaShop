@@ -4,8 +4,7 @@ from django.utils import timezone
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
-
-from common.email_service import EmailService
+from common.tasks import send_order_confirmation_email_task
 from products.models import Product
 from django.views import View
 from django.shortcuts import render, redirect
@@ -163,7 +162,7 @@ class OrderCreateView(LoginRequiredMixin, View):
             status='pending'
         )
 
-        EmailService.send_order_confirmation_email(request, request.user, order)
+        send_order_confirmation_email_task.delay(request.user.id, order.id)
 
         response = render(request, 'orders/order-confirmation.html', {'order': order})
         response.delete_cookie('cart')

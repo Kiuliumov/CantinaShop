@@ -5,74 +5,79 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<div class="bg-gray-800 p-10 rounded-2xl shadow-2xl w-full max-w-md">
-    <h2 class="text-4xl font-extrabold mb-8 text-gray-100 text-center tracking-tight">
-        Log in
-    </h2>
+    <div class="bg-gray-800 p-10 rounded-2xl shadow-2xl w-full max-w-md">
+        <h2 class="text-4xl font-extrabold mb-8 text-gray-100 text-center tracking-tight">
+            Log in
+        </h2>
 
-    <form action="{% url 'login' %}" method="POST" class="space-y-7" novalidate>
-        {% csrf_token %}
+        <form action="{% url 'login' %}" method="POST" class="space-y-7" novalidate>
+            {% csrf_token %}
 
-        {% for field in form %}
-            <div>
-                <label for="{{ field.id_for_label }}" class="block text-gray-300 mb-2 font-semibold tracking-wide">
-                    {{ field.label }}
-                </label>
+            {% for field in form %}
+                <div>
+                    <label for="{{ field.id_for_label }}" class="block text-gray-300 mb-2 font-semibold tracking-wide">
+                        {{ field.label }}
+                    </label>
 
-                {% if field.name == "password" %}
-                    <div class="relative">
-                        {{ field|add_class:"w-full px-5 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-3 focus:ring-indigo-500 focus:border-indigo-400 transition pr-12" }}
+                    {% if field.name == "password" %}
+                        <div class="relative">
+                            {{ field|add_class:"w-full px-5 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-3 focus:ring-indigo-500 focus:border-indigo-400 transition pr-12" }}
 
-                        <button
-                            type="button"
-                            onclick="togglePasswordVisibility()"
-                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-indigo-500 focus:outline-none"
-                            tabindex="-1"
-                            aria-label="Toggle password visibility"
-                        >
-                            <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                                 viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M2.458 12C3.732 7.943 7.523 5 12 5
+                            <button
+                                    type="button"
+                                    onclick="togglePasswordVisibility()"
+                                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-indigo-500 focus:outline-none"
+                                    tabindex="-1"
+                                    aria-label="Toggle password visibility"
+                            >
+                                <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                     viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M2.458 12C3.732 7.943 7.523 5 12 5
                                          c4.478 0 8.268 2.943 9.542 7
                                          -1.274 4.057-5.064 7-9.542 7
                                          -4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                {% else %}
-                    {{ field|add_class:"w-full px-5 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-3 focus:ring-indigo-500 focus:border-indigo-400 transition" }}
-                {% endif %}
+                                </svg>
+                            </button>
+                        </div>
+                    {% else %}
+                        {{ field|add_class:"w-full px-5 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-3 focus:ring-indigo-500 focus:border-indigo-400 transition" }}
+                    {% endif %}
 
-                {% if field.errors %}
-                    {% for error in field.errors %}
-                        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
-                    {% endfor %}
-                {% endif %}
-            </div>
-        {% endfor %}
-
-        {% if form.non_field_errors %}
-            {% for error in form.non_field_errors %}
-                <div class="text-red-500 text-sm mb-4">{{ error }}</div>
+                    {% if field.errors %}
+                        {% for error in field.errors %}
+                            <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
             {% endfor %}
-        {% endif %}
 
-        <button
-            type="submit"
-            class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-3 rounded-lg shadow-lg transition"
-        >
-            Log In
-        </button>
-    </form>
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                    <div class="text-red-500 text-sm mb-4">{{ error }}</div>
+                {% endfor %}
+            {% endif %}
 
-    <p class="mt-8 text-center text-gray-400 text-sm">
-        Don't have an account?
-        <a href="{% url 'register' %}" class="text-indigo-500 hover:underline font-semibold">Sign up</a>
-    </p>
-</div>
+            <button
+                    type="submit"
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-3 rounded-lg shadow-lg transition"
+            >
+                Log In
+            </button>
+        </form>
+        <p class="mt-4 text-center text-sm text-gray-400">
+            <a href="{% url 'password_reset' %}" class="text-indigo-500 hover:underline font-semibold">
+                Forgot your password?
+            </a>
+        </p>
+    
+        <p class="mt-8 text-center text-gray-400 text-sm">
+            Don't have an account?
+            <a href="{% url 'register' %}" class="text-indigo-500 hover:underline font-semibold">Sign up</a>
+        </p>
+    </div>
 
-<script src="{% static 'js/account/passwordToggle.js' %}"></script>
+    <script src="{% static 'js/account/passwordToggle.js' %}"></script>
 {% endblock %}
