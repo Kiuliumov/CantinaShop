@@ -133,10 +133,11 @@ class ProductDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('product-list')
 
-    def delete(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
+        obj = self.get_object()
+        obj.delete()
         messages.success(request, "Product deleted successfully.")
-        return super().delete(request, *args, **kwargs)
-
+        return redirect(self.success_url)
 
 class CommentDeleteView(LoginRequiredMixin, DeleteView):
     model = Comment
@@ -148,9 +149,12 @@ class CommentDeleteView(LoginRequiredMixin, DeleteView):
             raise PermissionDenied
         return super().dispatch(request, *args, **kwargs)
 
-    def delete(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
+        obj = self.get_object()
+        product_slug = obj.product.slug
+        obj.delete()
         messages.success(request, "Comment deleted successfully.")
-        return super().delete(request, *args, **kwargs)
+        return redirect('product-details', slug=product_slug)
 
     def get_success_url(self):
         comment = self.get_object()
