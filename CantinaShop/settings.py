@@ -30,6 +30,8 @@ ALLOWED_HOSTS = ['*']
 THIRD_PARTY_APPS = [
     'rest_framework',
     'drf_spectacular',
+    'tailwind',
+    'theme'
 ]
 
 DJANGO_APPS = [
@@ -131,7 +133,7 @@ TEMPLATES = [
         },
     },
 ]
-
+TAILWIND_APP_NAME = 'theme'
 LOG_DIR = BASE_DIR / 'logs'
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 
