@@ -1,9 +1,7 @@
-from django.http import JsonResponse
-from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, FormView, CreateView
+from django.views.generic import TemplateView, CreateView
 from pyexpat.errors import messages
-
+from django.contrib import messages
 from common.forms import ContactMessageForm
 from common.mixins import AdminRequiredMixin
 
@@ -27,3 +25,11 @@ class ContactView(CreateView):
     template_name = 'index/contacts.html'
     form_class = ContactMessageForm
     success_url = reverse_lazy('index')
+
+    def form_valid(self, form):
+        messages.success(self.request, "Your message has been sent successfully!")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, "There was an error submitting the form. Please check the fields and try again.")
+        return super().form_invalid(form)
