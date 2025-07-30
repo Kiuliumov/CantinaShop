@@ -19,23 +19,5 @@
         {% include "shopping_cart/partials/checkout/_payment_form.html" %}
     {% endif %}
 </div>
-
-{% include "shopping_cart/partials/checkout/_registration_modal.html" %}
 {% endblock %}
 
-{% block script %}
-    {{ block.super }}
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const isComplete = {{ isRegistrationComplete|yesno:"true,false" }};
-            if (!isComplete) {
-                const modal = document.getElementById('registrationModal');
-                const okBtn = document.getElementById('modalOkBtn');
-                modal.classList.remove('hidden');
-                okBtn.addEventListener('click', () => {
-                    window.location.href = "{% url 'account' %}";
-                });
-            }
-        });
-    </script>
-{% endblock %}

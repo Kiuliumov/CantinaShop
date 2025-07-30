@@ -92,7 +92,7 @@ class CheckoutView(LoginRequiredMixin, View):
             if missing_fields:
                 is_registration_complete = False
                 messages.warning(request, f"Please complete your profile: missing {', '.join(missing_fields)}.")
-
+                return redirect('account')
         cart_items, cart_total = get_cart_items_and_total(request)
 
         if not cart_items:
