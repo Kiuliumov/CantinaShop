@@ -3,40 +3,40 @@
 {% block title %}Generate API Key{% endblock %}
 
 {% block content %}
-  <div
-    class="max-w-2xl mx-auto p-10 rounded-3xl shadow-2xl border border-indigo-600 bg-gray-900 text-gray-200"
-    style="background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);"
-  >
-    <h1 class="text-3xl font-semibold mb-8 text-center text-gray-100 tracking-wide">
-      Generate New API Key
-    </h1>
-
-    <p class="mb-6 text-center text-gray-300">
-      Click the button below to generate a new API key. Only admins can perform this action.
-    </p>
-
-    <div class="flex justify-center">
-      <button
-        id="generateApiKeyBtn"
-        class="bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-semibold py-3 px-8 rounded-xl shadow-lg transition focus:outline-none focus:ring-4 focus:ring-indigo-500"
-      >
-        Generate API Key
-      </button>
-    </div>
-
     <div
-      id="apiKeyResult"
-      class="mt-8 p-6 bg-gray-800 border border-indigo-700 rounded-xl text-gray-300 break-words font-mono text-sm select-text"
-      style="min-height: 4rem;"
+            class="max-w-2xl mx-auto p-10 rounded-3xl shadow-2xl border border-indigo-600 bg-gray-900 text-gray-200"
+            style="background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);"
     >
+        <h1 class="text-3xl font-semibold mb-8 text-center text-gray-100 tracking-wide">
+            Generate New API Key
+        </h1>
+
+        <p class="mb-6 text-center text-gray-300">
+            Click the button below to generate a new API key. Only admins can perform this action.
+        </p>
+
+        <div class="flex justify-center">
+            <button
+                    id="generateApiKeyBtn"
+                    class="bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-semibold py-3 px-8 rounded-xl shadow-lg transition focus:outline-none focus:ring-4 focus:ring-indigo-500"
+            >
+                Generate API Key
+            </button>
+        </div>
+
+        <div
+                id="apiKeyResult"
+                class="mt-8 p-6 bg-gray-800 border border-indigo-700 rounded-xl text-gray-300 break-words font-mono text-sm select-text"
+                style="min-height: 4rem;"
+        >
+        </div>
     </div>
-  </div>
 {% endblock %}
 
 {% block script %}
-  {{ block.super }}
+    {{ block.super }}
     <script>
         window.API_KEY_URL = "{% url "generate-key" %}"
     </script>
-  <script src="{% static 'js/api/generateKey.js' %}"></script>
+    <script src="{% static 'js/api/generateKey.js' %}"></script>
 {% endblock %}
