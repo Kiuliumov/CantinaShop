@@ -30,15 +30,31 @@ document.addEventListener("DOMContentLoaded", function () {
             const recentMessagesSet = new Set();
 
             function showBanNotice() {
+                if (document.querySelector('.ban-notice'))
+                    return;
                 const banNotice = document.createElement('div');
-                banNotice.className = 'fixed bottom-20 right-6 max-w-sm bg-red-100 border border-red-300 text-red-800 px-4 py-3 rounded-lg shadow-lg z-50';
+                banNotice.className = 'ban-notice fixed top-6 right-6 max-w-sm bg-red-100 border border-red-300 text-red-800 px-4 py-3 rounded-lg shadow-lg z-50 flex justify-between items-start';
                 banNotice.innerHTML = `
-                    <strong class="block font-semibold mb-1">Chat Unavailable</strong>
-                    <span>You are currently banned from using the chat feature.</span>
+                    <div>
+                        <strong class="block font-semibold mb-1">Chat Unavailable</strong>
+                        <span>You are currently banned from using the chat feature.</span>
+                    </div>
+                    <button
+                        aria-label="Close"
+                        class="ml-4 text-red-800 hover:text-red-900 font-bold"
+                        style="background: none; border: none; font-size: 1.25rem; line-height: 1; cursor: pointer;"
+                    >&times;</button>
                 `;
+
+                const closeBtn = banNotice.querySelector('button');
+                closeBtn.addEventListener('click', () => {
+                    banNotice.remove();
+                });
+
                 document.body.appendChild(banNotice);
                 setTimeout(() => banNotice.remove(), 6000);
             }
+
 
             if (chatToggleBtn) {
                 chatToggleBtn.addEventListener('click', () => {
@@ -86,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 addMessage(msg);
             }
 
-            function addMessage({ text, avatarUrl, timestamp, fromAdmin }) {
+            function addMessage({text, avatarUrl, timestamp, fromAdmin}) {
                 const container = document.createElement('div');
                 container.className = `flex ${fromAdmin ? 'justify-end' : 'justify-start'} mb-3`;
 
@@ -190,7 +206,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (!chatSocket || chatSocket.readyState !== WebSocket.OPEN) return;
                     const message = chatInput.value.trim();
                     if (!message) return;
-                    chatSocket.send(JSON.stringify({ message }));
+                    chatSocket.send(JSON.stringify({message}));
                     chatInput.value = '';
                 });
             }
