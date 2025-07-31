@@ -75,6 +75,10 @@ class Login(ProfileProhibitedMixin, LoginView):
 class Logout(LogoutView):
     next_page = reverse_lazy('index')
 
+    def dispatch(self, request, *args, **kwargs):
+        messages.success(request, "You have been logged out.")
+        return super().dispatch(request, *args, **kwargs)
+
 class AccountUpdateView(LoginRequiredMixin, UpdateView):
     model = Account
     form_class = AccountForm
@@ -101,6 +105,13 @@ class AccountUpdateView(LoginRequiredMixin, UpdateView):
         ]
         return context
 
+    def form_valid(self, form):
+        messages.success(self.request, "Your account information has been updated successfully.")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, "There was an error with your account information. Please try again.")
+        return super().form_valid(form)
 
 class AccountDeactivateView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
@@ -125,9 +136,4 @@ class CustomPasswordResetView(PasswordResetView):
             reset_link = f"http://{domain}{reset_path}"
 
             send_password_reset_email_task.delay(user.id, domain, reset_link)
-
-        messages.success(
-            self.request,
-            "If your email exists in our system, we've sent instructions to reset your password."
-        )
         return redirect(self.success_url)
