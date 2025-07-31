@@ -1,6 +1,8 @@
 import secrets
 from datetime import timedelta
 
+from django.templatetags.static import static
+from django.urls import reverse
 from django.utils.timezone import now, localtime
 from rest_framework import status
 from django.contrib.auth import get_user_model
@@ -44,7 +46,7 @@ class ChatMessagesAPIView(APIView):
             limit = 100
 
         messages_qs = messages_qs.order_by('-timestamp')[:limit]
-        messages_qs = messages_qs.reverse()
+        messages_qs = reversed(messages_qs)
 
         serializer = ChatMessageSerializer(messages_qs, many=True, context={'request': request})
 
@@ -161,3 +163,20 @@ class GenerateAPIKeyAPIView(AdminRequiredMixin, APIView):
             'expires_at': expiry,
             'user': user.username,
         }, status=status.HTTP_201_CREATED)
+
+
+class ChatFrontendConfigAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        return Response({
+            "userId": user.id,
+            "wsProtocol": "wss" if request.is_secure() else "ws",
+            "host": request.get_host(),
+            "apiMessagesUrl": reverse('chat-messages-api-base', args=[user.id]),
+            "adminAvatarUrl": static('images/admin.jpg'),
+            "defaultAvatarUrl": static('images/avatar.png'),
+            "userIsStaffOrSuperuser": user.is_staff or user.is_superuser,
+            "userIsChatBanned": getattr(user, "is_chat_banned", False),
+        })

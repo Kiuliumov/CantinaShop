@@ -70,19 +70,6 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="{% static 'js/utils/iconsLoad.js' %}"></script>
     {% if user.is_authenticated %}
-        <script>
-            window.chatConfig = {
-                userId: {{ request.user.id|default:'null' }},
-                wsProtocol: "{{ request.is_secure|yesno:'wss,ws'|escapejs }}",
-                host: "{{ request.get_host|escapejs }}",
-                apiMessagesUrl: "{% url 'chat-messages-api-base' request.user.id %}",
-                adminAvatarUrl: "{% static 'images/admin.jpg' %}",
-                defaultAvatarUrl: "{% static 'images/avatar.png' %}",
-                userIsStaffOrSuperuser: {{ user.is_staff|yesno:"true,false" }} || {{ user.is_superuser|yesno:"true,false" }},
-                userIsChatBanned: {{ request.user.is_chat_banned|yesno:"true,false" }},
-
-            };
-        </script>
         <script src="{% static 'js/chat/chatFrontEnd.js' %}"></script>
     {% endif %}
 {% endblock %}

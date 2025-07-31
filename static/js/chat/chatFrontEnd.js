@@ -1,187 +1,202 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const {
-    adminAvatarUrl,
-    defaultAvatarUrl,
-    userId,
-    wsProtocol,
-    host,
-    apiMessagesUrl,
-    userIsChatBanned
-  } = window.chatConfig || {};
+    (async function () {
+        try {
+            const response = await fetch("/api/chat-config/");
+            if (!response.ok) throw new Error("Failed to load chat config");
 
+            const config = await response.json();
 
-  if (!userId) return;
+            const {
+                adminAvatarUrl,
+                defaultAvatarUrl,
+                userId,
+                wsProtocol,
+                host,
+                apiMessagesUrl,
+                userIsChatBanned,
+                userIsStaffOrSuperuser
+            } = config;
 
-  const chatToggleBtn = document.getElementById('chat-toggle');
-  const chatBox = document.getElementById('chat-box');
-  const chatCloseBtn = document.getElementById('chat-close');
-  const chatMessages = document.getElementById('chat-messages');
-  const chatForm = document.getElementById('chat-form');
-  const chatInput = document.getElementById('chat-input');
+            if (!userId) return;
 
-  let chatSocket = null;
-  const recentMessagesSet = new Set();
+            const chatToggleBtn = document.getElementById('chat-toggle');
+            const chatBox = document.getElementById('chat-box');
+            const chatCloseBtn = document.getElementById('chat-close');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatForm = document.getElementById('chat-form');
+            const chatInput = document.getElementById('chat-input');
 
-  function showBanNotice() {
-    const banNotice = document.createElement('div');
-    banNotice.className = 'fixed bottom-20 right-6 max-w-sm bg-red-100 border border-red-300 text-red-800 px-4 py-3 rounded-lg shadow-lg z-50';
-    banNotice.innerHTML = `
-      <strong class="block font-semibold mb-1">Chat Unavailable</strong>
-      <span>You are currently banned from using the chat feature.</span>
-    `;
-    document.body.appendChild(banNotice);
-    setTimeout(() => banNotice.remove(), 6000);
-  }
+            let chatSocket = null;
+            const recentMessagesSet = new Set();
 
-  if (chatToggleBtn) {
-    chatToggleBtn.addEventListener('click', () => {
-        if (window.chatConfig.userIsStaffOrSuperuser) {
-        window.location.href = "/chat/admin";
-        return;
-  }
+            function showBanNotice() {
+                const banNotice = document.createElement('div');
+                banNotice.className = 'fixed bottom-20 right-6 max-w-sm bg-red-100 border border-red-300 text-red-800 px-4 py-3 rounded-lg shadow-lg z-50';
+                banNotice.innerHTML = `
+                    <strong class="block font-semibold mb-1">Chat Unavailable</strong>
+                    <span>You are currently banned from using the chat feature.</span>
+                `;
+                document.body.appendChild(banNotice);
+                setTimeout(() => banNotice.remove(), 6000);
+            }
 
-      if (userIsChatBanned) {
-        showBanNotice();
-        return;
-      }
+            if (chatToggleBtn) {
+                chatToggleBtn.addEventListener('click', () => {
+                    if (userIsStaffOrSuperuser) {
+                        window.location.href = "/chat/admin";
+                        return;
+                    }
 
-      if (chatBox.classList.contains('invisible')) {
-        chatBox.classList.remove('invisible', 'opacity-0');
-        chatBox.classList.add('opacity-100');
-        chatInput.focus();
-        loadChatMessages();
-        connectSocket();
-      } else {
-        chatBox.classList.add('opacity-0', 'invisible');
-      }
-    });
-  }
+                    if (userIsChatBanned) {
+                        showBanNotice();
+                        return;
+                    }
 
-  if (chatCloseBtn) {
-    chatCloseBtn.addEventListener('click', () => {
-      chatBox.classList.add('opacity-0', 'invisible');
-    });
-  }
+                    if (chatBox.classList.contains('invisible')) {
+                        chatBox.classList.remove('invisible', 'opacity-0');
+                        chatBox.classList.add('opacity-100');
+                        chatInput.focus();
+                        loadChatMessages();
+                        connectSocket();
+                    } else {
+                        chatBox.classList.add('opacity-0', 'invisible');
+                    }
+                });
+            }
 
-  function messageKey(msg) {
-    return `${msg.timestamp}|${msg.sender_id}|${msg.text}`;
-  }
+            if (chatCloseBtn) {
+                chatCloseBtn.addEventListener('click', () => {
+                    chatBox.classList.add('opacity-0', 'invisible');
+                });
+            }
 
-  function addMessageSafe(msg) {
-    const key = messageKey(msg);
-    if (recentMessagesSet.has(key)) return;
-    recentMessagesSet.add(key);
-    if (recentMessagesSet.size > 500) {
-      const keys = Array.from(recentMessagesSet).slice(-250);
-      recentMessagesSet.clear();
-      keys.forEach(k => recentMessagesSet.add(k));
-    }
-    addMessage(msg);
-  }
+            function messageKey(msg) {
+                return `${msg.timestamp}|${msg.sender_id}|${msg.text}`;
+            }
 
-  function addMessage({ text, avatarUrl, timestamp, fromAdmin }) {
-    const container = document.createElement('div');
-    container.className = `flex ${fromAdmin ? 'justify-end' : 'justify-start'} mb-3`;
+            function addMessageSafe(msg) {
+                const key = messageKey(msg);
+                if (recentMessagesSet.has(key)) return;
+                recentMessagesSet.add(key);
+                if (recentMessagesSet.size > 500) {
+                    const keys = Array.from(recentMessagesSet).slice(-250);
+                    recentMessagesSet.clear();
+                    keys.forEach(k => recentMessagesSet.add(k));
+                }
+                addMessage(msg);
+            }
 
-    const contentRow = document.createElement('div');
-    contentRow.className = `flex items-center space-x-2 ${fromAdmin ? 'flex-row-reverse space-x-reverse' : ''}`;
+            function addMessage({ text, avatarUrl, timestamp, fromAdmin }) {
+                const container = document.createElement('div');
+                container.className = `flex ${fromAdmin ? 'justify-end' : 'justify-start'} mb-3`;
 
-    const avatar = document.createElement('img');
-    avatar.src = avatarUrl || defaultAvatarUrl;
-    avatar.alt = 'avatar';
-    avatar.className = 'w-8 h-8 rounded-full object-cover';
+                const contentRow = document.createElement('div');
+                contentRow.className = `flex items-center space-x-2 ${fromAdmin ? 'flex-row-reverse space-x-reverse' : ''}`;
 
-    const messageAndTimestamp = document.createElement('div');
-    messageAndTimestamp.className = 'flex flex-col';
+                const avatar = document.createElement('img');
+                avatar.src = avatarUrl || defaultAvatarUrl;
+                avatar.alt = 'avatar';
+                avatar.className = 'w-8 h-8 rounded-full object-cover';
 
-    const message = document.createElement('div');
-    message.className = `px-4 py-2 rounded-lg text-sm break-words max-w-xs ${fromAdmin ? 'bg-gray-200 text-gray-900 rounded-br-none' : 'bg-blue-500 text-white rounded-bl-none'}`;
-    message.textContent = text;
+                const messageAndTimestamp = document.createElement('div');
+                messageAndTimestamp.className = 'flex flex-col';
 
-    const time = document.createElement('span');
-    time.className = `text-xs text-gray-400 mt-1 ${fromAdmin ? 'text-right' : 'text-left'}`;
-    time.textContent = timestamp ? new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+                const message = document.createElement('div');
+                message.className = `px-4 py-2 rounded-lg text-sm break-words max-w-xs ${fromAdmin ? 'bg-gray-200 text-gray-900 rounded-br-none' : 'bg-blue-500 text-white rounded-bl-none'}`;
+                message.textContent = text;
 
-    messageAndTimestamp.appendChild(message);
-    messageAndTimestamp.appendChild(time);
+                const time = document.createElement('span');
+                time.className = `text-xs text-gray-400 mt-1 ${fromAdmin ? 'text-right' : 'text-left'}`;
+                time.textContent = timestamp ? new Date(timestamp).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }) : '';
 
-    contentRow.appendChild(avatar);
-    contentRow.appendChild(messageAndTimestamp);
+                messageAndTimestamp.appendChild(message);
+                messageAndTimestamp.appendChild(time);
 
-    container.appendChild(contentRow);
-    chatMessages.appendChild(container);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
+                contentRow.appendChild(avatar);
+                contentRow.appendChild(messageAndTimestamp);
 
-  function clearChat() {
-    chatMessages.innerHTML = '';
-    recentMessagesSet.clear();
-  }
+                container.appendChild(contentRow);
+                chatMessages.appendChild(container);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
 
-  async function loadChatMessages() {
-    clearChat();
-    if (!apiMessagesUrl) return;
+            function clearChat() {
+                chatMessages.innerHTML = '';
+                recentMessagesSet.clear();
+            }
 
-    try {
-      const res = await fetch(apiMessagesUrl);
-      if (!res.ok) throw new Error('Failed to fetch messages');
-      const data = await res.json();
-      const recentMessages = data.messages.slice(-100);
-      recentMessages.forEach(msg => {
-        addMessageSafe({
-          text: msg.message,
-          username: msg.sender_username || 'You',
-          avatarUrl: msg.from_admin ? adminAvatarUrl : (msg.avatar_url || defaultAvatarUrl),
-          timestamp: msg.timestamp,
-          fromAdmin: msg.from_admin,
-          sender_id: msg.sender_id,
-        });
-      });
-    } catch (err) {
-      console.error('Error loading messages:', err);
-      chatMessages.innerHTML = '<div class="text-center text-red-500">Failed to load messages.</div>';
-    }
-  }
+            async function loadChatMessages() {
+                clearChat();
+                if (!apiMessagesUrl) return;
 
-  function connectSocket() {
-    if (chatSocket) chatSocket.close();
+                try {
+                    const res = await fetch(apiMessagesUrl);
+                    if (!res.ok) throw new Error('Failed to fetch messages');
+                    const data = await res.json();
+                    const recentMessages = data.messages.slice(-100);
+                    recentMessages.forEach(msg => {
+                        addMessageSafe({
+                            text: msg.message,
+                            username: msg.sender_username || 'You',
+                            avatarUrl: msg.from_admin ? adminAvatarUrl : (msg.avatar_url || defaultAvatarUrl),
+                            timestamp: msg.timestamp,
+                            fromAdmin: msg.from_admin,
+                            sender_id: msg.sender_id,
+                        });
+                    });
+                } catch (err) {
+                    console.error('Error loading messages:', err);
+                    chatMessages.innerHTML = '<div class="text-center text-red-500">Failed to load messages.</div>';
+                }
+            }
 
-    const socketUrl = `${wsProtocol}://${host}/ws/chat/user/${userId}/`;
-    chatSocket = new WebSocket(socketUrl);
+            function connectSocket() {
+                if (chatSocket) chatSocket.close();
 
-    chatSocket.onopen = () => {
-      chatInput.disabled = false;
-      chatForm.querySelector('button[type="submit"]').disabled = false;
-    };
+                const socketUrl = `${wsProtocol}://${host}/ws/chat/user/${userId}/`;
+                chatSocket = new WebSocket(socketUrl);
 
-    chatSocket.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      addMessageSafe({
-        text: data.message,
-        username: data.username || (data.from_admin ? 'Admin' : 'You'),
-        avatarUrl: data.from_admin ? adminAvatarUrl : (data.avatar_url || defaultAvatarUrl),
-        timestamp: data.timestamp,
-        fromAdmin: data.from_admin,
-        sender_id: data.sender_id,
-      });
-    };
+                chatSocket.onopen = () => {
+                    chatInput.disabled = false;
+                    chatForm.querySelector('button[type="submit"]').disabled = false;
+                };
 
-    chatSocket.onclose = () => {
-      chatInput.disabled = true;
-      chatForm.querySelector('button[type="submit"]').disabled = true;
-    };
+                chatSocket.onmessage = (e) => {
+                    const data = JSON.parse(e.data);
+                    addMessageSafe({
+                        text: data.message,
+                        username: data.username || (data.from_admin ? 'Admin' : 'You'),
+                        avatarUrl: data.from_admin ? adminAvatarUrl : (data.avatar_url || defaultAvatarUrl),
+                        timestamp: data.timestamp,
+                        fromAdmin: data.from_admin,
+                        sender_id: data.sender_id,
+                    });
+                };
 
-    chatSocket.onerror = (err) => console.error('WebSocket error:', err);
-  }
+                chatSocket.onclose = () => {
+                    chatInput.disabled = true;
+                    chatForm.querySelector('button[type="submit"]').disabled = true;
+                };
 
-  if (chatForm) {
-    chatForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      if (!chatSocket || chatSocket.readyState !== WebSocket.OPEN) return;
-      const message = chatInput.value.trim();
-      if (!message) return;
-      chatSocket.send(JSON.stringify({ message }));
-      chatInput.value = '';
-    });
-  }
+                chatSocket.onerror = (err) => console.error('WebSocket error:', err);
+            }
+
+            if (chatForm) {
+                chatForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    if (!chatSocket || chatSocket.readyState !== WebSocket.OPEN) return;
+                    const message = chatInput.value.trim();
+                    if (!message) return;
+                    chatSocket.send(JSON.stringify({ message }));
+                    chatInput.value = '';
+                });
+            }
+
+        } catch (err) {
+            console.error("Chat config load failed:", err);
+        }
+    })();
 });
