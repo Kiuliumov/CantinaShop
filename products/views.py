@@ -275,7 +275,7 @@ class CartView(View):
         return render(request, 'shopping_cart/shopping_cart_list.html', context)
 
 
-class CreateCategory(CreateView):
+class CreateCategory(AdminRequiredMixin, CreateView):
     template_name = 'products/create_category.html'
     success_url = reverse_lazy('product-list')
     form_class = CategoryForm
