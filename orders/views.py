@@ -71,6 +71,12 @@ class CheckoutView(LoginRequiredMixin, View):
         user = request.user
         account = getattr(user, 'account', None)
 
+        cart_items, cart_total = get_cart_items_and_total(request)
+
+        if not cart_items:
+            messages.error(request, "Your cart is empty. Please add items before checking out.")
+            return redirect('cart')
+
         is_registration_complete = True
         missing_fields = []
 
@@ -93,11 +99,7 @@ class CheckoutView(LoginRequiredMixin, View):
                 is_registration_complete = False
                 messages.warning(request, f"Please complete your profile: missing {', '.join(missing_fields)}.")
                 return redirect('account')
-        cart_items, cart_total = get_cart_items_and_total(request)
 
-        if not cart_items:
-            messages.error(request, "Your cart is empty. Please add items before checking out.")
-            return redirect('cart')
 
         context = {
             'cart_items': cart_items,
