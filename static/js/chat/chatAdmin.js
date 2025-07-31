@@ -1,8 +1,25 @@
-(function () {
-  let adminAvatarUrl = window.chatConfig?.adminAvatarUrl || '/static/images/admin.jpg';
-  let defaultAvatarUrl = window.chatConfig?.defaultAvatarUrl || '/static/images/avatar.png';
-  let messagesApiUrlBase = window.chatConfig?.messagesApiUrlBase || '/api/messages/';
-  let websocketBaseUrl = window.chatConfig?.websocketBaseUrl || (window.location.protocol === "https:" ? "wss://" : "ws://") + window.location.host;
+(async function () {
+  let adminAvatarUrl = '/static/images/admin.jpg';
+  let defaultAvatarUrl = '/static/images/avatar.png';
+  let messagesApiUrlBase = '/api/messages/';
+  let websocketBaseUrl = (window.location.protocol === "https:" ? "wss://" : "ws://") + window.location.host;
+
+  try {
+    const res = await fetch('/api/chat-config/');
+    if (!res.ok) throw new Error('Failed to load chat config');
+    const config = await res.json();
+
+    adminAvatarUrl = config.adminAvatarUrl || adminAvatarUrl;
+    defaultAvatarUrl = config.defaultAvatarUrl || defaultAvatarUrl;
+
+    messagesApiUrlBase = config.apiMessagesUrl.replace(/\/\d+\/?$/, '/');
+
+    const wsProtocol = config.wsProtocol || (window.location.protocol === "https:" ? "wss" : "ws");
+    const host = config.host || window.location.host;
+    websocketBaseUrl = `${wsProtocol}://${host}`;
+  } catch (err) {
+    console.error('Failed to load chat config:', err);
+  }
 
   let currentChatUserId = null;
   let chatSocket = null;
@@ -98,26 +115,26 @@
   }
 
   async function loadChatMessages(userId) {
-  clearChat();
-  try {
-    const url = `${messagesApiUrlBase}${userId}/?limit=100`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('Failed to fetch messages');
-    const data = await res.json();
-    data.messages.forEach(msg => {
-      addMessageSafe({
-        text: msg.message,
-        username: msg.sender_username,
-        avatarUrl: (msg.sender_id === 0 || msg.from_admin) ? adminAvatarUrl : (msg.avatar_url || defaultAvatarUrl),
-        timestamp: msg.timestamp,
-        fromAdmin: msg.sender_id === 0 || msg.from_admin,
-        sender_id: msg.sender_id,
+    clearChat();
+    try {
+      const url = `${messagesApiUrlBase}${userId}/?limit=100`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Failed to fetch messages');
+      const data = await res.json();
+      data.messages.forEach(msg => {
+        addMessageSafe({
+          text: msg.message,
+          username: msg.sender_username,
+          avatarUrl: (msg.sender_id === 0 || msg.from_admin) ? adminAvatarUrl : (msg.avatar_url || defaultAvatarUrl),
+          timestamp: msg.timestamp,
+          fromAdmin: msg.sender_id === 0 || msg.from_admin,
+          sender_id: msg.sender_id,
+        });
       });
-    });
-  } catch (err) {
-    console.error(err);
+    } catch (err) {
+      console.error(err);
+    }
   }
-}
 
   function connectSocket(userId) {
     if (chatSocket) {
@@ -187,4 +204,10 @@
   window.chatApp = {
     init,
   };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
 })();
