@@ -7,4 +7,5 @@ urlpatterns = [
     path('about/', views.About.as_view(), name='about'),
     path('contact/', views.ContactView.as_view(), name='contact'),
     path('generate_api_key/', views.GenerateAPIKeyREST.as_view(), name='generate-api-key'),
+    path('apikeys/', views.APIKeyListView.as_view(), name='apikey-list'),
 ]

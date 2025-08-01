@@ -1,7 +1,11 @@
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import TemplateView, CreateView
 from pyexpat.errors import messages
 from django.contrib import messages
+
+from api.models import APIKey
 from common.forms import ContactMessageForm
 from common.mixins import AdminRequiredMixin
 
@@ -33,3 +37,29 @@ class ContactView(CreateView):
     def form_invalid(self, form):
         messages.error(self.request, "There was an error submitting the form. Please check the fields and try again.")
         return super().form_invalid(form)
+
+
+class APIKeyListView(AdminRequiredMixin, View):
+    template_name = "api/key-list.html"
+
+    def get(self, request):
+        if request.user.is_superuser:
+            api_keys = APIKey.objects.all()
+        else:
+            api_keys = APIKey.objects.filter(user=request.user)
+        return render(request, self.template_name, {"api_keys": api_keys})
+
+    def post(self, request):
+        key_id = request.POST.get("key_id")
+        if request.user.is_superuser:
+            api_key = get_object_or_404(APIKey, id=key_id)
+        else:
+            api_key = get_object_or_404(APIKey, id=key_id, user=request.user)
+
+        if request.user.is_superuser or (request.user.is_staff and api_key.user == request.user):
+            api_key.delete()
+        else:
+            messages.error(request, "You are not allowed to delete this API key!")
+            return redirect('index')
+        messages.success(request, "API key deleted successfully.")
+        return redirect("apikey-list")
