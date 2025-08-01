@@ -1,10 +1,10 @@
-<footer class="bg-gray-900 border-t border-gray-700 text-gray-400 pt-12 pb-12 mt-auto">
+<footer class="bg-gray-900 border-t border-gray-700 text-gray-400 pt-16 pb-16 mt-auto">
   <div class="container mx-auto px-8 sm:px-12">
-    <div class="flex flex-wrap justify-between items-start gap-y-12 gap-x-20 w-full">
-      <div class="flex flex-wrap gap-x-16 gap-y-8 w-full max-w-4xl">
+    <div class="flex flex-wrap justify-center items-start gap-y-12 gap-x-20 w-full mb-10">
+      <div class="flex flex-wrap gap-x-16 gap-y-8 w-full max-w-4xl justify-center">
         <div class="flex-1 min-w-[150px]">
-          <h3 class="text-gray-300 font-semibold mb-3">Shop</h3>
-          <ul class="space-y-2 text-gray-400 text-sm">
+          <h3 class="text-gray-300 font-semibold mb-3 text-center">Shop</h3>
+          <ul class="space-y-2 text-gray-400 text-sm text-center">
             <li><a href="{% url 'product-list' %}" class="hover:text-indigo-400 transition">All Products</a></li>
             <li><a href="{% url 'product-list' %}?category=Glasses" class="hover:text-indigo-400 transition">Glasses</a></li>
             <li><a href="{% url 'product-list' %}?category=Rings" class="hover:text-indigo-400 transition">Rings</a></li>
@@ -14,8 +14,8 @@
         </div>
 
         <div class="flex-1 min-w-[150px]">
-          <h3 class="text-gray-300 font-semibold mb-3">Company</h3>
-          <ul class="space-y-2 text-gray-400 text-sm">
+          <h3 class="text-gray-300 font-semibold mb-3 text-center">Company</h3>
+          <ul class="space-y-2 text-gray-400 text-sm text-center">
             <li><a href="{% url 'about' %}" class="hover:text-indigo-400 transition">About Us</a></li>
             <li><a href="{% url 'contact' %}" class="hover:text-indigo-400 transition">Contact</a></li>
             <li><a href="{% url 'index' %}" class="hover:text-indigo-400 transition">Home</a></li>
@@ -24,8 +24,8 @@
         </div>
 
         <div class="flex-1 min-w-[150px]">
-          <h3 class="text-gray-300 font-semibold mb-3">Account</h3>
-          <ul class="space-y-2 text-gray-400 text-sm">
+          <h3 class="text-gray-300 font-semibold mb-3 text-center">Account</h3>
+          <ul class="space-y-2 text-gray-400 text-sm text-center">
             {% if user.is_authenticated %}
               <li><a href="{% url 'account' %}" class="hover:text-indigo-400 transition">My Account</a></li>
               <li>
@@ -44,6 +44,6 @@
       </div>
     </div>
 
-    <p class="text-gray-500 text-sm mt-6 mb-5 text-center md:text-left">&copy; {{ now.year }} CantinaShop. All rights reserved.</p>
+    <p class="text-gray-500 text-sm mt-6 mb-8 text-center">&copy; {{ now.year }} CantinaShop. All rights reserved.</p>
   </div>
 </footer>
