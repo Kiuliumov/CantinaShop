@@ -47,7 +47,7 @@ class APIKeyListView(AdminRequiredMixin, View):
             api_keys = APIKey.objects.all().order_by('-created_at')
         else:
             api_keys = APIKey.objects.filter(user=request.user)
-        return render(request, self.template_name, {"api_keys": api_keys}).order_by('-created_at')
+        return render(request, self.template_name, {"api_keys": api_keys})
 
     def post(self, request):
         key_id = request.POST.get("key_id")
