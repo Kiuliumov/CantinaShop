@@ -1,20 +1,12 @@
-from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
 from django.templatetags.static import static
 from django.views.generic import TemplateView
 from accounts.models import Account
+from common.mixins import AdminRequiredMixin
 
 
-
-class AdminChatHubView(UserPassesTestMixin, TemplateView):
+class AdminChatHubView(AdminRequiredMixin, TemplateView):
     template_name = 'chat/hub.html'
-
-    def test_func(self):
-        user = self.request.user
-        return user.is_staff or user.is_superuser
-
-    def handle_no_permission(self):
-        raise PermissionDenied
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
