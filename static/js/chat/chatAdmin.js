@@ -14,7 +14,7 @@
     messagesApiUrlBase = config.apiMessagesUrl.replace(/\/\d+\/?$/, '/');
     const wsProtocol = config.wsProtocol || (window.location.protocol === "https:" ? "wss" : "ws");
     const host = config.host || window.location.host;
-    websocketBaseUrl = ${wsProtocol}://${host};
+    websocketBaseUrl = `${wsProtocol}://${host}`;
   } catch (err) {
     console.error('Failed to load chat config:', err);
   }
@@ -53,7 +53,7 @@
   }
 
   function updateUnreadBadge(userId, count) {
-    const btn = userList.querySelector(button[data-user-id="${userId}"]);
+    const btn = userList.querySelector(`button[data-user-id="${userId}"]`);
     if (!btn) return;
     const badge = btn.querySelector('.unread-badge');
     if (!badge) return;
@@ -86,7 +86,7 @@
   }
 
   function messageKey(msg) {
-    return ${msg.timestamp}|${msg.sender_id}|${msg.text};
+    return `${msg.timestamp}|${msg.sender_id}|${msg.text}`;
   }
 
   function addMessageSafe(msg) {
@@ -135,7 +135,7 @@
   }
 
   function moveUserToTop(userId) {
-    const btn = userList.querySelector(button[data-user-id="${userId}"]);
+    const btn = userList.querySelector(`button[data-user-id="${userId}"]`);
     if (!btn) return;
     const parent = btn.parentElement;
     if (parent.firstChild === btn) return;
@@ -145,7 +145,7 @@
   async function loadChatMessages(userId) {
     clearChat();
     try {
-      const url = ${messagesApiUrlBase}${userId}/?limit=100;
+      const url = `${messagesApiUrlBase}${userId}/?limit=100`;
       const res = await fetch(url);
       if (!res.ok) throw new Error('Failed to fetch messages');
       const data = await res.json();
@@ -169,7 +169,7 @@
 
   async function markMessagesRead(userId) {
     try {
-      await fetch(/api/mark-read/${userId}/, {
+      await fetch(`/api/mark-read/${userId}/`, {
         method: 'POST',
         headers: {
           'X-CSRFToken': getCookie('csrftoken'),
@@ -201,7 +201,7 @@
       chatSocket.close();
     }
     chatSocket = new WebSocket(
-      ${websocketBaseUrl}/ws/chat/admin/${userId}/
+      `${websocketBaseUrl}/ws/chat/admin/${userId}/`
     );
     chatSocket.onopen = () => {
       chatInput.disabled = false;
@@ -256,7 +256,7 @@
     if (!btn) return;
     currentChatUserId = btn.getAttribute('data-user-id');
     const username = btn.getAttribute('data-username');
-    chatHeader.textContent = Chat with ${username};
+    chatHeader.textContent = `Chat with ${username}`;
     chatInput.value = '';
     chatInput.focus();
     clearUnread(currentChatUserId);
