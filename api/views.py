@@ -21,12 +21,13 @@ from api.models import ChatMessage, APIKey
 from common.mixins import AdminRequiredMixin
 from products.models import Product
 
+
 class ChatMessagesAPIView(APIView):
     permission_classes = [IsAuthenticated]
+
     def get(self, request, user_id, **kwargs):
         UserModel = get_user_model()
         user = get_object_or_404(UserModel, id=user_id)
-
 
         if not request.user.is_superuser and not request.user.is_staff and user.id != request.user.id:
             raise PermissionDenied
@@ -119,12 +120,14 @@ class ProductListCreateAPIView(ListCreateAPIView):
         serializer = self.get_serializer(qs, many=True)
         return Response({'products': serializer.data})
 
+
 class ProductDetailAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     authentication_classes = [APIKeyAuthentication, SessionAuthentication]
     permission_classes = [IsAdminUser]
     lookup_field = 'id'
+
 
 class GenerateAPIKeyAPIView(AdminRequiredMixin, APIView):
     """
@@ -180,3 +183,16 @@ class ChatFrontendConfigAPIView(APIView):
             "userIsStaffOrSuperuser": user.is_staff or user.is_superuser,
             "userIsChatBanned": getattr(user, "is_chat_banned", False),
         })
+
+
+class MarkMessagesReadView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def post(self, request, user_id, *args, **kwargs):
+        admin_user = request.user
+        ChatMessage.objects.filter(
+            sender_id=user_id,
+            recipient=admin_user,
+            is_read=False
+        ).update(is_read=True)
+        return Response({'status': 'success'})

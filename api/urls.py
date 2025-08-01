@@ -1,7 +1,8 @@
 from django.urls import path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 
-from api.views import ChatMessagesAPIView, ProductListCreateAPIView, GenerateAPIKeyAPIView, ProductDetailAPIView, ChatFrontendConfigAPIView
+from api.views import ChatMessagesAPIView, ProductListCreateAPIView, GenerateAPIKeyAPIView, ProductDetailAPIView, \
+    ChatFrontendConfigAPIView, MarkMessagesReadView
 
 drf_spectacular = [
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
@@ -14,4 +15,5 @@ urlpatterns = [
     path('products/<int:id>/', ProductDetailAPIView.as_view(), name='product-detail-api-base'),
     path('generate_key/', GenerateAPIKeyAPIView.as_view(), name='generate-key'),
     path('chat-config/', ChatFrontendConfigAPIView.as_view(), name='chat-config'),
+    path('mark-read/<int:user_id>/', MarkMessagesReadView.as_view(), name='mark-messages-read'),
 ] + drf_spectacular
