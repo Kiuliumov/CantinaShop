@@ -56,7 +56,6 @@ class ActivateAccount(View):
             messages.success(request, "Your account has been activated successfully.")
             return redirect('activation_success')
 
-        messages.error(request, "Activation link is invalid or expired.")
         return redirect('activation_invalid')
 
 class Login(ProfileProhibitedMixin, LoginView):
