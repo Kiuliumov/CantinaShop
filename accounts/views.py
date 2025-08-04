@@ -123,13 +123,23 @@ class CustomPasswordResetView(PasswordResetView):
     email_template_name = None
     success_url = reverse_lazy('password_reset_done')
 
+    def _send_password_reset_email(self, user):
+        domain = self.request.get_host()
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        token = default_token_generator.make_token(user)
+        reset_path = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
+        reset_link = f"http://{domain}{reset_path}"
+
+        send_password_reset_email_task.delay(user.id, domain, reset_link)
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        if user.is_authenticated and user.email:
+            self._send_password_reset_email(user)
+            return redirect(self.success_url)
+        return super().get(request, *args, **kwargs)
+
     def form_valid(self, form):
         for user in form.get_users(form.cleaned_data["email"]):
-            domain = self.request.get_host()
-            uid = urlsafe_base64_encode(force_bytes(user.pk))
-            token = default_token_generator.make_token(user)
-            reset_path = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
-            reset_link = f"http://{domain}{reset_path}"
-
-            send_password_reset_email_task.delay(user.id, domain, reset_link)
+            self._send_password_reset_email(user)
         return redirect(self.success_url)

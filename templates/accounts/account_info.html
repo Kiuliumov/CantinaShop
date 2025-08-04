@@ -176,19 +176,27 @@
                 </form>
 
                 {% if user.is_staff or user.is_superuser %}
-                <form method="GET" action="{% url 'generate-api-key' %}" class="flex-1">
-                    <button
-                            type="submit"
-                            class="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 hover:from-purple-700 hover:via-pink-700 hover:to-red-700 text-white font-semibold py-3 rounded-xl shadow-lg transition focus:outline-none focus:ring-4 focus:ring-pink-500 flex items-center justify-center"
+                    <a
+                            href="{% url 'generate-api-key' %}"
+                            class="flex-1 block w-full bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 hover:from-purple-700 hover:via-pink-700 hover:to-red-700 text-white font-semibold py-3 rounded-xl shadow-lg transition focus:outline-none focus:ring-4 focus:ring-pink-500 flex items-center justify-center"
                     >
                         <i class="fa-solid fa-key mr-2"></i>
                         Generate API Key
-                    </button>
-                </form>
+                    </a>
                 {% endif %}
+
+                <a
+                        href="{% url 'password_reset' %}"
+                        class="flex-1 block w-full bg-green-600 hover:bg-green-700 active:bg-green-800 text-white font-semibold py-3 rounded-xl shadow-lg transition focus:outline-none focus:ring-4 focus:ring-green-500 flex items-center justify-center"
+                >
+                    <i class="fa-solid fa-unlock-keyhole mr-2"></i>
+                    Reset Password
+                </a>
+
             </div>
         </div>
     </div>
+
     {% include 'partials/pop-ups/confirm_delete.html' %}
 {% endblock %}
 
@@ -199,11 +207,11 @@
         window.SelectConfig = {
             countryCodesUrl: "{% static 'json/countryCodes.json' %}"
         };
-        
+
         document.addEventListener("DOMContentLoaded", () => {
             document.querySelector('#confirmModal p').innerHTML = "Are you sure you want to deactivate this account?<br><br><br>This action can only be undone by an administrator."
         });
-        
+
     </script>
     <script src="{% static 'js/account/countryCodeSelector.js' %}"></script>
     <script src="{% static 'js/boxes/confirmDelete.js' %}"></script>

@@ -40,7 +40,6 @@
 
     loadUnreadCountsFromDOM();
 
-    // Open first conversation if exists:
     const firstUserBtn = userList.querySelector('button[data-user-id]');
     if (firstUserBtn) {
       firstUserBtn.click();
@@ -69,7 +68,6 @@
 
   if (count > 0) {
     if (!badge) {
-      // Create badge if missing
       badge = document.createElement('span');
       badge.className = 'unread-badge flex items-center justify-center';
       badge.style.position = 'absolute';
