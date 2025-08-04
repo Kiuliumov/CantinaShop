@@ -31,27 +31,6 @@
     chatInput = document.getElementById('chat-input');
     userSearchInput = document.getElementById('user-search');
 
-    userList.querySelectorAll('button[data-user-id]').forEach(button => {
-      let badge = document.createElement('span');
-      badge.className = 'unread-badge hidden ml-auto text-white text-xs flex items-center justify-center';
-      badge.style.cssText = `
-        background-color: #dc2626;
-        position: absolute;
-        top: 6px;
-        right: 6px;
-        font-weight: bold;
-        font-size: 0.75rem;
-        width: 1.25rem;
-        height: 1.25rem;
-        line-height: 1.25rem;
-        text-align: center;
-        border-radius: 50%;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-      `;
-      button.style.position = 'relative';
-      button.appendChild(badge);
-    });
-
     userSearchInput.addEventListener('input', onUserSearch);
     userList.addEventListener('click', onUserSelect);
     chatForm.addEventListener('submit', onSendMessage);
@@ -59,21 +38,27 @@
     chatInput.disabled = true;
     chatForm.querySelector('button[type="submit"]').disabled = true;
 
-    loadInitialUnreadCounts();
+    loadUnreadCountsFromDOM();
+
+    // Open first conversation if exists:
+    const firstUserBtn = userList.querySelector('button[data-user-id]');
+    if (firstUserBtn) {
+      firstUserBtn.click();
+    }
   }
 
-  async function loadInitialUnreadCounts() {
-    try {
-      const res = await fetch('/chat/unread-counts/');
-      if (!res.ok) return;
-      const data = await res.json();
-      for (const [userId, count] of Object.entries(data)) {
+  function loadUnreadCountsFromDOM() {
+    unreadCounts.clear();
+    const buttons = userList.querySelectorAll('button[data-user-id]');
+    buttons.forEach(btn => {
+      const badge = btn.querySelector('.unread-badge');
+      if (badge && !badge.classList.contains('hidden')) {
+        const userId = btn.getAttribute('data-user-id');
+        let countText = badge.textContent.trim();
+        let count = countText === '9+' ? 9 : parseInt(countText) || 0;
         unreadCounts.set(userId, count);
-        updateUnreadBadge(userId, count);
       }
-    } catch (err) {
-      console.error('Failed to load unread counts', err);
-    }
+    });
   }
 
   function updateUnreadBadge(userId, count) {
@@ -81,12 +66,22 @@
     if (!btn) return;
     const badge = btn.querySelector('.unread-badge');
     if (!badge) return;
+
     if (count > 0) {
       badge.textContent = count > 9 ? '9+' : count;
       badge.classList.remove('hidden');
+      badge.classList.add('flex', 'items-center', 'justify-center');
+      badge.style.width = '1.25rem';
+      badge.style.height = '1.25rem';
+      badge.style.fontSize = '0.75rem';
+      badge.style.lineHeight = '1.25rem';
+      badge.style.position = 'absolute';
+      badge.style.top = '6px';
+      badge.style.right = '6px';
     } else {
       badge.textContent = '';
       badge.classList.add('hidden');
+      badge.classList.remove('flex', 'items-center', 'justify-center');
     }
   }
 

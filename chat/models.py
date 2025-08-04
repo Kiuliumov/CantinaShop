@@ -1,5 +1,5 @@
 from django.db import models
-from django.template.context_processors import static
+from django.templatetags.static import static
 
 from accounts.models import UserModel
 

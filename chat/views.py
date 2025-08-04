@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Max
+from django.db.models.functions import Greatest
 from django.shortcuts import get_object_or_404
 from django.templatetags.static import static
 from django.urls import reverse
@@ -8,11 +9,11 @@ from django.views.generic import TemplateView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from accounts.models import Account
 from .models import ChatMessage
 from .serializers import ChatMessageSerializer
 from common.mixins import AdminRequiredMixin
+
+UserModel = get_user_model()
 
 
 class ChatMessagesAPIView(APIView):
@@ -52,9 +53,42 @@ class AdminChatHubView(AdminRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['users'] = Account.objects.filter(user__is_staff=False, user__is_superuser=False).select_related('user')
+
+        admin_user = self.request.user
+
+        users = UserModel.objects.filter(
+            is_staff=False,
+            is_superuser=False
+        ).select_related('account')
+
+        users = users.annotate(
+            last_sent=Max(
+                'sent_messages__timestamp',
+                filter=Q(sent_messages__recipient=admin_user)
+            ),
+            last_received=Max(
+                'received_messages__timestamp',
+                filter=Q(received_messages__sender=admin_user)
+            )
+        ).annotate(
+            last_interaction=Greatest('last_sent', 'last_received')
+        ).order_by('-last_interaction')
+        unread_counts = ChatMessage.objects.filter(
+            recipient=admin_user,
+            is_read=False,
+            sender__in=users,
+        ).values('sender').annotate(
+            unread_count=Count('id')
+        )
+        unread_map = {item['sender']: item['unread_count'] for item in unread_counts}
+
+        for user in users:
+            user.unread_count = unread_map.get(user.id, 0)
+
+        context['users'] = users
         context['admin_avatar_url'] = static('images/admin.jpg')
         return context
+
 
 class ChatFrontendConfigAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -84,19 +118,3 @@ class MarkMessagesReadView(APIView):
             is_read=False
         ).update(is_read=True)
         return Response({'status': 'success'})
-
-
-class UnreadMessageCountView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        user = request.user
-        unread = (
-            ChatMessage.objects
-            .filter(recipient=user, is_read=False)
-            .values('sender_id')
-            .annotate(unread=Count('id'))
-        )
-        return Response({str(item['sender_id']): item['unread'] for item in unread})
-
-

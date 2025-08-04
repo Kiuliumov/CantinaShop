@@ -36,24 +36,44 @@
         />
         <ul id="user-list" class="space-y-3 max-h-[calc(50vh-8rem)] overflow-y-auto">
             {% for user in users %}
-                <li>
+                <li class="relative">
                     <button
                             class="w-full flex items-center space-x-3 p-2 rounded hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-100"
-                            data-user-id="{{ user.user.id }}"
-                            data-username="{{ user.user.username }}"
+                            data-user-id="{{ user.id }}"
+                            data-username="{{ user.username }}"
                     >
                         <img
-                                src="{{ user.profile_picture_url|default:'/static/images/avatar.png' }}"
-                                alt="{{ user.user.username }}"
+                                src="{{ user.account.profile_picture_url|default:'/static/images/avatar.png' }}"
+                                alt="{{ user.username }}"
                                 class="w-10 h-10 rounded-full object-cover"
                         >
-                        <span>{{ user.user.username }}</span>
-                        <span class="unread-badge hidden bg-red-600 rounded-full w-3 h-3 inline-block ml-auto"></span>
+                        <span>{{ user.username }}</span>
+
+                        {% if user.unread_count|default:0 > 9 %}
+                            <span
+                                    class="unread-badge bg-red-600 rounded-full w-5 h-5 inline-flex items-center justify-center ml-auto text-xs font-semibold"
+                                    style="position: absolute; top: 6px; right: 6px;"
+                            >
+          9+
+        </span>
+                        {% elif user.unread_count|default:0 > 0 %}
+                            <span
+                                    class="unread-badge bg-red-600 rounded-full w-5 h-5 inline-flex items-center justify-center ml-auto text-xs font-semibold"
+                                    style="position: absolute; top: 6px; right: 6px;"
+                            >
+          {{ user.unread_count }}
+        </span>
+                        {% else %}
+                            <span
+                                    class="unread-badge hidden bg-red-600 rounded-full w-3 h-3 inline-block ml-auto"
+                            ></span>
+                        {% endif %}
                     </button>
                 </li>
             {% empty %}
                 <li class="text-gray-400">No users found.</li>
             {% endfor %}
+
         </ul>
     </aside>
 
