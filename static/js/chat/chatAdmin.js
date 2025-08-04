@@ -62,28 +62,38 @@
   }
 
   function updateUnreadBadge(userId, count) {
-    const btn = userList.querySelector(`button[data-user-id="${userId}"]`);
-    if (!btn) return;
-    const badge = btn.querySelector('.unread-badge');
-    if (!badge) return;
+  const btn = userList.querySelector(`button[data-user-id="${userId}"]`);
+  if (!btn) return;
 
-    if (count > 0) {
-      badge.textContent = count > 9 ? '9+' : count;
-      badge.classList.remove('hidden');
-      badge.classList.add('flex', 'items-center', 'justify-center');
+  let badge = btn.querySelector('.unread-badge');
+
+  if (count > 0) {
+    if (!badge) {
+      // Create badge if missing
+      badge = document.createElement('span');
+      badge.className = 'unread-badge flex items-center justify-center';
+      badge.style.position = 'absolute';
+      badge.style.top = '6px';
+      badge.style.right = '6px';
       badge.style.width = '1.25rem';
       badge.style.height = '1.25rem';
       badge.style.fontSize = '0.75rem';
       badge.style.lineHeight = '1.25rem';
-      badge.style.position = 'absolute';
-      badge.style.top = '6px';
-      badge.style.right = '6px';
-    } else {
-      badge.textContent = '';
-      badge.classList.add('hidden');
-      badge.classList.remove('flex', 'items-center', 'justify-center');
+      badge.style.borderRadius = '9999px';
+      badge.style.backgroundColor = '#dc2626';
+      badge.style.color = 'white';
+      btn.style.position = 'relative';
+      btn.appendChild(badge);
+    }
+    badge.textContent = count > 9 ? '9+' : count;
+    badge.classList.remove('hidden');
+  } else {
+    if (badge) {
+      badge.remove();
     }
   }
+}
+
 
   function clearUnread(userId) {
     unreadCounts.set(userId, 0);
