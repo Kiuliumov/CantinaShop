@@ -1,53 +1,5 @@
-<footer class="bg-gray-900 border-t border-gray-700 text-gray-400 pt-16 pb-16 mt-auto">
-  <div class="container mx-auto px-8 sm:px-12">
-    <div class="flex flex-wrap justify-start items-start gap-y-12 gap-x-20 w-full mb-10">
-      <div class="flex flex-wrap gap-x-16 gap-y-8 w-full max-w-4xl">
-        <div class="flex-1 min-w-[150px]">
-          <h3 class="text-indigo-400 font-semibold mb-4 uppercase tracking-wider opacity-80">Shop</h3>
-          <ul class="space-y-3 text-gray-400 text-sm opacity-70">
-            <li><a href="{% url 'product-list' %}" class="hover:text-indigo-500 transition">All Products</a></li>
-            <li><a href="{% url 'product-list' %}?category=Glasses" class="hover:text-indigo-500 transition">Glasses</a></li>
-            <li><a href="{% url 'product-list' %}?category=Rings" class="hover:text-indigo-500 transition">Rings</a></li>
-            <li><a href="{% url 'product-list' %}?category=Necklaces" class="hover:text-indigo-500 transition">Necklaces</a></li>
-            <li><a href="{% url 'product-list' %}?category=Bracelets" class="hover:text-indigo-500 transition">Bracelets</a></li>
-          </ul>
-        </div>
-
-        <div class="flex-1 min-w-[150px]">
-          <h3 class="text-indigo-400 font-semibold mb-4 uppercase tracking-wider opacity-80">Company</h3>
-          <ul class="space-y-3 text-gray-400 text-sm opacity-70">
-            <li><a href="{% url 'about' %}" class="hover:text-indigo-500 transition">About Us</a></li>
-            <li><a href="{% url 'contact' %}" class="hover:text-indigo-500 transition">Contact</a></li>
-            <li><a href="{% url 'index' %}" class="hover:text-indigo-500 transition">Home</a></li>
-            <li><a href="{% url 'cart' %}" class="hover:text-indigo-500 transition">Cart</a></li>
-          </ul>
-        </div>
-
-        <div class="flex-1 min-w-[150px]">
-          <h3 class="text-indigo-400 font-semibold mb-4 uppercase tracking-wider opacity-80">Account</h3>
-          <ul class="space-y-3 text-gray-400 text-sm opacity-70">
-            {% if user.is_authenticated %}
-              <li><a href="{% url 'account' %}" class="hover:text-indigo-500 transition">My Account</a></li>
-              <li>
-                <form method="POST" action="{% url 'logout' %}">
-                  {% csrf_token %}
-                  <button type="submit" class="hover:text-red-500 transition font-semibold text-sm">
-                    Logout
-                  </button>
-                </form>
-              </li>
-            {% else %}
-              <li><a href="{% url 'login' %}" class="hover:text-indigo-500 transition">Login</a></li>
-            {% endif %}
-          </ul>
-        </div>
-      </div>
+<footer class="bg-gray-900 border-t border-gray-700 mt-auto py-3">
+    <div class="container mx-auto px-4 text-center text-gray-500 text-sm select-none">
+        &copy; {{ now.year }} CantinaShop. All rights reserved.
     </div>
-  </div>
-
-  <hr class="border-gray-700 w-full" />
-
-  <div class="container mx-auto px-8 sm:px-12">
-    <p class="text-gray-500 text-sm mt-6 mb-8">&copy; {{ now.year }} CantinaShop. All rights reserved.</p>
-  </div>
 </footer>
