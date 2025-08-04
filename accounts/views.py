@@ -64,9 +64,6 @@ class Login(ProfileProhibitedMixin, LoginView):
     redirect_authenticated_user = True
     success_url = reverse_lazy('index')
 
-    def get_success_url(self):
-        return self.success_url
-
     def form_valid(self, form):
         messages.success(self.request, "Login successful!")
         return super().form_valid(form)
