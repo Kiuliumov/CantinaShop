@@ -5,19 +5,17 @@
   let websocketBaseUrl = (window.location.protocol === "https:" ? "wss://" : "ws://") + window.location.host;
 
   try {
-    const res = await fetch('/api/chat-config/');
-    if (!res.ok) throw new Error('Failed to load chat config');
-    const config = await res.json();
-
-    adminAvatarUrl = config.adminAvatarUrl || adminAvatarUrl;
-    defaultAvatarUrl = config.defaultAvatarUrl || defaultAvatarUrl;
-    messagesApiUrlBase = config.apiMessagesUrl.replace(/\/\d+\/?$/, '/');
-    const wsProtocol = config.wsProtocol || (window.location.protocol === "https:" ? "wss" : "ws");
-    const host = config.host || window.location.host;
-    websocketBaseUrl = `${wsProtocol}://${host}`;
-  } catch (err) {
-    console.error('Failed to load chat config:', err);
-  }
+    const res = await fetch('/chat/chat-config/');
+    if (res.ok) {
+      const config = await res.json();
+      adminAvatarUrl = config.adminAvatarUrl || adminAvatarUrl;
+      defaultAvatarUrl = config.defaultAvatarUrl || defaultAvatarUrl;
+      messagesApiUrlBase = config.apiMessagesUrl.replace(/\/\d+\/?$/, '/');
+      const wsProtocol = config.wsProtocol || (window.location.protocol === "https:" ? "wss" : "ws");
+      const host = config.host || window.location.host;
+      websocketBaseUrl = `${wsProtocol}://${host}`;
+    }
+  } catch {}
 
   let currentChatUserId = null;
   let chatSocket = null;
@@ -35,11 +33,21 @@
 
     userList.querySelectorAll('button[data-user-id]').forEach(button => {
       let badge = document.createElement('span');
-      badge.className = 'unread-badge hidden ml-auto bg-red-700 text-white rounded-full text-sm w-6 h-6 flex items-center justify-center shadow-lg';
-      badge.style.fontWeight = 'bold';
-      badge.style.position = 'absolute';
-      badge.style.top = '6px';
-      badge.style.right = '6px';
+      badge.className = 'unread-badge hidden ml-auto text-white text-xs flex items-center justify-center';
+      badge.style.cssText = `
+        background-color: #dc2626;
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        font-weight: bold;
+        font-size: 0.75rem;
+        width: 1.25rem;
+        height: 1.25rem;
+        line-height: 1.25rem;
+        text-align: center;
+        border-radius: 50%;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      `;
       button.style.position = 'relative';
       button.appendChild(badge);
     });
@@ -50,6 +58,22 @@
 
     chatInput.disabled = true;
     chatForm.querySelector('button[type="submit"]').disabled = true;
+
+    loadInitialUnreadCounts();
+  }
+
+  async function loadInitialUnreadCounts() {
+    try {
+      const res = await fetch('/chat/unread-counts/');
+      if (!res.ok) return;
+      const data = await res.json();
+      for (const [userId, count] of Object.entries(data)) {
+        unreadCounts.set(userId, count);
+        updateUnreadBadge(userId, count);
+      }
+    } catch (err) {
+      console.error('Failed to load unread counts', err);
+    }
   }
 
   function updateUnreadBadge(userId, count) {
@@ -104,18 +128,21 @@
   function addMessage({ text, username, avatarUrl, timestamp, fromAdmin }) {
     const bubble = document.createElement('div');
     bubble.className = 'flex flex-col space-y-1 max-w-xs ' + (fromAdmin ? 'mr-auto items-start' : 'ml-auto items-end');
+
     const bubbleRow = document.createElement('div');
     bubbleRow.className = 'flex items-start space-x-2';
+
     const avatar = document.createElement('img');
     avatar.src = avatarUrl || defaultAvatarUrl;
     avatar.alt = username;
     avatar.className = 'w-8 h-8 rounded-full object-cover';
+
     const msgDiv = document.createElement('div');
-    msgDiv.className = fromAdmin
-      ? 'bg-indigo-600 text-white px-3 py-2 rounded-lg break-words'
-      : 'bg-gray-700 text-gray-100 px-3 py-2 rounded-lg break-words';
-    msgDiv.style.wordBreak = 'break-word';
+    msgDiv.className = (fromAdmin
+      ? 'bg-indigo-600 text-white'
+      : 'bg-gray-700 text-gray-100') + ' px-3 py-2 rounded-lg break-words';
     msgDiv.textContent = text;
+
     if (fromAdmin) {
       bubbleRow.appendChild(avatar);
       bubbleRow.appendChild(msgDiv);
@@ -123,11 +150,13 @@
       bubbleRow.appendChild(msgDiv);
       bubbleRow.appendChild(avatar);
     }
+
     const timeDiv = document.createElement('div');
     timeDiv.className = 'text-xs text-gray-400';
     timeDiv.textContent = timestamp
       ? new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       : '';
+
     bubble.appendChild(bubbleRow);
     bubble.appendChild(timeDiv);
     chatMessages.appendChild(bubble);
@@ -137,9 +166,9 @@
   function moveUserToTop(userId) {
     const btn = userList.querySelector(`button[data-user-id="${userId}"]`);
     if (!btn) return;
-    const parent = btn.parentElement;
-    if (parent.firstChild === btn) return;
-    parent.prepend(btn);
+    const li = btn.parentElement;
+    const ul = li.parentElement;
+    ul.prepend(li);
   }
 
   async function loadChatMessages(userId) {
@@ -169,44 +198,37 @@
 
   async function markMessagesRead(userId) {
     try {
-      await fetch(`/api/mark-read/${userId}/`, {
+      await fetch(`/chat/mark-read/${userId}/`, {
         method: 'POST',
         headers: {
           'X-CSRFToken': getCookie('csrftoken'),
           'Content-Type': 'application/json',
         },
       });
-    } catch (err) {
-      console.error('Failed to mark messages as read:', err);
-    }
+    } catch {}
   }
 
   function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
+    const cookies = document.cookie ? document.cookie.split(';') : [];
+    for (let cookie of cookies) {
+      cookie = cookie.trim();
+      if (cookie.startsWith(name + '=')) {
+        return decodeURIComponent(cookie.slice(name.length + 1));
       }
     }
-    return cookieValue;
+    return null;
   }
 
   function connectSocket(userId) {
-    if (chatSocket) {
-      chatSocket.close();
-    }
-    chatSocket = new WebSocket(
-      `${websocketBaseUrl}/ws/chat/admin/${userId}/`
-    );
+    if (chatSocket) chatSocket.close();
+
+    chatSocket = new WebSocket(`${websocketBaseUrl}/ws/chat/admin/${userId}/`);
+
     chatSocket.onopen = () => {
       chatInput.disabled = false;
       chatForm.querySelector('button[type="submit"]').disabled = false;
     };
+
     chatSocket.onmessage = (e) => {
       const data = JSON.parse(e.data);
       const fromAdmin = data.from_admin;
@@ -216,14 +238,14 @@
         if (senderId === currentChatUserId) {
           addMessageSafe({
             text: data.message,
-            username: data.username || 'Admin',
+            username: 'Admin',
             avatarUrl: adminAvatarUrl,
             timestamp: data.timestamp,
             fromAdmin: true,
             sender_id: senderId,
           });
-          moveUserToTop(senderId);
         }
+        moveUserToTop(senderId);
         return;
       }
 
@@ -238,13 +260,14 @@
         });
         clearUnread(senderId);
         markMessagesRead(senderId);
-        moveUserToTop(senderId);
       } else {
-        let currentCount = unreadCounts.get(senderId) || 0;
-        unreadCounts.set(senderId, currentCount + 1);
-        updateUnreadBadge(senderId, unreadCounts.get(senderId));
+        const count = (unreadCounts.get(senderId) || 0) + 1;
+        unreadCounts.set(senderId, count);
+        updateUnreadBadge(senderId, count);
       }
+      moveUserToTop(senderId);
     };
+
     chatSocket.onclose = () => {
       chatInput.disabled = true;
       chatForm.querySelector('button[type="submit"]').disabled = true;
@@ -282,9 +305,7 @@
     moveUserToTop(currentChatUserId);
   }
 
-  window.chatApp = {
-    init,
-  };
+  window.chatApp = { init };
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);

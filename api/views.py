@@ -1,57 +1,20 @@
 import secrets
 from datetime import timedelta
 
-from django.templatetags.static import static
-from django.urls import reverse
 from django.utils.timezone import now, localtime
 from rest_framework import status
-from django.contrib.auth import get_user_model
 from django.db.models import Q
-from django.shortcuts import get_object_or_404
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.authentication import APIKeyAuthentication
-from api.serializers import ChatMessageSerializer, ProductSerializer
-from api.models import ChatMessage, APIKey
+from api.serializers import ProductSerializer
+from api.models import APIKey
 from common.mixins import AdminRequiredMixin
 from products.models import Product
-
-
-class ChatMessagesAPIView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, user_id, **kwargs):
-        UserModel = get_user_model()
-        user = get_object_or_404(UserModel, id=user_id)
-
-        if not request.user.is_superuser and not request.user.is_staff and user.id != request.user.id:
-            raise PermissionDenied
-
-        admins = UserModel.objects.filter(Q(is_staff=True) | Q(is_superuser=True))
-        messages_qs = (ChatMessage.objects.filter(
-            Q(sender=user, recipient__in=admins) |
-            Q(sender__in=admins, recipient=user)
-        ).order_by('timestamp'))
-
-        limit = request.GET.get('limit', 100)
-        try:
-            limit = int(limit)
-            if limit <= 0:
-                limit = 100
-        except ValueError:
-            limit = 100
-
-        messages_qs = messages_qs.order_by('-timestamp')[:limit]
-        messages_qs = reversed(messages_qs)
-
-        serializer = ChatMessageSerializer(messages_qs, many=True, context={'request': request})
-
-        return Response({'messages': serializer.data})
 
 
 class ProductListCreateAPIView(ListCreateAPIView):
@@ -168,31 +131,3 @@ class GenerateAPIKeyAPIView(AdminRequiredMixin, APIView):
         }, status=status.HTTP_201_CREATED)
 
 
-class ChatFrontendConfigAPIView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        user = request.user
-        return Response({
-            "userId": user.id,
-            "wsProtocol": "wss" if request.is_secure() else "ws",
-            "host": request.get_host(),
-            "apiMessagesUrl": reverse('chat-messages-api-base', args=[user.id]),
-            "adminAvatarUrl": static('images/admin.jpg'),
-            "defaultAvatarUrl": static('images/avatar.png'),
-            "userIsStaffOrSuperuser": user.is_staff or user.is_superuser,
-            "userIsChatBanned": getattr(user, "is_chat_banned", False),
-        })
-
-
-class MarkMessagesReadView(APIView):
-    permission_classes = [IsAdminUser]
-
-    def post(self, request, user_id, *args, **kwargs):
-        admin_user = request.user
-        ChatMessage.objects.filter(
-            sender_id=user_id,
-            recipient=admin_user,
-            is_read=False
-        ).update(is_read=True)
-        return Response({'status': 'success'})

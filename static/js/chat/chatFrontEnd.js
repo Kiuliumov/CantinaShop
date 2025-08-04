@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     (async function () {
         try {
-            const response = await fetch("/api/chat-config/");
+            const response = await fetch("/chat/chat-config/");
             if (!response.ok) throw new Error("Failed to load chat config");
 
             const config = await response.json();
