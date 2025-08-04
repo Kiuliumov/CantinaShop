@@ -1,7 +1,7 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.db import models
-from django.core.validators import MinLengthValidator
+from django.core.validators import MinLengthValidator, EmailValidator
 from accounts.validators import NoProfanityValidator, PhoneNumberValidator
 
 
@@ -28,27 +28,34 @@ class CustomUserManager(BaseUserManager):
 
 
 class UserModel(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(unique=True)
+    email = models.EmailField(
+        unique=True,
+        validators=[EmailValidator()],
+        error_messages={'unique': 'A user with that email already exists.'}
+    )
+    username = models.CharField(
+        max_length=150,
+        unique=True,
+        validators=[NoProfanityValidator()],
+    )
+    is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-
     is_chat_banned = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username']
 
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.email
+        return self.username or self.email
 
     def get_full_name(self):
-        return self.email
+        return self.username or self.email
 
     def get_short_name(self):
-        return self.email
-
+        return self.username or self.email
 
 class Account(models.Model):
     user = models.OneToOneField(UserModel, on_delete=models.CASCADE)
