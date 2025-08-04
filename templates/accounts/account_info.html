@@ -199,6 +199,11 @@
         window.SelectConfig = {
             countryCodesUrl: "{% static 'json/countryCodes.json' %}"
         };
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelector('#confirmModal p').innerHTML = "Are you sure you want to deactivate this account?<br><br><br>(This action can only be undone by an administrator)"
+        });
+        
     </script>
     <script src="{% static 'js/account/countryCodeSelector.js' %}"></script>
     <script src="{% static 'js/boxes/confirmDelete.js' %}"></script>
