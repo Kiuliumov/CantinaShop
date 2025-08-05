@@ -1,39 +1,46 @@
 <section class="bg-gray-700 rounded-xl p-6 sm:p-8 max-w-4xl mx-auto mb-12 text-indigo-100">
-  <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4 sm:gap-0">
-      
-    <h2 class="text-2xl font-semibold text-indigo-300 flex items-center gap-2">
-      <i class="fas fa-user-circle"></i> Account Info
-    </h2>
-      
-    <a href="{% url 'account' %}"
-       class="text-sm font-medium text-indigo-300 hover:text-white bg-gray-600 hover:bg-indigo-600 border border-indigo-400 px-4 py-2 rounded-lg transition-all whitespace-nowrap">
-      <i class="fas fa-edit mr-1"></i> Edit
-    </a>
-  </div>
+    <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4 sm:gap-0">
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-base leading-relaxed">
-    <div class="bg-gray-600 p-6 rounded-lg space-y-4">
-      <h3 class="text-indigo-400 font-semibold text-lg flex items-center gap-2 mb-2">
-        <i class="fas fa-id-badge"></i> Contact Details
-      </h3>
-      <p><span class="font-semibold text-indigo-300">Name:</span> {{ account.first_name }} {{ account.last_name }}</p>
-      <p><span class="font-semibold text-indigo-300">Phone:</span> {% if account.country_code %}{{ account.country_code }} {% endif %}{{ account.phone_number }}</p>
-      <p><span class="font-semibold text-indigo-300">Email:</span> {{ request.user.email }}</p>
+        <h2 class="text-2xl font-semibold text-indigo-300 flex items-center gap-2">
+            <i class="fas fa-user-circle"></i> Account Info
+        </h2>
+
+        <a href="{% url 'account' %}"
+           class="text-sm font-medium text-indigo-300 hover:text-white bg-gray-600 hover:bg-indigo-600 border border-indigo-400 px-4 py-2 rounded-lg transition-all whitespace-nowrap">
+            <i class="fas fa-edit mr-1"></i> Edit
+        </a>
     </div>
 
-    <div class="bg-gray-600 p-6 rounded-lg space-y-4">
-        
-      <h3 class="text-indigo-400 font-semibold text-lg flex items-center gap-2 mb-2">
-        <i class="fas fa-map-marker-alt"></i> Shipping Address
-      </h3>
-        
-      <address class="not-italic space-y-1 ml-1 text-indigo-200">
-        <p>{{ account.default_shipping.street_address }}</p>
-        <p>{{ account.default_shipping.city }}, {{ account.default_shipping.state }}</p>
-        <p>{{ account.default_shipping.postal_code }}</p>
-        <p>{{ account.default_shipping.country }}</p>
-      </address>
-        
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-base leading-relaxed">
+        <div class="bg-gray-600 p-6 rounded-lg space-y-4">
+            <h3 class="text-indigo-400 font-semibold text-lg flex items-center gap-2 mb-2">
+                <i class="fas fa-id-badge"></i> Contact Details
+            </h3>
+            <p class="break-words">
+                <span class="font-semibold text-indigo-300">Name:</span> {{ account.first_name }} {{ account.last_name }}
+            </p>
+            <p class="break-words">
+                <span class="font-semibold text-indigo-300">Phone:</span>
+                {% if account.country_code %}{{ account.country_code }} {% endif %}{{ account.phone_number }}
+            </p>
+            <p class="break-all break-words overflow-hidden truncate max-w-full">
+                <span class="font-semibold text-indigo-300">Email:</span> {{ request.user.email }}
+            </p>
+        </div>
+
+        <div class="bg-gray-600 p-6 rounded-lg space-y-4">
+
+            <h3 class="text-indigo-400 font-semibold text-lg flex items-center gap-2 mb-2">
+                <i class="fas fa-map-marker-alt"></i> Shipping Address
+            </h3>
+
+            <address class="not-italic space-y-1 ml-1 text-indigo-200">
+                <p>{{ account.default_shipping.street_address }}</p>
+                <p>{{ account.default_shipping.city }}, {{ account.default_shipping.state }}</p>
+                <p>{{ account.default_shipping.postal_code }}</p>
+                <p>{{ account.default_shipping.country }}</p>
+            </address>
+
+        </div>
     </div>
-  </div>
 </section>
