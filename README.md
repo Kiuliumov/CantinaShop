@@ -27,7 +27,7 @@ Additionally, CantinaShop is built to be fully responsive, delivering a seamless
 
 ### Online Demo
 
-A live demo of the project is available [here](https://cantinashop.onrender.com) *(The deployed version is buggy and slow, because of render's 512mb free plan, so you probably shouldn't test on it. Also it doesn't allow me to run background tasks so it's practically useless for sending emails - I host the celery worker on railway. Otherwise it's fully functional and doesn't differ from the local version - it's just a little slower and requires another computer to run the celery workers.*
+A live demo of the project is available [here](https://cantinashop.onrender.com) *(The deployed version is buggy and slow, because of render's 512mb free plan, so you probably shouldn't test on it. Also it doesn't allow me to run background tasks so it's practically useless for sending emails - I host the celery worker on railway. Otherwise it's fully functional and doesn't differ from the local version - it's just a little slower and requires another computer to run the celery workers. It is possible that my celery worekr can run out of memory ( because I am using a free plan again and so there is a possibiltiy that the email services will go down at some point on the deployed version. It shouldn't be an issue though as it runs only one worker to save memory.*)
 
 
 # SoftUni Project – Local Testing & Demonstration
