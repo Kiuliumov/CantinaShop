@@ -27,7 +27,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfilesSh'
 
-ALLOWED_HOSTS = ['cantinashop.onrender.com']
+ALLOWED_HOSTS = ['*']
 
 THIRD_PARTY_APPS = [
     'rest_framework',
