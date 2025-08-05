@@ -107,7 +107,7 @@ class AccountUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_invalid(self, form):
         messages.error(self.request, "There was an error with your account information. Please try again.")
-        return super().form_valid(form)
+        return super().form_invalid(form)
 
 class AccountDeactivateView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
