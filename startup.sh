@@ -19,5 +19,4 @@ web: python runserver.py
 worker: python runceleryworker.py
 EOF
 
-pip install honcho
 exec honcho start
