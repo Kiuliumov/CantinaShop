@@ -13,9 +13,3 @@ class ContactMessageAdmin(admin.ModelAdmin):
     def short_message(self, obj):
         return (obj.message[:75] + '...') if len(obj.message) > 75 else obj.message
     short_message.short_description = 'Message Preview'
-
-    def has_add_permission(self, request):
-        return False
-
-    def has_change_permission(self, request, obj=None):
-        return False
