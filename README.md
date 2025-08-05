@@ -41,7 +41,102 @@ These variables can be loaded via a `.env` file or system environment using the 
 
 ### Online Demo
 
-A live demo of the project is available [here](#) *(link to be provided)*
+A live demo of the project is available [here]([#](https://cantinashop.onrender.com)) *(The deployed version is buggy and slow, because of render's 512mb free plan, so you probably shouldn't test on it. Also it doesn't allow me to run background tasks so it's practically useless.)*
+
+
+# SoftUni Project – Local Testing & Demonstration
+
+For testing purposes and demonstration for SoftUni, the project must be run locally so you can fully use it.
+
+---
+
+## .env Configuration
+
+You should configure the `.env` file:
+
+```env
+SECRET_KEY=your-django-secret-key
+DEBUG=False
+
+CLOUDINARY_CLOUD_NAME=your-cloudinary-cloud-name
+CLOUDINARY_API_KEY=your-cloudinary-api-key
+CLOUDINARY_API_SECRET=your-cloudinary-api-secret
+
+EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=your-email@example.com
+EMAIL_HOST_PASSWORD=your-email-password
+DEFAULT_FROM_EMAIL=your-email@example.com
+
+DB_NAME=your-db-name
+DB_USER=your-db-username
+DB_PASSWORD=your-db-password
+DB_HOST=your-db-host
+DB_PORT=your-db-port
+
+REDIS_URL=redis://:your-redis-password@your-redis-host:6379/0
+
+CELERY_BROKER_URL=redis://:your-redis-password@your-redis-host:6379/0
+CELERY_RESULT_BACKEND=redis://:your-redis-password@your-redis-host:6379/0
+
+NODE_LOCATION='C:\Program Files\nodejs\npm.cmd'  # Only if running django-tailwind
+```
+
+---
+
+## Frontend
+
+You can use the CDN for Tailwind as currently configured, or use the theme app:
+
+1. Navigate to the static source folder:
+   ```bash
+   cd static_src
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Then either build once:
+   ```bash
+   python manage.py tailwind build
+   ```
+   Or run continuously:
+   ```bash
+   python manage.py tailwind start
+   ```
+The differences between the CDN version and the django-tailwind one are minimal.
+
+---
+
+## Database
+
+You can use either:
+
+- Your own database with already loaded data, or
+- A fresh SQLite database to test how the application works from scratch.
+
+---
+
+## Running the Server
+
+When running the server, you should:
+1. Start the Django development server:
+   ```bash
+   python runserver.py
+   ```
+2. Run the Celery worker for asynchronous tasks:
+
+   ```bash
+   python runceleryworker.py
+   ```
+---
+## Channels Layer
+
+It is recommended to use the `InMemoryLayer`, because it is faster. However, you can also use the deployed version on Azure.
+
+Both options will work.
 
 ---
 
