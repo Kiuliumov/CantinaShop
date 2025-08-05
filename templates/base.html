@@ -1,16 +1,21 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en" class="bg-gray-900">
+
 <head>
     <title>{% block title %}CantinaShop{% endblock %}</title>
     {% include 'partials/main/head.html' %}
     <link href="{% static 'css/dist/styles.css' %}" rel="stylesheet">
 </head>
+
 <body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
+
 {% include 'partials/main/nav.html' %}
 <main class="flex-grow container mx-auto px-4 py-8">
+
     {% include 'partials/pop-ups/pop-ups.html' %}
     {% block content %}{% endblock %}
+
 </main>
 {% include 'partials/main/footer.html' %}
 {% if user.is_authenticated %}
@@ -23,5 +28,6 @@
         <script src="{% static 'js/chat/chatFrontEnd.js' %}"></script>
     {% endif %}
 {% endblock %}
+
 </body>
 </html>
