@@ -4,6 +4,7 @@ source /antenv/bin/activate
 
 export DJANGO_SETTINGS_MODULE=CantinaShop.settings
 
+# shellcheck disable=SC2164
 cd theme/static_src
 npm install
 cd ../../
