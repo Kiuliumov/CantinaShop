@@ -2,7 +2,7 @@ from django.urls import reverse
 from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
 from django.contrib.auth import get_user_model
-from api.models import ChatMessage
+from chat.models import ChatMessage
 from products.models import Product, Category
 from django.utils import timezone
 

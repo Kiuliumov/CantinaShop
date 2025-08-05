@@ -79,8 +79,12 @@ class ProductViewIntegrationTests(TestCase):
     def setUp(self):
         self.client = Client()
         User = get_user_model()
-        self.user = User.objects.create_user(username='testuser', password='12345')
-        self.admin = User.objects.create_superuser(username='admin', password='admin')
+        self.user = User.objects.create_user(username='testuser', email='test@test.test', password='12345')
+        self.user.is_active = True
+        self.user.save()
+        self.admin = User.objects.create_superuser(username='admin', email='test@tester.test', password='admin')
+        self.admin.is_active = True
+        self.admin.save()
         self.category = Category.objects.create(name='Books')
         self.product = Product.objects.create(
             name='Test Product',
@@ -148,6 +152,6 @@ class ProductViewIntegrationTests(TestCase):
     def test_set_rating_valid(self):
         self.client.login(username='testuser', password='12345')
         data = {'rating': '4'}
-        response = self.client.post(reverse('set-rating', kwargs={'slug': 'test-product'}), data)
+        response = self.client.post(reverse('rate', kwargs={'slug': 'test-product'}), data)
         self.assertEqual(response.status_code, 302)
         self.assertTrue(Rating.objects.filter(user=self.user.account, product=self.product).exists())
