@@ -8,6 +8,7 @@
     {% endif %}
 
     {% page_range products.paginator products.number as page_range %}
+
     {% for num in page_range %}
         {% if num == products.number %}
             <span class="px-3 py-1 rounded bg-indigo-600 text-white">{{ num }}</span>
