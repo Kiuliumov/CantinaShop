@@ -51,6 +51,8 @@ class LoginDefenderMiddleware(MiddlewareMixin):
 
         return response
 
+
+    # Used for proxy and load balancer
     def get_client_ip(self, request):
         x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
         if x_forwarded_for:
