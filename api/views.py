@@ -22,11 +22,6 @@ class ProductListCreateAPIView(ListCreateAPIView):
     serializer_class = ProductSerializer
     authentication_classes = [APIKeyAuthentication, SessionAuthentication]
 
-    def get_permissions(self):
-        if self.request.method == 'POST':
-            return [IsAdminUser()]
-        return [IsAuthenticatedOrReadOnly()]
-
     def get(self, request, *args, **kwargs):
         qs = self.filter_queryset(self.get_queryset())
 
