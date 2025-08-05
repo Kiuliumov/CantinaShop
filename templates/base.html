@@ -12,12 +12,10 @@
     {% include 'partials/pop-ups/pop-ups.html' %}
     {% block content %}{% endblock %}
 </main>
-
 {% include 'partials/main/footer.html' %}
 {% if user.is_authenticated %}
     {% include 'chat/partials/user-chat.html' %}
 {% endif %}
-
 {% block script %}
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="{% static 'js/utils/iconsLoad.js' %}"></script>
@@ -25,7 +23,5 @@
         <script src="{% static 'js/chat/chatFrontEnd.js' %}"></script>
     {% endif %}
 {% endblock %}
-
 </body>
 </html>
-
