@@ -78,6 +78,7 @@ class ProductViewIntegrationTests(TestCase):
 
     def setUp(self):
         self.client = Client()
+        User = get_user_model()
         self.user = User.objects.create_user(username='testuser', password='12345')
         self.admin = User.objects.create_superuser(username='admin', password='admin')
         self.category = Category.objects.create(name='Books')
