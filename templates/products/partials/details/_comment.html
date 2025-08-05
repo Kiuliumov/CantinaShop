@@ -8,6 +8,7 @@
                      alt="{{ comment.account.user.username }}"
                      class="w-10 h-10 rounded-full object-cover shadow-sm">
             {% else %}
+                
                 <img src="{% static 'images/avatar.png' %}" alt="Default profile picture"
                      class="w-10 h-10 rounded-full object-cover shadow-sm">
             {% endif %}
@@ -33,6 +34,7 @@
                     class="bg-gray-600 hover:bg-gray-700 text-white font-semibold px-4 py-2 rounded shadow">
                 Cancel
             </button>
+            
         </div>
     </form>
 
