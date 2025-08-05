@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
+from django.db.models import Q
 
 User = get_user_model()
 
@@ -9,7 +10,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         try:
-            group = Group.objects.get(name="Moderator")
+            group = Group.objects.get(Q(name="Moderator") | Q(name="Administrator"))
         except Group.DoesNotExist:
             self.stdout.write(self.style.ERROR("The 'Moderators' group does not exist."))
             return
