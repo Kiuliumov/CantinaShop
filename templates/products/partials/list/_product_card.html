@@ -20,6 +20,7 @@
             {% if product.is_available %}In Stock{% else %}Out of Stock{% endif %}
         </span>
     </div>
+
     <div class="mt-4 text-center">
         <a href="{% url 'product-details' product.slug %}"
            class="inline-block px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow transition">
