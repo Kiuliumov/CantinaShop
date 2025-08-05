@@ -3,6 +3,8 @@ import urllib.parse
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.urls import reverse
+
 from common.tasks import send_order_confirmation_email_task
 from products.models import Product
 from django.views import View
@@ -51,8 +53,8 @@ class AddToCartView(View):
             cart.append({'slug': slug, 'quantity': quantity})
 
         messages.success(request, f"Added {quantity} x '{product.name}' to your cart.")
-
-        response = HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        products_list_url = reverse('product-list')
+        response = HttpResponseRedirect(request.META.get('HTTP_REFERER', products_list_url))
 
         encoded_cart = urllib.parse.quote(json.dumps(cart))
 
