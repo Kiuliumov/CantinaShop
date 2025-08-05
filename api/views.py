@@ -6,7 +6,7 @@ from rest_framework import status
 from django.db.models import Q
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -21,7 +21,7 @@ class ProductListCreateAPIView(ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     authentication_classes = [APIKeyAuthentication, SessionAuthentication]
-
+    permission_classes = [IsAuthenticated]
     def get(self, request, *args, **kwargs):
         qs = self.filter_queryset(self.get_queryset())
 
