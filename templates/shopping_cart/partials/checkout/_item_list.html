@@ -1,8 +1,12 @@
 <div id="cart-items" class="space-y-12">
+
     {% for item in cart_items %}
+        
         {% include "shopping_cart/partials/checkout/_item.html" with item=item %}
+        
         {% if not forloop.last %}
             <hr class="border-gray-700 my-6"/>
         {% endif %}
     {% endfor %}
+
 </div>
