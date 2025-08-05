@@ -8,5 +8,4 @@ python manage.py collectstatic --noinput
 python manage.py migrate --noinput
 
 start /B python runserver.py
-
 python runceleryworker.py
