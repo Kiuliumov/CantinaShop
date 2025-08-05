@@ -1,9 +1,8 @@
 {% load page_range %}
 
-
 <div class="flex justify-center mt-6 space-x-2 text-indigo-500 flex-wrap gap-2">
     {% if products.has_previous %}
-        <a href="?page={{ products.previous_page_number }}"
+        <a href="?page={{ products.previous_page_number }}&{{ querystring }}"
            class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">Previous</a>
     {% endif %}
 
@@ -13,13 +12,13 @@
         {% if num == products.number %}
             <span class="px-3 py-1 rounded bg-indigo-600 text-white">{{ num }}</span>
         {% else %}
-            <a href="?page={{ num }}"
+            <a href="?page={{ num }}&{{ querystring }}"
                class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">{{ num }}</a>
         {% endif %}
     {% endfor %}
 
     {% if products.has_next %}
-        <a href="?page={{ products.next_page_number }}"
+        <a href="?page={{ products.next_page_number }}&{{ querystring }}"
            class="px-3 py-1 rounded border border-indigo-500 hover:bg-indigo-500 hover:text-white transition">Next</a>
     {% endif %}
 </div>
