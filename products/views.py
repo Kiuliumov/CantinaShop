@@ -141,6 +141,7 @@ class ProductDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
 
 class CommentDeleteView(LoginRequiredMixin, DeleteView):
     model = Comment
+    template_name = 'products/product_list.html'
 
     def dispatch(self, request, *args, **kwargs):
         obj = self.get_object()
@@ -184,6 +185,7 @@ class ProductUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
 class CommentUpdateView(LoginRequiredMixin, UpdateView):
     model = Comment
     form_class = CommentForm
+    template_name = 'products/product_list.html'
 
     def dispatch(self, request, *args, **kwargs):
         obj = self.get_object()
