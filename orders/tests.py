@@ -12,7 +12,7 @@ User = get_user_model()
 
 class OrderTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='pass12345')
+        self.user = User.objects.create_user(username='testuser', email='example@example.com', password='pass12345')
         self.user.is_active = True
         self.user.save()
 
