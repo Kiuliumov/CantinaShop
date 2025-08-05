@@ -21,6 +21,8 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('username', 'email')
     ordering = ('-date_joined',)
 
+    readonly_fields = ('date_joined', 'last_login')
+
     fieldsets = (
         (None, {'fields': ('username', 'email', 'password')}),
         ('Permissions', {
@@ -29,12 +31,14 @@ class UserAdmin(BaseUserAdmin):
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
 
+
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
             'fields': ('username', 'email', 'password1', 'password2', 'is_active', 'is_staff', 'is_superuser'),
         }),
     )
+
 
     def profile_image(self, obj):
         try:
@@ -48,10 +52,15 @@ class UserAdmin(BaseUserAdmin):
         except Account.DoesNotExist:
             pass
         return "—"
+
+
     profile_image.short_description = "Profile"
+
 
     def username_link(self, obj):
         return format_html('<a href="/admin/accounts/usermodel/{}/change/">{}</a>', obj.pk, obj.username)
+
+
     username_link.short_description = "Username"
     username_link.admin_order_field = "username"
 
@@ -73,8 +82,8 @@ class AccountAdmin(admin.ModelAdmin):
 
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):
-    list_display = ('account',  'city', 'state')
+    list_display = ('account', 'city', 'state')
     list_filter = ('country', 'city', 'state')
-    search_fields = ( 'state', 'city', 'postal_code', 'country')
+    search_fields = ('state', 'city', 'postal_code', 'country')
     readonly_fields = ('created_at', 'updated_at')
     raw_id_fields = ('account',)
