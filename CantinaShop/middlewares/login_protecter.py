@@ -3,9 +3,9 @@ from django.conf import settings
 from django.core.cache import cache
 from django.shortcuts import render
 from django.utils.deprecation import MiddlewareMixin
+from .get_ip import IPMixin
 
-
-class LoginDefenderMiddleware(MiddlewareMixin):
+class LoginDefenderMiddleware(MiddlewareMixin, IPMixin):
     """
     Middleware to throttle failed login attempts by IP address.
     """
@@ -19,7 +19,7 @@ class LoginDefenderMiddleware(MiddlewareMixin):
 
     def process_request(self, request):
         if request.path == settings.LOGIN_URL and request.method == "POST":
-            ip = self.get_client_ip(request)
+            ip = self._get_client_ip(request)
             cache_key = f"{self.cache_prefix}{ip}"
             data = cache.get(cache_key, {"failures": 0, "timestamp": 0})
 
@@ -40,7 +40,7 @@ class LoginDefenderMiddleware(MiddlewareMixin):
     def process_response(self, request, response):
         if request.path == settings.LOGIN_URL and request.method == "POST":
             if request.user.is_anonymous and response.status_code in (200, 401):
-                ip = self.get_client_ip(request)
+                ip = self._get_client_ip(request)
                 cache_key = f"{self.cache_prefix}{ip}"
                 data = cache.get(cache_key, {"failures": 0, "timestamp": 0})
 
@@ -50,11 +50,3 @@ class LoginDefenderMiddleware(MiddlewareMixin):
                 cache.set(cache_key, data, timeout=self.block_duration)
 
         return response
-
-
-    # Used for proxy and load balancer
-    def get_client_ip(self, request):
-        x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
-        if x_forwarded_for:
-            return x_forwarded_for.split(",")[0].strip()
-        return request.META.get("REMOTE_ADDR")
