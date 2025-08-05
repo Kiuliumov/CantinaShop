@@ -1,6 +1,6 @@
 <div class="cart-item flex flex-col lg:flex-row items-center gap-6 sm:gap-8 bg-gray-700 rounded-xl p-4 sm:p-6 lg:p-8 shadow-md"
      data-slug="{{ item.product.slug }}">
-    
+
     <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}"
          class="w-28 h-28 sm:w-32 sm:h-32 lg:w-36 lg:h-36 object-cover rounded-lg shadow">
 
@@ -17,24 +17,27 @@
                     <label class="text-xs sm:text-sm text-indigo-200 font-medium select-none">
                         <i class="fas fa-sort-numeric-up-alt mr-1"></i> Quantity:
                     </label>
-                    <div class="flex items-center border rounded-lg overflow-hidden bg-gray-600 text-white text-xs sm:text-sm">
+                    <div class="flex items-center justify-between border rounded-lg overflow-hidden bg-gray-600 text-white text-xs sm:text-sm px-1">
                         <button class="quantity-decrement px-2 py-1 hover:bg-gray-500 transition"
                                 data-slug="{{ item.product.slug }}">
                             <i class="fas fa-minus"></i>
                         </button>
+
                         <input
-                            type="number"
-                            min="0"
-                            value="{{ item.quantity }}"
-                            readonly
-                            class="quantity-input w-12 sm:w-14 text-center bg-gray-600 outline-none font-semibold"
-                            data-slug="{{ item.product.slug }}"
+                                type="number"
+                                min="0"
+                                value="{{ item.quantity }}"
+                                readonly
+                                class="quantity-input w-12 sm:w-14 text-center bg-gray-600 outline-none font-semibold"
+                                data-slug="{{ item.product.slug }}"
                         />
-                        <button class="quantity-increment px-2 py-1 hover:bg-gray-500 transition"
+
+                        <button class="quantity-increment px-2 py-1 hover:bg-gray-500 transition ml-auto"
                                 data-slug="{{ item.product.slug }}">
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
+
                 </div>
 
                 <div class="mt-2 sm:mt-0">
@@ -50,7 +53,7 @@
                 <i class="fas fa-dollar-sign mr-1"></i>
                 <span class="subtotal-amount">{{ item.subtotal|floatformat:2 }}</span>
             </p>
-            
+
         </div>
     </div>
 </div>
