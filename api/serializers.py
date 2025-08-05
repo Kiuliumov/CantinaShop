@@ -24,7 +24,7 @@ class ProductSerializer(serializers.ModelSerializer):
         category = attrs.get('category', None)
         category_name = attrs.get('category_name_input', '').strip()
 
-        if not category and not category_name:
+        if not self.instance and not category and not category_name:
             raise serializers.ValidationError("Provide either a category ID or a category_name_input.")
 
         return attrs
