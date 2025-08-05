@@ -27,7 +27,7 @@ Additionally, CantinaShop is built to be fully responsive, delivering a seamless
 
 ### Online Demo
 
-A live demo of the project is available [here](https://cantinashop.onrender.com) *(The deployed version is buggy and slow, because of render's 512mb free plan, so you probably shouldn't test on it. Also it doesn't allow me to run background tasks so it's practically useless - It can't send emails nor can cache the chat and use sockets fast enough and etc)*
+A live demo of the project is available [here](https://cantinashop.onrender.com) *(The deployed version is buggy and slow, because of render's 512mb free plan, so you probably shouldn't test on it. Also it doesn't allow me to run background tasks so it's practically useless for sending emails - you have to run the celery worker locally if you want to be able to execute tasks. Otherwise it's fully functional and doesn't differ from the local version - it's just a little slower and requires another computer to run the celery workers.*
 
 
 # SoftUni Project – Local Testing & Demonstration
