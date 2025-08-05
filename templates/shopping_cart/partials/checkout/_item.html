@@ -1,4 +1,5 @@
 <div class="cart-item flex flex-col lg:flex-row items-center gap-8 bg-gray-700 rounded-xl p-8 shadow-md" data-slug="{{ item.product.slug }}">
+    
     <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}"
          class="w-36 h-36 md:w-44 md:h-44 object-cover rounded-xl shadow-md">
 
@@ -21,6 +22,7 @@
                 <i class="fas fa-dollar-sign mr-1"></i>
                 <span class="subtotal-amount">{{ item.subtotal|floatformat:2 }}</span>
             </p>
+            
         </div>
     </div>
 </div>
