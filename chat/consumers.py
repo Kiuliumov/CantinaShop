@@ -13,32 +13,50 @@ class BaseChatConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         user = self.scope['user']
-        if not user.is_authenticated:
+        if not await self.validate_connection(user):
             await self.close()
             return
+
+        await self.setup_groups()
+        await self.accept()
+
+    async def validate_connection(self, user):
+        if not user.is_authenticated:
+            return False
 
         self.user = user
 
-        is_banned = await self.is_user_banned(user)
-        if is_banned:
-            await self.close()
-            return
-
-        if user.is_staff or user.is_superuser:
+        if self.is_from_admin:
+            if not (user.is_staff or user.is_superuser):
+                return False
             self.recipient_user_id = self.scope['url_route']['kwargs'].get('user_id')
-            if not self.recipient_user_id:
-                await self.close()
-                return
-            self.room_group_name = f'chat_{self.recipient_user_id}'
+            return bool(self.recipient_user_id)
         else:
-            self.room_group_name = f'chat_{user.id}'
+            self.is_banned = await self.is_user_banned(user)
+            return not self.is_banned
+
+    async def get_recipient(self):
+        if self.is_from_admin:
+            return await self.get_user(self.recipient_user_id)
+        else:
+            return await self.get_admin_user()
+
+    async def setup_groups(self):
+        if self.is_from_admin:
+            self.room_group_name = f'chat_{self.recipient_user_id}'
+            self.admin_group_name = f'chat_{self.user.id}'
+            await self.channel_layer.group_add(self.admin_group_name, self.channel_name)
+        else:
+            self.room_group_name = f'chat_{self.user.id}'
 
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
-        await self.accept()
 
     async def disconnect(self, close_code):
-        if hasattr(self, 'room_group_name') and self.room_group_name:
+        if hasattr(self, 'room_group_name'):
             await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
+
+        if self.is_from_admin and hasattr(self, 'admin_group_name'):
+            await self.channel_layer.group_discard(self.admin_group_name, self.channel_name)
 
     async def receive(self, text_data):
         data = json.loads(text_data)
@@ -49,8 +67,7 @@ class BaseChatConsumer(AsyncWebsocketConsumer):
         sender = self.user
 
         if not sender.is_staff and not sender.is_superuser:
-            is_banned = await self.is_user_banned(sender)
-            if is_banned:
+            if getattr(self, 'is_banned', False):
                 await self.send(text_data=json.dumps({
                     'type': 'chat_banned',
                     'message': 'You have been banned from chatting due to excessive messaging.'
@@ -68,14 +85,9 @@ class BaseChatConsumer(AsyncWebsocketConsumer):
                 await self.close()
                 return
 
-        if sender.is_staff or sender.is_superuser:
-            recipient = await self.get_user(self.recipient_user_id)
-            if not recipient:
-                return
-        else:
-            recipient = await self.get_admin_user()
-            if not recipient:
-                return
+        recipient = await self.get_recipient()
+        if not recipient:
+            return
 
         chat_message = await self.save_message(sender, recipient, message, self.is_from_admin)
 
@@ -160,26 +172,6 @@ class UserConsumer(BaseChatConsumer):
 
 class AdminConsumer(BaseChatConsumer):
     is_from_admin = True
-
-    async def connect(self):
-        user = self.scope['user']
-        if not user.is_authenticated or not (user.is_staff or user.is_superuser):
-            await self.close()
-            return
-
-        self.user = user
-        self.recipient_user_id = self.scope['url_route']['kwargs'].get('user_id')
-        if not self.recipient_user_id:
-            await self.close()
-            return
-
-        self.room_group_name = f'chat_{self.recipient_user_id}'
-        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
-
-        self.admin_group_name = f'chat_{user.id}'
-        await self.channel_layer.group_add(self.admin_group_name, self.channel_name)
-
-        await self.accept()
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
