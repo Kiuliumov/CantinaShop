@@ -7,7 +7,7 @@ from django.test import TestCase
 from django.urls import reverse
 from common.forms import ContactMessageForm
 from common.models import ContactMessage
-from common.views import Index, About, ContactView
+
 
 # Unit Tests
 class StaticViewTests(TestCase):
