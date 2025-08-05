@@ -29,7 +29,8 @@ class ProductListView(ListView):
 
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
-        self.object_list = page_obj.object_list
+        self.object_list = queryset
+
         context = {
             'products': page_obj,
             'categories': Category.objects.all(),
