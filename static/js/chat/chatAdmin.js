@@ -11,7 +11,7 @@
       adminAvatarUrl = config.adminAvatarUrl || adminAvatarUrl;
       defaultAvatarUrl = config.defaultAvatarUrl || defaultAvatarUrl;
       messagesApiUrlBase = config.apiMessagesUrl.replace(/\/\d+\/?$/, '/');
-      const wsProtocol = config.wsProtocol || (window.location.protocol === "https:" ? "wss" : "ws");
+      const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
       const host = config.host || window.location.host;
       websocketBaseUrl = `${wsProtocol}://${host}`;
     }
