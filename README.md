@@ -41,7 +41,7 @@ These variables can be loaded via a `.env` file or system environment using the 
 
 ### Online Demo
 
-A live demo of the project is available [here]([#](https://cantinashop.onrender.com)) *(The deployed version is buggy and slow, because of render's 512mb free plan, so you probably shouldn't test on it. Also it doesn't allow me to run background tasks so it's practically useless.)*
+A live demo of the project is available [here]([#](https://cantinashop.onrender.com)) *(The deployed version is buggy and slow, because of render's 512mb free plan, so you probably shouldn't test on it. Also it doesn't allow me to run background tasks so it's practically useless - It can't send emails nor can cache the chat and use sockets fast enough and etc)*
 
 
 # SoftUni Project – Local Testing & Demonstration
@@ -114,7 +114,7 @@ The differences between the CDN version and the django-tailwind one are minimal.
 
 You can use either:
 
-- Your own database with already loaded data, or
+- My database with already loaded data, or
 - A fresh SQLite database to test how the application works from scratch.
 
 ---
