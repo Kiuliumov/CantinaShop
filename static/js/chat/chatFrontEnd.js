@@ -172,7 +172,11 @@ document.addEventListener("DOMContentLoaded", function () {
             function connectSocket() {
                 if (chatSocket) chatSocket.close();
 
-                const socketUrl = `${wsProtocol}://${host}/ws/chat/user/${userId}/`;
+                const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+
+                const socketUrl = `${protocol}://${host}/ws/chat/user/${userId}/`;
+                chatSocket = new WebSocket(socketUrl);
+
                 chatSocket = new WebSocket(socketUrl);
 
                 chatSocket.onopen = () => {
