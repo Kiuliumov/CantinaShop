@@ -84,6 +84,7 @@ class ProductViewIntegrationTests(TestCase):
         self.user.save()
         self.admin = User.objects.create_superuser(username='admin', email='test@tester.test', password='admin')
         self.admin.is_active = True
+        self.admin.is_superuser = True
         self.admin.save()
         self.category = Category.objects.create(name='Books')
         self.product = Product.objects.create(
