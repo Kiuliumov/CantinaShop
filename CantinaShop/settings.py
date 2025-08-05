@@ -58,7 +58,6 @@ SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = [
     'accounts.backends.EmailOrUsernameModelBackend',
-    'django.contrib.auth.backends.ModelBackend',
 ]
 
 LOGIN_REDIRECT_URL = '/'
@@ -113,11 +112,6 @@ CHANNEL_LAYERS = {
     },
 }
 
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "channels.layers.InMemoryChannelLayer"
-#     }
-# }
 AUTH_USER_MODEL = 'accounts.UserModel'
 
 TEMPLATES = [
@@ -182,12 +176,6 @@ DATABASES = {
     }
 }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
