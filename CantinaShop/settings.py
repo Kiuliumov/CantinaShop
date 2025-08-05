@@ -27,7 +27,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfilesSh'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['cantinashop.onrender.com']
 
 THIRD_PARTY_APPS = [
     'rest_framework',
@@ -206,3 +206,8 @@ CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', 'redis://localhost:63
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://cantinashop.onrender.com",
+]
+
