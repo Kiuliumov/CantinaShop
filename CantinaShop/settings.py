@@ -7,7 +7,9 @@ import cloudinary.api
 from dotenv import load_dotenv
 from django.template.context_processors import static
 
-load_dotenv()
+if os.getenv("DJANGO_ENV") != "production":
+    from dotenv import load_dotenv
+    load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
