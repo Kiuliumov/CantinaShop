@@ -3,9 +3,10 @@ from django.conf import settings
 from django.core.cache import cache
 from django.shortcuts import render
 from django.utils.deprecation import MiddlewareMixin
+from .get_ip import IPMixin
 
 
-class RateLimitMiddleware(MiddlewareMixin):
+class RateLimitMiddleware(MiddlewareMixin, IPMixin):
     """
     Rate limit middleware using Django cache.
     Limits requests per IP address.
@@ -25,7 +26,7 @@ class RateLimitMiddleware(MiddlewareMixin):
         self.cache_key_prefix = config.get("CACHE_KEY_PREFIX", "rl:")
 
     def process_request(self, request):
-        ip = self.get_client_ip(request)
+        ip = self._get_client_ip(request)
         if ip:
             cache_key = f"{self.cache_key_prefix}{ip}"
             now = time.time()
@@ -45,12 +46,3 @@ class RateLimitMiddleware(MiddlewareMixin):
 
             request_times.append(now)
             cache.set(cache_key, request_times, timeout=self.period)
-
-    def get_client_ip(self, request):
-        """Get client IP address considering proxies."""
-        x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
-        if x_forwarded_for:
-            ip = x_forwarded_for.split(",")[0].strip()
-        else:
-            ip = request.META.get("REMOTE_ADDR")
-        return ip
