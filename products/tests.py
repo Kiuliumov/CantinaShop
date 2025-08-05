@@ -81,7 +81,6 @@ class ProductViewIntegrationTests(TestCase):
         self.client = Client()
         self.user = User.objects.create_user(username='testuser', password='12345')
         self.admin = User.objects.create_superuser(username='admin', password='admin')
-        # Removed explicit Account creation
         self.category = Category.objects.create(name='Books')
         self.product = Product.objects.create(
             name='Test Product',
