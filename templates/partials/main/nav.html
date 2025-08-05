@@ -26,28 +26,36 @@
                 </li>
             {% endif %}
 
-            <li><a href="{% url 'index' %}"
+            <li>
+                <a href="{% url 'index' %}"
                    class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition text-center">Home</a>
             </li>
-            <li><a href="{% url 'product-list' %}"
+            <li>
+                <a href="{% url 'product-list' %}"
                    class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition text-center">
                 Products</a></li>
-            <li><a href="{% url 'product-list' %}?category=Glasses"
+            <li>
+                <a href="{% url 'product-list' %}?category=Glasses"
                    class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition text-center">Glasses</a>
             </li>
-            <li><a href="{% url 'product-list' %}?category=Rings"
+            <li>
+                <a href="{% url 'product-list' %}?category=Rings"
                    class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition text-center">Rings</a>
             </li>
-            <li><a href="{% url 'product-list' %}?category=Necklaces"
+            <li>
+                <a href="{% url 'product-list' %}?category=Necklaces"
                    class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition text-center">Necklaces</a>
             </li>
-            <li><a href="{% url 'product-list' %}?category=Bracelets"
+            <li>
+                <a href="{% url 'product-list' %}?category=Bracelets"
                    class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition text-center">Bracelets</a>
             </li>
-            <li><a href="{% url 'about' %}"
+            <li>
+                <a href="{% url 'about' %}"
                    class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition text-center">About</a>
             </li>
-            <li><a href="{% url 'contact' %}"
+            <li>
+                <a href="{% url 'contact' %}"
                    class="text-base sm:text-lg text-gray-300 hover:text-indigo-400 font-semibold transition text-center">Contacts</a>
             </li>
 
@@ -104,19 +112,28 @@
                     </a>
                 </li>
             {% endif %}
-            <li><a href="{% url 'index' %}" class="block hover:text-indigo-400 text-center">Home</a></li>
-            <li><a href="{% url 'product-list' %}" class="block hover:text-indigo-400 text-center">Products</a></li>
-            <li><a href="{% url 'product-list' %}?category=Glasses" class="block hover:text-indigo-400 text-center">Glasses</a>
+            <li>
+                <a href="{% url 'index' %}" class="block hover:text-indigo-400 text-center">Home</a></li>
+            <li>
+                <a href="{% url 'product-list' %}" class="block hover:text-indigo-400 text-center">Products</a></li>
+            <li>
+                <a href="{% url 'product-list' %}?category=Glasses" class="block hover:text-indigo-400 text-center">Glasses</a>
             </li>
-            <li><a href="{% url 'product-list' %}?category=Rings"
+            <li>
+                <a href="{% url 'product-list' %}?category=Rings"
                    class="block hover:text-indigo-400 text-center">Rings</a></li>
-            <li><a href="{% url 'product-list' %}?category=Necklaces" class="block hover:text-indigo-400 text-center">Necklaces</a>
+            <li>
+                <a href="{% url 'product-list' %}?category=Necklaces" class="block hover:text-indigo-400 text-center">Necklaces</a>
             </li>
-            <li><a href="{% url 'product-list' %}?category=Bracelets" class="block hover:text-indigo-400 text-center">Bracelets</a>
+            <li>
+                <a href="{% url 'product-list' %}?category=Bracelets" class="block hover:text-indigo-400 text-center">Bracelets</a>
             </li>
-            <li><a href="{% url 'about' %}" class="block hover:text-indigo-400 text-center">About</a></li>
-            <li><a href="{% url 'contact' %}" class="block hover:text-indigo-400 text-center">Contacts</a></li>
-            <li><a href="{% url 'cart' %}" class="block hover:text-indigo-400 text-center">Cart</a></li>
+            <li>
+                <a href="{% url 'about' %}" class="block hover:text-indigo-400 text-center">About</a></li>
+            <li>
+                <a href="{% url 'contact' %}" class="block hover:text-indigo-400 text-center">Contacts</a></li>
+            <li>
+                <a href="{% url 'cart' %}" class="block hover:text-indigo-400 text-center">Cart</a></li>
 
             {% if user.is_authenticated %}
                 <li><a href="{% url 'account' %}" class="block hover:text-indigo-400 text-center">Account</a></li>
