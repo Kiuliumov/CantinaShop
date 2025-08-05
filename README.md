@@ -25,20 +25,6 @@ The platform supports essential e-commerce features such as product management, 
 Additionally, CantinaShop is built to be fully responsive, delivering a seamless and consistent user experience across desktops, tablets, and mobile devices.
 ---
 
-## Important Notes
-
-This project **cannot be run immediately after cloning** due to dependencies on external API services like **Cloudinary** for image storage and processing. To run the project locally, you must set up the necessary environment variables with valid API credentials.
-
-### Required Environment Variables (examples):
-
-- `SECRET_KEY` — Django secret key  
-- `CLOUDINARY_CLOUD_NAME`  
-- `CLOUDINARY_API_KEY`  
-- `CLOUDINARY_API_SECRET`  
-- Email service provider credentials and PostgreSQL database configurations  
-
-These variables can be loaded via a `.env` file or system environment using the `python-dotenv` library.
-
 ### Online Demo
 
 A live demo of the project is available [here]([#](https://cantinashop.onrender.com)) *(The deployed version is buggy and slow, because of render's 512mb free plan, so you probably shouldn't test on it. Also it doesn't allow me to run background tasks so it's practically useless - It can't send emails nor can cache the chat and use sockets fast enough and etc)*
