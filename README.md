@@ -131,12 +131,14 @@ When running the server, you should:
    ```bash
    python runceleryworker.py
    ```
+
+You can also run the batch file startup.bat for the same effect.
 ---
 ## Channels Layer
 
-It is recommended to use the `InMemoryLayer`, because it is faster. However, you can also use the deployed version on Azure.
+It is recommended to use the `InMemoryLayer`, because it is faster. However, you can also use the deployed version on Azure of Redis I have.
 
-Both options will work.
+Both options will work, the Azure deployment has a delay though.
 
 ---
 
