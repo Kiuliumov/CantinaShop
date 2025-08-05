@@ -1,5 +1,6 @@
 {% if messages %}
     <div class="fixed top-5 right-5 z-50 flex flex-col space-y-4 max-w-xs w-full">
+    
         {% for message in messages %}
             <div
                     role="alert"
@@ -13,6 +14,7 @@
           {% endif %}"
                     onclick="this.style.display='none';"
             >
+            
                 <div class="flex-shrink-0">
                     {% if 'error' in message.tags %}
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
@@ -44,6 +46,7 @@
                     &times;
                 </button>
             </div>
+            
         {% endfor %}
     </div>
 {% endif %}
