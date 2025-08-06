@@ -207,8 +207,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     const message = chatInput.value.trim();
                     if (!message) return;
 
-                    const timestamp = new Date().toISOString();
-
                     chatSocket.send(JSON.stringify({message}));
 
                     chatInput.value = '';
