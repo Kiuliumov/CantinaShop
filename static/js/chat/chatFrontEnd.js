@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             function messageKey(msg) {
-                return `${msg.timestamp}|${msg.sender_id}|${msg.text}`;
+                return `${msg.sender_id}|${msg.text}`;
             }
 
             function addMessageSafe(msg) {
