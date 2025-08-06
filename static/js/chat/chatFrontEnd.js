@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             function messageKey(msg) {
-                return `${msg.sender_id}|${msg.text}`;
+                return `${msg.timestamp}|${msg.sender_id}|${msg.text}`;;
             }
 
             function addMessageSafe(msg) {
@@ -210,14 +210,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     const timestamp = new Date().toISOString();
 
                     chatSocket.send(JSON.stringify({message}));
-
-                    addMessageSafe({
-                        text: message,
-                        avatarUrl: defaultAvatarUrl,
-                        timestamp: timestamp,
-                        fromAdmin: false,
-                        sender_id: userId,
-                    });
 
                     chatInput.value = '';
                 });
