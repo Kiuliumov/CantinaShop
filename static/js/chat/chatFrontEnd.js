@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             function messageKey(msg) {
-                return `${msg.timestamp}|${msg.sender_id}|${msg.text}`;
+                return `${msg.sender_id}|${msg.text}`;
             }
 
             function addMessageSafe(msg) {
@@ -206,7 +206,19 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (!chatSocket || chatSocket.readyState !== WebSocket.OPEN) return;
                     const message = chatInput.value.trim();
                     if (!message) return;
+
+                    const timestamp = new Date().toISOString();
+
                     chatSocket.send(JSON.stringify({message}));
+
+                    addMessageSafe({
+                        text: message,
+                        avatarUrl: defaultAvatarUrl,
+                        timestamp: timestamp,
+                        fromAdmin: false,
+                        sender_id: userId,
+                    });
+
                     chatInput.value = '';
                 });
             }
