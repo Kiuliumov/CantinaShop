@@ -116,7 +116,7 @@ DO NOT RUN THE CELERY WORKER, as it is already ran by my Railway deployment.
 ---
 ## Channels Layer
 
-It is recommended to use the `InMemoryLayer`, because it is faster. However, you can also use the deployed version on Azure of Redis I have. But if you want to run the InMemoryLayer you need to also run the celery worker, because the hosted version runs on the deployed Redis
+It is recommended to use the `InMemoryLayer`, because it is faster. However, you can also use the deployed version on Azure of Redis I have.
 
 Both options will work, the Azure deployment has a delay though.
 
