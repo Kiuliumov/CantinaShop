@@ -32,7 +32,7 @@ A live demo of the project is available [here](https://cantinashop.onrender.com)
 I also recommend you test on a fresh sqlite database, because the external database is far away and has a lot of delay. You can also host your own for the same effect. Please make at least one superuser so the chat can open the socket due to the group connection. You can try out the chat with the postgre azure db and the redis server on the live demo too.
 # SoftUni Project – Local Testing & Demonstration
 
-For testing purposes and demonstration for SoftUni, the project must be run locally so you can fully use it.
+For testing purposes and demonstration for SoftUni, the project must be run locally so you can make tests faster on it. You can also fully use it in the web.
 
 ---
 
@@ -101,7 +101,7 @@ The differences between the CDN version and the django-tailwind one are minimal.
 You can use either:
 
 - My database with already loaded data, or
-- A fresh SQLite database to test how the application works from scratch. Make sure to run a local celery worker, as the deployed worker only sends data from the deployed db.
+- A fresh SQLite database to test how the application works from scratch. Make sure to run a local celery worker, as the deployed worker only sends data from the deployed db. You need a local redis cache too.
 
 ---
 
