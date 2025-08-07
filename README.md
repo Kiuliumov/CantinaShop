@@ -113,6 +113,7 @@ When running the server, you should:
    python runserver.py
    ```
 DO NOT RUN THE CELERY WORKER, as it is already ran by my Railway deployment.
+If you want to run your own worker make sure to change all settings like the redis url and such, because it may result in conflicts which will not allow you to connect to the redis network.
 ---
 ## Channels Layer
 
