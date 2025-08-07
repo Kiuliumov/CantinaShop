@@ -101,7 +101,7 @@ The differences between the CDN version and the django-tailwind one are minimal.
 You can use either:
 
 - My database with already loaded data, or
-- A fresh SQLite database to test how the application works from scratch.
+- A fresh SQLite database to test how the application works from scratch. Make sure to run a local celery worker, as the deployed worker only sends data from the deployed db.
 
 ---
 
