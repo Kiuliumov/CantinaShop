@@ -1,16 +1,18 @@
 from django.contrib import admin
-from django.utils.html import mark_safe
+from django.utils.safestring import mark_safe
 from .models import Order
-
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'account', 'status', 'total_price', 'created_at')
-    readonly_fields = ('order_data_pretty', 'created_at')
+    list_display = ('id', 'account', 'order_first_name', 'order_last_name', 'status', 'total_price', 'created_at')
+    readonly_fields = ('order_data_pretty', 'order_address', 'order_phone_number', 'order_first_name', 'order_last_name', 'created_at')
 
     fieldsets = (
         (None, {
             'fields': ('account', 'payment_option', 'status', 'total_price')
+        }),
+        ('Customer Snapshot', {
+            'fields': ('order_first_name', 'order_last_name', 'order_address', 'order_phone_number'),
         }),
         ('Ordered Products', {
             'fields': ('order_data_pretty',),
