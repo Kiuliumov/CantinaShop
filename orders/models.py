@@ -25,7 +25,7 @@ class Order(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.pk:
-            self.order_address = self.account.default_shipping
+            self.order_address = self.account.default_shipping.id
             self.order_phone_number = self.account.phone_number
             self.order_first_name = self.account.first_name
             self.order_last_name = self.account.last_name
