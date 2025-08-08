@@ -253,7 +253,10 @@ This role-based access control ensures appropriate separation of duties and enha
 - Email confirmation is mandatory for account activation.  
 - Custom validators ensure usernames and addresses do not contain profanity (`NoProfanityValidator`).  
 - Phone numbers are validated with a custom phone validator to ensure correct format.
-
+- XSS ( Cross site scripting ) is prevented by django forms
+- Parameter Tampering is prevented by server-side authorization
+- CSRF ( Cross site request forgery) attacks are prevented by django's CSRF token.
+- Brute force attacks are prevented by middlewears
 ---
 ### Screenshots
 ![Register](screenshots/accounts/register.png)
