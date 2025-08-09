@@ -32,7 +32,7 @@ class Order(models.Model):
                 f"{self.account.default_shipping.postal_code}, "
                 f"{self.account.default_shipping.country}"
             )
-            self.order_phone_number = self.account.phone_number
+            self.order_phone_number = f'{self.account.country_code} {self.account.phone_number}'
             self.order_first_name = self.account.first_name
             self.order_last_name = self.account.last_name
         super().save(*args, **kwargs)
