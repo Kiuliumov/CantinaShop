@@ -499,8 +499,7 @@ Orders are created via a POST to `/checkout/place-order/`. The process includes:
 ![Checkout](screenshots/orders/checkout_page.png)
 ![Email](screenshots/orders/orders_email.png)
 ![Send](screenshots/orders/order_confirm_page.png)
-
-
+![Order](screenshots/orders/order.png)
 
 
 
