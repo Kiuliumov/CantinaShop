@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             function messageKey(msg) {
-                return `${msg.timestamp}|${msg.sender_id}|${msg.text}`;
+                return `${msg.timestamp}|${msg.sender_id}|${msg.text}`;;
             }
 
             function addMessageSafe(msg) {
@@ -172,11 +172,7 @@ document.addEventListener("DOMContentLoaded", function () {
             function connectSocket() {
                 if (chatSocket) chatSocket.close();
 
-                const protocol = window.location.protocol === "https:" ? "wss" : "ws";
-
-                const socketUrl = `${protocol}://${host}/ws/chat/user/${userId}/`;
-                chatSocket = new WebSocket(socketUrl);
-
+                const socketUrl = `${wsProtocol}://${host}/ws/chat/user/${userId}/`;
                 chatSocket = new WebSocket(socketUrl);
 
                 chatSocket.onopen = () => {
@@ -210,7 +206,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (!chatSocket || chatSocket.readyState !== WebSocket.OPEN) return;
                     const message = chatInput.value.trim();
                     if (!message) return;
+
                     chatSocket.send(JSON.stringify({message}));
+
                     chatInput.value = '';
                 });
             }

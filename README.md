@@ -29,10 +29,10 @@ Additionally, CantinaShop is built to be fully responsive, delivering a seamless
 
 A live demo of the project is available [here](https://cantinashop.onrender.com) *(The deployed version is buggy and slow, because of render's 512mb free plan, so you probably shouldn't test on it. Also it doesn't allow me to run background tasks so it's practically useless for sending emails - I host the celery worker on railway. Otherwise it's fully functional and doesn't differ from the local version - it's just a little slower and requires another computer to run the celery workers. It is possible that my celery worekr can run out of memory ( because I am using a free plan again and so there is a possibiltiy that the email services will go down at some point on the deployed version. It shouldn't be an issue though as it runs only one worker to save memory.*)
 
-
+I also recommend you test on a fresh sqlite database, because the external database is far away and has a lot of delay. You can also host your own for the same effect. Please make at least one superuser so the chat can open the socket due to the group connection. You can try out the chat with the postgre azure db and the redis server on the live demo too.
 # SoftUni Project – Local Testing & Demonstration
 
-For testing purposes and demonstration for SoftUni, the project must be run locally so you can fully use it.
+For testing purposes and demonstration for SoftUni, the project must be run locally so you can make tests faster on it. You can also fully use it in the web.
 
 ---
 
@@ -101,7 +101,7 @@ The differences between the CDN version and the django-tailwind one are minimal.
 You can use either:
 
 - My database with already loaded data, or
-- A fresh SQLite database to test how the application works from scratch.
+- A fresh SQLite database to test how the application works from scratch. Make sure to run a local celery worker, as the deployed worker only sends data from the deployed db. You need a local redis cache too.
 
 ---
 
@@ -113,6 +113,7 @@ When running the server, you should:
    python runserver.py
    ```
 DO NOT RUN THE CELERY WORKER, as it is already ran by my Railway deployment.
+If you want to run your own worker make sure to change all settings like the redis url and such, because it may result in conflicts which will not allow you to connect to the redis network.
 ---
 ## Channels Layer
 
@@ -252,7 +253,10 @@ This role-based access control ensures appropriate separation of duties and enha
 - Email confirmation is mandatory for account activation.  
 - Custom validators ensure usernames and addresses do not contain profanity (`NoProfanityValidator`).  
 - Phone numbers are validated with a custom phone validator to ensure correct format.
-
+- XSS ( Cross site scripting ) is prevented by django forms
+- Parameter Tampering is prevented by server-side authorization
+- CSRF ( Cross site request forgery) attacks are prevented by django's CSRF token.
+- Brute force attacks are prevented by middlewears
 ---
 ### Screenshots
 ![Register](screenshots/accounts/register.png)
@@ -495,8 +499,7 @@ Orders are created via a POST to `/checkout/place-order/`. The process includes:
 ![Checkout](screenshots/orders/checkout_page.png)
 ![Email](screenshots/orders/orders_email.png)
 ![Send](screenshots/orders/order_confirm_page.png)
-
-
+![Order](screenshots/orders/image.png)
 
 
 
