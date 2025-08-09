@@ -2,7 +2,7 @@ import requests
 import argparse
 
 parser = argparse.ArgumentParser(description='Test CantinaShop API')
-parser.add_argument('--api-key', required=True, help='API key for authentication')
+parser.add_argument('--api-key', help='API key for authentication', default='d9abb381d21216998c2c6095302b350a9efef079')
 parser.add_argument('--base-url', default='http://localhost:8000/api', help='Base URL of the API')
 args = parser.parse_args()
 
@@ -31,7 +31,7 @@ def test_create_product():
         "description": "A sample product created via API",
         "price": "49.99",
         "is_available": True,
-        "category": 1
+        "category": 5
     }
     response = requests.post(f'{BASE_URL}/products/', headers=HEADERS, json=payload)
     print("Create Product:", response.status_code)
@@ -49,7 +49,7 @@ def test_update_product(product_id):
         "description": "Updated description",
         "price": "59.99",
         "is_available": False,
-        "category": 1
+        "category": 5
     }
     response = requests.put(f'{BASE_URL}/products/{product_id}/', headers=HEADERS, json=payload)
     print("Update Product:", response.status_code)
