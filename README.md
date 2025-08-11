@@ -22,16 +22,6 @@ This project showcases the application of modern web development techniques and 
 
 The platform supports essential e-commerce features such as product management, shopping cart functionality, and user registration, making it a fully functional and practical application.
 
-Additionally, CantinaShop is built to be fully responsive, delivering a seamless and consistent user experience across desktops, tablets, and mobile devices.
----
-
-### Online Demo
-
-A live demo of the project is available [here](https://cantinashop.onrender.com)
-
-# SoftUni Project – Local Testing & Demonstration
----
-
 ## .env Configuration
 
 You should configure the `.env` file:
