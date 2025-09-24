@@ -81,7 +81,7 @@ You can use the CDN for Tailwind as currently configured, or use the theme app:
 The differences between the CDN version and the django-tailwind one are minimal.
 
 ## Running the Server
-
+Live demo: here[(https://cantinashop.onrender.com/)]
 When running the server, you should:
 1. Start the Django development server:
    ```bash
