@@ -1,13 +1,10 @@
 
 # CantinaShop
-
-![CantinaShop Logo](screenshots/course-logo.png)
-
 ---
 
 ## Introduction
 
-**CantinaShop** is a comprehensive online store developed as the final project for the Python Web 2025 course at SoftUni. It offers a wide range of accessories and focuses on delivering a seamless and user-friendly shopping experience.
+**CantinaShop** is a comprehensive online store. It offers a wide range of accessories and focuses on delivering a seamless and user-friendly shopping experience.
 
 This project showcases the application of modern web development techniques and best practices in Python, including:
 
