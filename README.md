@@ -1,13 +1,10 @@
 
 # CantinaShop
-
-![CantinaShop Logo](screenshots/course-logo.png)
-
 ---
 
 ## Introduction
 
-**CantinaShop** is a comprehensive online store developed as the final project for the Python Web 2025 course at SoftUni. It offers a wide range of accessories and focuses on delivering a seamless and user-friendly shopping experience.
+**CantinaShop** is a comprehensive online store. It offers a wide range of accessories and focuses on delivering a seamless and user-friendly shopping experience.
 
 This project showcases the application of modern web development techniques and best practices in Python, including:
 
@@ -21,20 +18,6 @@ This project showcases the application of modern web development techniques and 
 - Client-side interactivity through **AJAX** and **fetch API**  
 
 The platform supports essential e-commerce features such as product management, shopping cart functionality, and user registration, making it a fully functional and practical application.
-
-Additionally, CantinaShop is built to be fully responsive, delivering a seamless and consistent user experience across desktops, tablets, and mobile devices.
----
-
-### Online Demo
-
-A live demo of the project is available [here](https://cantinashop.onrender.com) *(The deployed version is buggy and slow, because of render's 512mb free plan, so you probably shouldn't test on it. Also it doesn't allow me to run background tasks so it's practically useless for sending emails - I host the celery worker on railway. Otherwise it's fully functional and doesn't differ from the local version - it's just a little slower and requires another computer to run the celery workers. It is possible that my celery worekr can run out of memory ( because I am using a free plan again and so there is a possibiltiy that the email services will go down at some point on the deployed version. It shouldn't be an issue though as it runs only one worker to save memory.*)
-
-I also recommend you test on a fresh sqlite database, because the external database is far away and has a lot of delay. You can also host your own for the same effect. Please make at least one superuser so the chat can open the socket due to the group connection.
-# SoftUni Project – Local Testing & Demonstration
-
-For testing purposes and demonstration for SoftUni, the project must be run locally so you can fully use it.
-
----
 
 ## .env Configuration
 
@@ -94,25 +77,19 @@ You can use the CDN for Tailwind as currently configured, or use the theme app:
    ```
 The differences between the CDN version and the django-tailwind one are minimal.
 
----
-
-## Database
-
-You can use either:
-
-- My database with already loaded data, or
-- A fresh SQLite database to test how the application works from scratch.
-
----
 
 ## Running the Server
-
 When running the server, you should:
 1. Start the Django development server:
    ```bash
    python runserver.py
    ```
-DO NOT RUN THE CELERY WORKER, as it is already ran by my Railway deployment.
+
+      ```bash
+   python runceleryworker.py
+   ```
+You also need to install Redis and host it locally or trough docker (https://redis.io/).
+
 ---
 ## Channels Layer
 
@@ -252,7 +229,10 @@ This role-based access control ensures appropriate separation of duties and enha
 - Email confirmation is mandatory for account activation.  
 - Custom validators ensure usernames and addresses do not contain profanity (`NoProfanityValidator`).  
 - Phone numbers are validated with a custom phone validator to ensure correct format.
-
+- XSS ( Cross site scripting ) is prevented by django forms
+- Parameter Tampering is prevented by server-side authorization
+- CSRF ( Cross site request forgery) attacks are prevented by django's CSRF token.
+- Brute force attacks are prevented by middlewears
 ---
 ### Screenshots
 ![Register](screenshots/accounts/register.png)
@@ -495,8 +475,7 @@ Orders are created via a POST to `/checkout/place-order/`. The process includes:
 ![Checkout](screenshots/orders/checkout_page.png)
 ![Email](screenshots/orders/orders_email.png)
 ![Send](screenshots/orders/order_confirm_page.png)
-
-
+![Order](screenshots/orders/image.png)
 
 
 

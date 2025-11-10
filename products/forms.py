@@ -19,7 +19,7 @@ class ProductForm(forms.ModelForm):
         product = super().save(commit=False)
         image_file = self.cleaned_data.get('image_file')
 
-        if product.image_url:
+        if product.image_url and image_file:
             public_id = get_public_id_from_url(product.image_url)
             delete_cloudinary_image(public_id)
 

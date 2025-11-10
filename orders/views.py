@@ -148,6 +148,10 @@ class OrderCreateView(LoginRequiredMixin, View):
         for item in raw_cart:
             slug = item.get('slug')
             quantity = item.get('quantity', 1)
+            if quantity > 99:
+                messages.error(request, "Quantity cannot exceed 99 for any item.")
+                return redirect('cart')
+
             if not slug or quantity < 1:
                 continue
             try:
