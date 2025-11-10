@@ -164,7 +164,7 @@ class CommentDeleteView(LoginRequiredMixin, DeleteView):
         return self.request.META.get('HTTP_REFERER', reverse_lazy('product-details', kwargs={'pk': product_id}))
 
 
-class ProductUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
+class ProductUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView, object):
     model = Product
     form_class = ProductForm
     template_name = 'products/edit_product.html'
