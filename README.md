@@ -7,6 +7,7 @@
 **CantinaShop** is a comprehensive online store. It offers a wide range of accessories and focuses on delivering a seamless and user-friendly shopping experience.
 
 This project showcases the application of modern web development techniques and best practices in Python, including:
+-- Live Demo: https://cantinashop.onrender.com/
 
 - Real-time communication using **WebSockets** for live chat between staff and customers  
 - Responsive and modular design with **Tailwind CSS**  
