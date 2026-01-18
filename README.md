@@ -545,6 +545,8 @@ If the key is invalid, expired, or belongs to an inactive user, the request is r
 - Authenticated users can only fetch their own messages.
 - Staff and superusers can fetch any user's message history.
 - Messages are serialized with timestamp, sender, and recipient.
+- Results are ordered by most recent messages first.
+- Pagination is supported via query parameters.
 
 ---
 
