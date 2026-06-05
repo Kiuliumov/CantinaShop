@@ -276,7 +276,6 @@ When an admin selects a user:
 All admins share the same conversation view for a user. Any admin can send a message, and all others (including the user) see it live. Message metadata includes:
 - Sender identity
 - Avatar and timestamp
-- Role-based bubble styling
 
 A de-duplication system prevents message duplication on re-renders or reconnections.
 
