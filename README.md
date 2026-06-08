@@ -24,6 +24,7 @@ The platform supports essential e-commerce features such as product management, 
 
 You should configure the `.env` file:
 
+
 ```env
 SECRET_KEY=your-django-secret-key
 DEBUG=False
