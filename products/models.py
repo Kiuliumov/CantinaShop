@@ -13,6 +13,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+
 class Product(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
@@ -27,12 +28,12 @@ class Product(models.Model):
 
     @property
     def average_rating(self):
-        avg = self.rating_set.aggregate(avg=Avg('rating'))['avg']
+        avg = self.rating_set.aggregate(avg=Avg("rating"))["avg"]
         return float(avg) if avg is not None else 0
 
     @property
     def rating_count(self):
-        return self.rating_set.aggregate(count=Count('id'))['count'] or 0
+        return self.rating_set.aggregate(count=Count("id"))["count"] or 0
 
     def save(self, *args, **kwargs):
         if not self.pk and not self.slug:
@@ -55,8 +56,9 @@ class Rating(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     rating = models.IntegerField(validators=[MaxValueValidator(5)])
 
+
 class Comment(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="comments")
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     content = models.TextField(max_length=500, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)

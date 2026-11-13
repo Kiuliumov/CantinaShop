@@ -6,17 +6,21 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('products', '0001_initial'),
+        ("products", "0001_initial"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='product',
-            name='image',
+            model_name="product",
+            name="image",
         ),
         migrations.AddField(
-            model_name='product',
-            name='image_url',
-            field=models.CharField(blank=True, default='https://flightsunglasses.com/cdn/shop/products/ScreenShot2021-01-09at3.49.54PM_2048x.png?v=1610225425', max_length=255),
+            model_name="product",
+            name="image_url",
+            field=models.CharField(
+                blank=True,
+                default="https://flightsunglasses.com/cdn/shop/products/ScreenShot2021-01-09at3.49.54PM_2048x.png?v=1610225425",
+                max_length=255,
+            ),
         ),
     ]

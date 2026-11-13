@@ -7,13 +7,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('products', '0005_comment'),
+        ("products", "0005_comment"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='product',
-            name='rating',
+            model_name="product",
+            name="rating",
             field=models.PositiveIntegerField(default=5, validators=[django.core.validators.MaxValueValidator(5)]),
             preserve_default=False,
         ),

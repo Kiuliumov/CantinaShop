@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0003_apikey_expires_at'),
+        ("api", "0003_apikey_expires_at"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='chatmessage',
-            name='is_read',
+            model_name="chatmessage",
+            name="is_read",
             field=models.BooleanField(default=False),
         ),
     ]

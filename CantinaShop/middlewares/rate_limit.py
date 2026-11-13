@@ -41,7 +41,7 @@ class RateLimitMiddleware(MiddlewareMixin, IPMixin):
                     request,
                     "middleware_pages/too_many_requests.html",
                     status=429,
-                    context={"retry_after_seconds": retry_after}
+                    context={"retry_after_seconds": retry_after},
                 )
 
             request_times.append(now)

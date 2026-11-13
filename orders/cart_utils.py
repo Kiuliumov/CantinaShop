@@ -4,11 +4,10 @@ from products.models import Product
 from decimal import Decimal
 
 
-
 def get_cart_items_and_total(request):
-    cart_cookie = request.COOKIES.get('cart')
+    cart_cookie = request.COOKIES.get("cart")
     items = []
-    total = Decimal('0.00')
+    total = Decimal("0.00")
 
     if not cart_cookie:
         return items, total
@@ -20,8 +19,8 @@ def get_cart_items_and_total(request):
         raw_cart = []
 
     for entry in raw_cart:
-        slug = entry.get('slug') if isinstance(entry, dict) else None
-        quantity = entry.get('quantity', 1) if isinstance(entry, dict) else 1
+        slug = entry.get("slug") if isinstance(entry, dict) else None
+        quantity = entry.get("quantity", 1) if isinstance(entry, dict) else 1
 
         if not slug:
             continue
@@ -31,12 +30,13 @@ def get_cart_items_and_total(request):
             continue
 
         subtotal = product.price * quantity
-        items.append({
-            'product': product,
-            'quantity': quantity,
-            'subtotal': subtotal,
-        })
+        items.append(
+            {
+                "product": product,
+                "quantity": quantity,
+                "subtotal": subtotal,
+            }
+        )
         total += subtotal
 
     return items, total
-

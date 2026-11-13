@@ -5,9 +5,11 @@ profanity.load_censor_words()
 
 PROFANE_WORDS = sorted((str(word) for word in profanity.CENSOR_WORDSET), key=len, reverse=True)
 
+
 def normalize(text):
     """Return a lowercase string with only letters, no symbols/spaces."""
-    return re.sub(r'[^a-zA-Z]', '', str(text)).lower()
+    return re.sub(r"[^a-zA-Z]", "", str(text)).lower()
+
 
 def smart_censor(text):
     text_str = str(text)
@@ -25,7 +27,7 @@ def smart_censor(text):
     for bad_word in PROFANE_WORDS:
         bad_word = bad_word.lower()
 
-        pattern = r'\b' + re.escape(bad_word) + r'\b'
+        pattern = r"\b" + re.escape(bad_word) + r"\b"
 
         for match in re.finditer(pattern, normalized):
             start, end = match.start(), match.end()
@@ -34,9 +36,6 @@ def smart_censor(text):
                     orig_idx = normalized_to_original[norm_idx]
                     censor_mask[orig_idx] = True
 
-    censored_chars = [
-        '*' if censor_mask[i] else text_str[i]
-        for i in range(len(text_str))
-    ]
+    censored_chars = ["*" if censor_mask[i] else text_str[i] for i in range(len(text_str))]
 
-    return ''.join(censored_chars)
+    return "".join(censored_chars)

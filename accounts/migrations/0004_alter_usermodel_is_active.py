@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0003_alter_address_city_alter_address_country_and_more'),
+        ("accounts", "0003_alter_address_city_alter_address_country_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='usermodel',
-            name='is_active',
+            model_name="usermodel",
+            name="is_active",
             field=models.BooleanField(default=False),
         ),
     ]

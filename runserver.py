@@ -12,8 +12,10 @@ if __name__ == "__main__":
 
     sys.argv = [
         "daphne",
-        "-b", "127.0.0.1",
-        "-p", "8000",
+        "-b",
+        "127.0.0.1",
+        "-p",
+        "8000",
         "CantinaShop.asgi:application",
     ]
 

@@ -8,23 +8,34 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0015_alter_usermodel_options_alter_usermodel_managers_and_more'),
+        ("accounts", "0015_alter_usermodel_options_alter_usermodel_managers_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='usermodel',
-            name='username',
-            field=models.CharField(blank=True, max_length=150, null=True, unique=True, validators=[accounts.validators.NoProfanityValidator()]),
+            model_name="usermodel",
+            name="username",
+            field=models.CharField(
+                blank=True,
+                max_length=150,
+                null=True,
+                unique=True,
+                validators=[accounts.validators.NoProfanityValidator()],
+            ),
         ),
         migrations.AlterField(
-            model_name='usermodel',
-            name='email',
-            field=models.EmailField(error_messages={'unique': 'A user with that email already exists.'}, max_length=254, unique=True, validators=[django.core.validators.EmailValidator()]),
+            model_name="usermodel",
+            name="email",
+            field=models.EmailField(
+                error_messages={"unique": "A user with that email already exists."},
+                max_length=254,
+                unique=True,
+                validators=[django.core.validators.EmailValidator()],
+            ),
         ),
         migrations.AlterField(
-            model_name='usermodel',
-            name='is_active',
+            model_name="usermodel",
+            name="is_active",
             field=models.BooleanField(default=False),
         ),
     ]

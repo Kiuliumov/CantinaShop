@@ -19,9 +19,9 @@ User = get_user_model()
 
 
 class RegisterView(ProfileProhibitedMixin, FormView):
-    template_name = 'accounts/authentication/register.html'
+    template_name = "accounts/authentication/register.html"
     form_class = RegistrationForm
-    success_url = reverse_lazy('email_confirmation_sent')
+    success_url = reverse_lazy("email_confirmation_sent")
 
     def form_valid(self, form):
         user = form.save(commit=False)
@@ -32,7 +32,7 @@ class RegisterView(ProfileProhibitedMixin, FormView):
         uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
         token = default_token_generator.make_token(user)
         activation_link = self.request.build_absolute_uri(
-            reverse_lazy('activate', kwargs={'uidb64': uidb64, 'token': token})
+            reverse_lazy("activate", kwargs={"uidb64": uidb64, "token": token})
         )
         subject = "Activate your account"
 
@@ -40,6 +40,7 @@ class RegisterView(ProfileProhibitedMixin, FormView):
 
         messages.success(self.request, "Registration successful. Please check your email to activate your account.")
         return super().form_valid(form)
+
 
 class ActivateAccount(View):
     def get(self, request, uidb64: str, token: str):
@@ -54,50 +55,53 @@ class ActivateAccount(View):
             user.save()
             login(request, user)
             messages.success(request, "Your account has been activated successfully.")
-            return redirect('activation_success')
+            return redirect("activation_success")
 
-        return redirect('activation_invalid')
+        return redirect("activation_invalid")
+
 
 class Login(ProfileProhibitedMixin, LoginView):
-    template_name = 'accounts/authentication/login.html'
+    template_name = "accounts/authentication/login.html"
     authentication_form = LoginForm
     redirect_authenticated_user = True
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy("index")
 
     def form_valid(self, form):
         messages.success(self.request, "Login successful!")
         return super().form_valid(form)
 
+
 class Logout(LogoutView):
-    next_page = reverse_lazy('index')
+    next_page = reverse_lazy("index")
 
     def dispatch(self, request, *args, **kwargs):
         messages.success(request, "You have been logged out.")
         return super().dispatch(request, *args, **kwargs)
 
+
 class AccountUpdateView(LoginRequiredMixin, UpdateView):
     model = Account
     form_class = AccountForm
-    template_name = 'accounts/account_info.html'
-    success_url = reverse_lazy('account')
+    template_name = "accounts/account_info.html"
+    success_url = reverse_lazy("account")
 
     def get_object(self, queryset=None):
         return Account.objects.get(user=self.request.user)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user
+        kwargs["user"] = self.request.user
         return kwargs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        form = context['form']
-        context['address_fields'] = [
-            form['street_address'],
-            form['city'],
-            form['state'],
-            form['postal_code'],
-            form['country'],
+        form = context["form"]
+        context["address_fields"] = [
+            form["street_address"],
+            form["city"],
+            form["state"],
+            form["postal_code"],
+            form["country"],
         ]
         return context
 
@@ -109,6 +113,7 @@ class AccountUpdateView(LoginRequiredMixin, UpdateView):
         messages.error(self.request, "There was an error with your account information. Please try again.")
         return super().form_invalid(form)
 
+
 class AccountDeactivateView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         user = request.user
@@ -116,18 +121,19 @@ class AccountDeactivateView(LoginRequiredMixin, View):
         user.save()
         logout(request)
         messages.success(request, "Your account has been deactivated.")
-        return redirect('index')
+        return redirect("index")
+
 
 class CustomPasswordResetView(PasswordResetView):
-    template_name = 'accounts/reset/password_reset_form.html'
+    template_name = "accounts/reset/password_reset_form.html"
     email_template_name = None
-    success_url = reverse_lazy('password_reset_done')
+    success_url = reverse_lazy("password_reset_done")
 
     def _send_password_reset_email(self, user):
         domain = self.request.get_host()
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         token = default_token_generator.make_token(user)
-        reset_path = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
+        reset_path = reverse("password_reset_confirm", kwargs={"uidb64": uid, "token": token})
         reset_link = f"http://{domain}{reset_path}"
 
         send_password_reset_email_task.delay(user.id, domain, reset_link)

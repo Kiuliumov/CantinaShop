@@ -6,32 +6,32 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('orders', '0004_rename_product_quantities_order_order_data'),
+        ("orders", "0004_rename_product_quantities_order_order_data"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='order',
-            name='order_address',
-            field=models.CharField(default='adsa', max_length=100),
+            model_name="order",
+            name="order_address",
+            field=models.CharField(default="adsa", max_length=100),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='order',
-            name='order_first_name',
-            field=models.CharField(default='asdasd', max_length=100),
+            model_name="order",
+            name="order_first_name",
+            field=models.CharField(default="asdasd", max_length=100),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='order',
-            name='order_last_name',
-            field=models.CharField(default='asdsadasda', max_length=100),
+            model_name="order",
+            name="order_last_name",
+            field=models.CharField(default="asdsadasda", max_length=100),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='order',
-            name='order_phone_number',
-            field=models.CharField(default='asddasdsa', max_length=100),
+            model_name="order",
+            name="order_phone_number",
+            field=models.CharField(default="asddasdsa", max_length=100),
             preserve_default=False,
         ),
     ]

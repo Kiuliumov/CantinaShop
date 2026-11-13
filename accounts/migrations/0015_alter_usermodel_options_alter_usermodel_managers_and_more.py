@@ -6,49 +6,48 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0014_remove_address_label'),
+        ("accounts", "0014_remove_address_label"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='usermodel',
+            name="usermodel",
             options={},
         ),
         migrations.AlterModelManagers(
-            name='usermodel',
-            managers=[
-            ],
+            name="usermodel",
+            managers=[],
         ),
         migrations.RemoveField(
-            model_name='usermodel',
-            name='first_name',
+            model_name="usermodel",
+            name="first_name",
         ),
         migrations.RemoveField(
-            model_name='usermodel',
-            name='last_name',
+            model_name="usermodel",
+            name="last_name",
         ),
         migrations.RemoveField(
-            model_name='usermodel',
-            name='username',
+            model_name="usermodel",
+            name="username",
         ),
         migrations.AlterField(
-            model_name='usermodel',
-            name='date_joined',
+            model_name="usermodel",
+            name="date_joined",
             field=models.DateTimeField(auto_now_add=True),
         ),
         migrations.AlterField(
-            model_name='usermodel',
-            name='email',
+            model_name="usermodel",
+            name="email",
             field=models.EmailField(max_length=254, unique=True),
         ),
         migrations.AlterField(
-            model_name='usermodel',
-            name='is_active',
+            model_name="usermodel",
+            name="is_active",
             field=models.BooleanField(default=True),
         ),
         migrations.AlterField(
-            model_name='usermodel',
-            name='is_staff',
+            model_name="usermodel",
+            name="is_staff",
             field=models.BooleanField(default=False),
         ),
     ]

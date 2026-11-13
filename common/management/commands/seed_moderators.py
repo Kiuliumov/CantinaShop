@@ -5,6 +5,7 @@ from django.db.models import Q
 
 User = get_user_model()
 
+
 class Command(BaseCommand):
     help = "Ensure all users in the 'Moderator' group are marked as staff (is_staff=True)."
 
@@ -24,6 +25,4 @@ class Command(BaseCommand):
                 user.save()
                 updated += 1
 
-        self.stdout.write(self.style.SUCCESS(
-            f"Marked {updated} user(s) in 'Moderators' group as staff."
-        ))
+        self.stdout.write(self.style.SUCCESS(f"Marked {updated} user(s) in 'Moderators' group as staff."))

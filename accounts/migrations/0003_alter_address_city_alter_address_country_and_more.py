@@ -6,33 +6,33 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0002_remove_account_bio_remove_account_city_and_more'),
+        ("accounts", "0002_remove_account_bio_remove_account_city_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='address',
-            name='city',
+            model_name="address",
+            name="city",
             field=models.CharField(blank=True, max_length=50),
         ),
         migrations.AlterField(
-            model_name='address',
-            name='country',
+            model_name="address",
+            name="country",
             field=models.CharField(blank=True, max_length=50),
         ),
         migrations.AlterField(
-            model_name='address',
-            name='postal_code',
+            model_name="address",
+            name="postal_code",
             field=models.CharField(blank=True, max_length=20),
         ),
         migrations.AlterField(
-            model_name='address',
-            name='state',
+            model_name="address",
+            name="state",
             field=models.CharField(blank=True, max_length=50),
         ),
         migrations.AlterField(
-            model_name='address',
-            name='street_address',
+            model_name="address",
+            name="street_address",
             field=models.CharField(blank=True, max_length=100),
         ),
     ]

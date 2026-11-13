@@ -22,29 +22,30 @@ class ProductListCreateAPIView(ListCreateAPIView):
     serializer_class = ProductSerializer
     authentication_classes = [APIKeyAuthentication, SessionAuthentication]
     permission_classes = [IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
         qs = self.filter_queryset(self.get_queryset())
 
-        product_id = request.GET.get('id')
+        product_id = request.GET.get("id")
         if product_id:
             qs = qs.filter(id=product_id)
 
-        search = request.GET.get('search')
+        search = request.GET.get("search")
         if search:
             qs = qs.filter(Q(name__icontains=search) | Q(description__icontains=search))
 
-        category_id = request.GET.get('category')
+        category_id = request.GET.get("category")
         if category_id:
             qs = qs.filter(category__id=category_id)
 
-        availability = request.GET.get('availability')
-        if availability == 'available':
+        availability = request.GET.get("availability")
+        if availability == "available":
             qs = qs.filter(is_available=True)
-        elif availability == 'unavailable':
+        elif availability == "unavailable":
             qs = qs.filter(is_available=False)
 
-        min_price = request.GET.get('min_price')
-        max_price = request.GET.get('max_price')
+        min_price = request.GET.get("min_price")
+        max_price = request.GET.get("max_price")
         try:
             if min_price:
                 qs = qs.filter(price__gte=float(min_price))
@@ -53,19 +54,19 @@ class ProductListCreateAPIView(ListCreateAPIView):
         except ValueError:
             pass
 
-        sort = request.GET.get('sort')
-        if sort == 'name_asc':
-            qs = qs.order_by('name')
-        elif sort == 'name_desc':
-            qs = qs.order_by('-name')
-        elif sort == 'price_asc':
-            qs = qs.order_by('price')
-        elif sort == 'price_desc':
-            qs = qs.order_by('-price')
+        sort = request.GET.get("sort")
+        if sort == "name_asc":
+            qs = qs.order_by("name")
+        elif sort == "name_desc":
+            qs = qs.order_by("-name")
+        elif sort == "price_asc":
+            qs = qs.order_by("price")
+        elif sort == "price_desc":
+            qs = qs.order_by("-price")
         else:
-            qs = qs.order_by('-created_at')
+            qs = qs.order_by("-created_at")
 
-        limit = request.GET.get('limit', 50)
+        limit = request.GET.get("limit", 50)
         try:
             limit = int(limit)
             if limit <= 0:
@@ -76,7 +77,7 @@ class ProductListCreateAPIView(ListCreateAPIView):
         qs = qs[:limit]
 
         serializer = self.get_serializer(qs, many=True)
-        return Response({'products': serializer.data})
+        return Response({"products": serializer.data})
 
 
 class ProductDetailAPIView(RetrieveUpdateDestroyAPIView):
@@ -84,7 +85,7 @@ class ProductDetailAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = ProductSerializer
     authentication_classes = [APIKeyAuthentication, SessionAuthentication]
     permission_classes = [IsAdminUser]
-    lookup_field = 'id'
+    lookup_field = "id"
 
 
 class GenerateAPIKeyAPIView(AdminRequiredMixin, APIView):
@@ -97,18 +98,18 @@ class GenerateAPIKeyAPIView(AdminRequiredMixin, APIView):
         user = request.user
         today = localtime(now()).date()
 
-        existing_key = APIKey.objects.filter(
-            user=user,
-            created_at__date=today
-        ).first()
+        existing_key = APIKey.objects.filter(user=user, created_at__date=today).first()
 
         if existing_key:
-            return Response({
-                'detail': 'You can only generate one API key per day.',
-                'api_key': existing_key.key,
-                'expires_at': existing_key.expires_at,
-                'user': user.username,
-            }, status=status.HTTP_429_TOO_MANY_REQUESTS)
+            return Response(
+                {
+                    "detail": "You can only generate one API key per day.",
+                    "api_key": existing_key.key,
+                    "expires_at": existing_key.expires_at,
+                    "user": user.username,
+                },
+                status=status.HTTP_429_TOO_MANY_REQUESTS,
+            )
 
         new_key = secrets.token_hex(20)
         expiry = now() + timedelta(days=30)
@@ -119,10 +120,11 @@ class GenerateAPIKeyAPIView(AdminRequiredMixin, APIView):
             expires_at=expiry,
         )
 
-        return Response({
-            'api_key': new_key,
-            'expires_at': expiry,
-            'user': user.username,
-        }, status=status.HTTP_201_CREATED)
-
-
+        return Response(
+            {
+                "api_key": new_key,
+                "expires_at": expiry,
+                "user": user.username,
+            },
+            status=status.HTTP_201_CREATED,
+        )

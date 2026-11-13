@@ -5,11 +5,11 @@ from accounts.models import Account
 
 class Order(models.Model):
     STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('shipped', 'Shipped'),
-        ('unpaid', 'Unpaid'),
-        ('returned', 'Returned'),
-        ('cancelled', 'Cancelled'),
+        ("pending", "Pending"),
+        ("shipped", "Shipped"),
+        ("unpaid", "Unpaid"),
+        ("returned", "Returned"),
+        ("cancelled", "Cancelled"),
     ]
 
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
@@ -20,7 +20,7 @@ class Order(models.Model):
     order_first_name = models.CharField(max_length=100)
     order_last_name = models.CharField(max_length=100)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
@@ -32,7 +32,7 @@ class Order(models.Model):
                 f"{self.account.default_shipping.postal_code}, "
                 f"{self.account.default_shipping.country}"
             )
-            self.order_phone_number = f'{self.account.country_code} {self.account.phone_number}'
+            self.order_phone_number = f"{self.account.country_code} {self.account.phone_number}"
             self.order_first_name = self.account.first_name
             self.order_last_name = self.account.last_name
         super().save(*args, **kwargs)

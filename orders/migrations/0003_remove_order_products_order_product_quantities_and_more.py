@@ -6,23 +6,33 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('orders', '0002_order_created_at'),
+        ("orders", "0002_order_created_at"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='order',
-            name='products',
+            model_name="order",
+            name="products",
         ),
         migrations.AddField(
-            model_name='order',
-            name='product_quantities',
-            field=models.JSONField(default='{sfr:dgdfg}'),
+            model_name="order",
+            name="product_quantities",
+            field=models.JSONField(default="{sfr:dgdfg}"),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='order',
-            name='status',
-            field=models.CharField(choices=[('pending', 'Pending'), ('shipped', 'Shipped'), ('unpaid', 'Unpaid'), ('returned', 'Returned'), ('cancelled', 'Cancelled')], default='pending', max_length=20),
+            model_name="order",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    ("pending", "Pending"),
+                    ("shipped", "Shipped"),
+                    ("unpaid", "Unpaid"),
+                    ("returned", "Returned"),
+                    ("cancelled", "Cancelled"),
+                ],
+                default="pending",
+                max_length=20,
+            ),
         ),
     ]

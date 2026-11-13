@@ -15,5 +15,5 @@ def create_user_account(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=UserModel)
 def save_user_account(sender, instance, **kwargs):
-    if hasattr(instance, 'account'):
+    if hasattr(instance, "account"):
         instance.account.save()

@@ -7,8 +7,9 @@ profanity.load_censor_words()
 
 
 def split_to_words(value):
-    parts = re.findall(r'[A-Z]?[a-z]+|[A-Z]+|[0-9]+', value)
+    parts = re.findall(r"[A-Z]?[a-z]+|[A-Z]+|[0-9]+", value)
     return parts
+
 
 @deconstructible
 class NoProfanityValidator:
@@ -28,6 +29,7 @@ class NoProfanityValidator:
             if profanity.contains_profanity(part.lower()):
                 raise ValidationError(self.message, code=self.code)
 
+
 @deconstructible
 class PhoneNumberValidator:
     message = "Phone number must contain only digits and optional '+' at the start."
@@ -40,5 +42,5 @@ class PhoneNumberValidator:
             self.code = code
 
     def __call__(self, value):
-        if value and not re.fullmatch(r'^\+?\d{7,15}$', value):
+        if value and not re.fullmatch(r"^\+?\d{7,15}$", value):
             raise ValidationError(self.message, code=self.code)

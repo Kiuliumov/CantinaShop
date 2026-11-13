@@ -7,19 +7,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0008_alter_address_account_alter_address_address_type_and_more'),
-        ('products', '0004_alter_product_name'),
+        ("accounts", "0008_alter_address_account_alter_address_address_type_and_more"),
+        ("products", "0004_alter_product_name"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Comment',
+            name="Comment",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('content', models.TextField(max_length=500)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('account', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='accounts.account')),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='products.product')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("content", models.TextField(max_length=500)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("account", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="accounts.account")),
+                (
+                    "product",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, related_name="comments", to="products.product"
+                    ),
+                ),
             ],
         ),
     ]

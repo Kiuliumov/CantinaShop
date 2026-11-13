@@ -8,48 +8,79 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0012_remove_account_default_billing_and_more'),
+        ("accounts", "0012_remove_account_default_billing_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='account',
-            name='first_name',
-            field=models.CharField(blank=True, max_length=150, null=True, validators=[django.core.validators.MinLengthValidator(2)]),
+            model_name="account",
+            name="first_name",
+            field=models.CharField(
+                blank=True, max_length=150, null=True, validators=[django.core.validators.MinLengthValidator(2)]
+            ),
         ),
         migrations.AlterField(
-            model_name='account',
-            name='last_name',
-            field=models.CharField(blank=True, max_length=150, null=True, validators=[django.core.validators.MinLengthValidator(2)]),
+            model_name="account",
+            name="last_name",
+            field=models.CharField(
+                blank=True, max_length=150, null=True, validators=[django.core.validators.MinLengthValidator(2)]
+            ),
         ),
         migrations.AlterField(
-            model_name='account',
-            name='phone_number',
-            field=models.CharField(blank=True, max_length=20, null=True, validators=[accounts.validators.PhoneNumberValidator(), django.core.validators.MinLengthValidator(7)]),
+            model_name="account",
+            name="phone_number",
+            field=models.CharField(
+                blank=True,
+                max_length=20,
+                null=True,
+                validators=[accounts.validators.PhoneNumberValidator(), django.core.validators.MinLengthValidator(7)],
+            ),
         ),
         migrations.AlterField(
-            model_name='address',
-            name='city',
-            field=models.CharField(blank=True, max_length=50, null=True, validators=[accounts.validators.NoProfanityValidator(), django.core.validators.MinLengthValidator(2)]),
+            model_name="address",
+            name="city",
+            field=models.CharField(
+                blank=True,
+                max_length=50,
+                null=True,
+                validators=[accounts.validators.NoProfanityValidator(), django.core.validators.MinLengthValidator(2)],
+            ),
         ),
         migrations.AlterField(
-            model_name='address',
-            name='country',
-            field=models.CharField(blank=True, max_length=50, null=True, validators=[accounts.validators.NoProfanityValidator(), django.core.validators.MinLengthValidator(2)]),
+            model_name="address",
+            name="country",
+            field=models.CharField(
+                blank=True,
+                max_length=50,
+                null=True,
+                validators=[accounts.validators.NoProfanityValidator(), django.core.validators.MinLengthValidator(2)],
+            ),
         ),
         migrations.AlterField(
-            model_name='address',
-            name='postal_code',
-            field=models.CharField(blank=True, max_length=20, null=True, validators=[django.core.validators.MinLengthValidator(3)]),
+            model_name="address",
+            name="postal_code",
+            field=models.CharField(
+                blank=True, max_length=20, null=True, validators=[django.core.validators.MinLengthValidator(3)]
+            ),
         ),
         migrations.AlterField(
-            model_name='address',
-            name='state',
-            field=models.CharField(blank=True, max_length=50, null=True, validators=[accounts.validators.NoProfanityValidator(), django.core.validators.MinLengthValidator(2)]),
+            model_name="address",
+            name="state",
+            field=models.CharField(
+                blank=True,
+                max_length=50,
+                null=True,
+                validators=[accounts.validators.NoProfanityValidator(), django.core.validators.MinLengthValidator(2)],
+            ),
         ),
         migrations.AlterField(
-            model_name='address',
-            name='street_address',
-            field=models.CharField(blank=True, max_length=100, null=True, validators=[accounts.validators.NoProfanityValidator(), django.core.validators.MinLengthValidator(5)]),
+            model_name="address",
+            name="street_address",
+            field=models.CharField(
+                blank=True,
+                max_length=100,
+                null=True,
+                validators=[accounts.validators.NoProfanityValidator(), django.core.validators.MinLengthValidator(5)],
+            ),
         ),
     ]

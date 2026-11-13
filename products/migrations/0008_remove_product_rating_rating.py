@@ -8,22 +8,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0011_account_country_code'),
-        ('products', '0007_alter_product_image_url'),
+        ("accounts", "0011_account_country_code"),
+        ("products", "0007_alter_product_image_url"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='product',
-            name='rating',
+            model_name="product",
+            name="rating",
         ),
         migrations.CreateModel(
-            name='Rating',
+            name="Rating",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('rating', models.IntegerField(validators=[django.core.validators.MaxValueValidator(5)])),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='products.product')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='accounts.account')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("rating", models.IntegerField(validators=[django.core.validators.MaxValueValidator(5)])),
+                ("product", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="products.product")),
+                ("user", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="accounts.account")),
             ],
         ),
     ]

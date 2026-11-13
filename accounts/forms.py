@@ -10,12 +10,12 @@ from .validators import NoProfanityValidator
 
 
 class RegistrationForm(UserCreationForm):
-    username = forms.CharField(label='Username', widget=forms.TextInput())
+    username = forms.CharField(label="Username", widget=forms.TextInput())
     email = forms.EmailField(required=True)
     password1 = forms.CharField(
         label="Password",
         strip=False,
-        widget=forms.PasswordInput(attrs={'id': 'password'}),
+        widget=forms.PasswordInput(attrs={"id": "password"}),
     )
     password2 = forms.CharField(
         label="Password confirmation",
@@ -23,14 +23,14 @@ class RegistrationForm(UserCreationForm):
         widget=forms.PasswordInput(),
     )
 
-    field_order = ['username', 'email', 'password1', 'password2']
+    field_order = ["username", "email", "password1", "password2"]
 
     class Meta:
         model = UserModel
-        fields = ('username', 'email', 'password1', 'password2')
+        fields = ("username", "email", "password1", "password2")
 
     def clean_email(self):
-        email = self.cleaned_data.get('email')
+        email = self.cleaned_data.get("email")
         try:
             user = UserModel.objects.get(email=email)
             if user.is_active:
@@ -42,7 +42,7 @@ class RegistrationForm(UserCreationForm):
         return email
 
     def clean_username(self):
-        username = self.cleaned_data.get('username')
+        username = self.cleaned_data.get("username")
         NoProfanityValidator()(username)
         try:
             user = UserModel.objects.get(username=username)
@@ -55,13 +55,12 @@ class RegistrationForm(UserCreationForm):
         return username
 
 
-
 class LoginForm(AuthenticationForm):
     username = forms.CharField(label="Username or Email")
 
     def clean(self):
-        username_or_email = self.cleaned_data.get('username')
-        password = self.cleaned_data.get('password')
+        username_or_email = self.cleaned_data.get("username")
+        password = self.cleaned_data.get("password")
 
         if username_or_email and password:
             user = authenticate(self.request, username=username_or_email, password=password)
@@ -72,6 +71,7 @@ class LoginForm(AuthenticationForm):
             self.user_cache = user
 
         return self.cleaned_data
+
 
 class AccountForm(forms.ModelForm):
     username = forms.CharField(max_length=150)
@@ -86,45 +86,54 @@ class AccountForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = [
-            'username', 'country_code', 'first_name', 'last_name', 'phone_number', 'profile_picture',
-            'street_address', 'city', 'state', 'postal_code', 'country',
+            "username",
+            "country_code",
+            "first_name",
+            "last_name",
+            "phone_number",
+            "profile_picture",
+            "street_address",
+            "city",
+            "state",
+            "postal_code",
+            "country",
         ]
 
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
+        user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
 
         for field_name, field in self.fields.items():
-            existing_classes = field.widget.attrs.get('class', '')
-            field.widget.attrs['class'] = (
-                existing_classes + ' w-full px-5 py-3 bg-gray-700 border border-gray-600 rounded-lg '
-                'text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-3 focus:ring-indigo-500 '
-                'focus:border-indigo-400 transition'
+            existing_classes = field.widget.attrs.get("class", "")
+            field.widget.attrs["class"] = (
+                existing_classes + " w-full px-5 py-3 bg-gray-700 border border-gray-600 rounded-lg "
+                "text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-3 focus:ring-indigo-500 "
+                "focus:border-indigo-400 transition"
             ).strip()
 
         if user:
-            self.fields['username'].initial = user.username
+            self.fields["username"].initial = user.username
 
         if self.instance and self.instance.country_code:
-            self.fields['country_code'].initial = self.instance.country_code
+            self.fields["country_code"].initial = self.instance.country_code
 
-        if self.instance and hasattr(self.instance, 'default_shipping') and self.instance.default_shipping:
+        if self.instance and hasattr(self.instance, "default_shipping") and self.instance.default_shipping:
             addr = self.instance.default_shipping
-            self.fields['street_address'].initial = addr.street_address
-            self.fields['city'].initial = addr.city
-            self.fields['state'].initial = addr.state
-            self.fields['postal_code'].initial = addr.postal_code
-            self.fields['country'].initial = addr.country
+            self.fields["street_address"].initial = addr.street_address
+            self.fields["city"].initial = addr.city
+            self.fields["state"].initial = addr.state
+            self.fields["postal_code"].initial = addr.postal_code
+            self.fields["country"].initial = addr.country
 
     def clean_username(self):
-        username = self.cleaned_data.get('username')
+        username = self.cleaned_data.get("username")
         qs = UserModel.objects.filter(username=username).exclude(pk=self.instance.user.pk)
         if qs.exists():
             raise forms.ValidationError("This username is already taken.")
         return username
 
     def clean_postal_code(self):
-        postal_code = self.cleaned_data.get('postal_code')
+        postal_code = self.cleaned_data.get("postal_code")
         if postal_code and len(postal_code) > 20:
             raise forms.ValidationError("Postal code cannot exceed 20 characters.")
         return postal_code
@@ -133,12 +142,12 @@ class AccountForm(forms.ModelForm):
         account = super().save(commit=False)
         user = account.user
 
-        new_username = self.cleaned_data['username']
+        new_username = self.cleaned_data["username"]
         if user.username != new_username:
             user.username = new_username
             user.save()
 
-        profile_picture: InMemoryUploadedFile = self.cleaned_data.get('profile_picture')
+        profile_picture: InMemoryUploadedFile = self.cleaned_data.get("profile_picture")
 
         if account.profile_picture_url:
             public_id = get_public_id_from_url(account.profile_picture_url)
@@ -152,15 +161,15 @@ class AccountForm(forms.ModelForm):
             account.save()
 
         address_data = {
-            'street_address': self.cleaned_data.get('street_address', ''),
-            'city': self.cleaned_data.get('city', ''),
-            'state': self.cleaned_data.get('state', ''),
-            'postal_code': self.cleaned_data.get('postal_code', ''),
-            'country': self.cleaned_data.get('country', ''),
-            'account': account,
+            "street_address": self.cleaned_data.get("street_address", ""),
+            "city": self.cleaned_data.get("city", ""),
+            "state": self.cleaned_data.get("state", ""),
+            "postal_code": self.cleaned_data.get("postal_code", ""),
+            "country": self.cleaned_data.get("country", ""),
+            "account": account,
         }
 
-        default_shipping = getattr(account, 'default_shipping', None)
+        default_shipping = getattr(account, "default_shipping", None)
         if default_shipping:
             for attr, value in address_data.items():
                 setattr(default_shipping, attr, value)
@@ -172,5 +181,3 @@ class AccountForm(forms.ModelForm):
                 account.save()
 
         return account
-
-

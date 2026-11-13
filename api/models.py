@@ -6,8 +6,8 @@ from django.db import models
 
 from accounts.models import UserModel
 
-
 # Create your models here.
+
 
 class APIKey(models.Model):
     key = models.CharField(max_length=40, unique=True, editable=False)

@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0005_alter_usermodel_email'),
+        ("accounts", "0005_alter_usermodel_email"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='usermodel',
-            name='is_chatbanned',
+            model_name="usermodel",
+            name="is_chatbanned",
             field=models.BooleanField(default=False),
         ),
     ]

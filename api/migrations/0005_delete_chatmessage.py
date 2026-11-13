@@ -6,11 +6,11 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0004_chatmessage_is_read'),
+        ("api", "0004_chatmessage_is_read"),
     ]
 
     operations = [
         migrations.DeleteModel(
-            name='ChatMessage',
+            name="ChatMessage",
         ),
     ]

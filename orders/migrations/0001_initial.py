@@ -9,19 +9,19 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('accounts', '0013_alter_account_first_name_alter_account_last_name_and_more'),
-        ('products', '0010_remove_product_quantity'),
+        ("accounts", "0013_alter_account_first_name_alter_account_last_name_and_more"),
+        ("products", "0010_remove_product_quantity"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Order',
+            name="Order",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('payment_option', models.CharField(max_length=50)),
-                ('total_price', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('account', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='accounts.account')),
-                ('products', models.ManyToManyField(to='products.product')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("payment_option", models.CharField(max_length=50)),
+                ("total_price", models.DecimalField(decimal_places=2, max_digits=10)),
+                ("account", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="accounts.account")),
+                ("products", models.ManyToManyField(to="products.product")),
             ],
         ),
     ]

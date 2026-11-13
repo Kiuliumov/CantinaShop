@@ -7,43 +7,55 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0007_rename_is_chatbanned_usermodel_is_chat_banned'),
+        ("accounts", "0007_rename_is_chatbanned_usermodel_is_chat_banned"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='address',
-            name='account',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='addresses', to='accounts.account'),
+            model_name="address",
+            name="account",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="addresses",
+                to="accounts.account",
+            ),
         ),
         migrations.AlterField(
-            model_name='address',
-            name='address_type',
-            field=models.CharField(blank=True, choices=[('shipping', 'Shipping'), ('billing', 'Billing'), ('other', 'Other')], default='shipping', max_length=10, null=True),
+            model_name="address",
+            name="address_type",
+            field=models.CharField(
+                blank=True,
+                choices=[("shipping", "Shipping"), ("billing", "Billing"), ("other", "Other")],
+                default="shipping",
+                max_length=10,
+                null=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='address',
-            name='city',
+            model_name="address",
+            name="city",
             field=models.CharField(blank=True, max_length=50, null=True),
         ),
         migrations.AlterField(
-            model_name='address',
-            name='country',
+            model_name="address",
+            name="country",
             field=models.CharField(blank=True, max_length=50, null=True),
         ),
         migrations.AlterField(
-            model_name='address',
-            name='postal_code',
+            model_name="address",
+            name="postal_code",
             field=models.CharField(blank=True, max_length=20, null=True),
         ),
         migrations.AlterField(
-            model_name='address',
-            name='state',
+            model_name="address",
+            name="state",
             field=models.CharField(blank=True, max_length=50, null=True),
         ),
         migrations.AlterField(
-            model_name='address',
-            name='street_address',
+            model_name="address",
+            name="street_address",
             field=models.CharField(blank=True, max_length=100, null=True),
         ),
     ]

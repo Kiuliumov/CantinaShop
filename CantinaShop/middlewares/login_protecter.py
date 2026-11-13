@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.utils.deprecation import MiddlewareMixin
 from .get_ip import IPMixin
 
+
 class LoginDefenderMiddleware(MiddlewareMixin, IPMixin):
     """
     Middleware to throttle failed login attempts by IP address.
