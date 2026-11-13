@@ -7,8 +7,6 @@ from common.models import ContactMessage
 # Create your tests here.
 
 
-
-
 # Unit Tests
 class StaticViewTests(TestCase):
 
