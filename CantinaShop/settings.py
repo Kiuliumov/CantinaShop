@@ -50,6 +50,10 @@ AUTHENTICATION_BACKENDS = [
 
 LOGIN_REDIRECT_URL = "/"
 
+# Throttling windows in seconds, applied per client IP address.
+LOGIN_DEFENDER = {"MAX_ATTEMPTS": 5, "BLOCK_DURATION": 600}
+RATE_LIMIT = {"RATE": 50, "PERIOD": 90}
+
 EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.example.com")
 EMAIL_PORT = int(os.getenv("EMAIL_PORT", 587))
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
