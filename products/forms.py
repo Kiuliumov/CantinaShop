@@ -9,7 +9,11 @@ class ProductForm(forms.ModelForm):
         required=False,
         widget=forms.ClearableFileInput(
             attrs={
-                "class": "block w-full text-sm text-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 transition",
+                "class": (
+                    "block w-full text-sm text-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-fu"
+                    "ll file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-wh"
+                    "ite hover:file:bg-indigo-700 transition"
+                ),
                 "accept": "image/*",
             }
         ),
@@ -45,34 +49,56 @@ class ProductForm(forms.ModelForm):
         widgets = {
             "name": forms.TextInput(
                 attrs={
-                    "class": "w-full px-4 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition",
+                    "class": (
+                        "w-full px-4 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:"
+                        "outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transiti"
+                        "on"
+                    ),
                 }
             ),
             "description": forms.Textarea(
                 attrs={
                     "rows": 4,
-                    "class": "w-full px-4 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition",
+                    "class": (
+                        "w-full px-4 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:"
+                        "outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transiti"
+                        "on"
+                    ),
                 }
             ),
             "price": forms.NumberInput(
                 attrs={
-                    "class": "w-full px-4 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition",
+                    "class": (
+                        "w-full px-4 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:"
+                        "outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transiti"
+                        "on"
+                    ),
                     "step": "0.01",
                 }
             ),
             "is_available": forms.CheckboxInput(
                 attrs={
-                    "class": "h-5 w-5 text-indigo-600 bg-gray-700 border-gray-500 rounded focus:ring-indigo-500 transition",
+                    "class": (
+                        "h-5 w-5 text-indigo-600 bg-gray-700 border-gray-500 rounded focus:ring-indigo-50"
+                        "0 transition"
+                    ),
                 }
             ),
             "has_discount": forms.CheckboxInput(
                 attrs={
-                    "class": "h-5 w-5 text-yellow-400 bg-gray-700 border-gray-500 rounded focus:ring-yellow-400 transition",
+                    "class": (
+                        "h-5 w-5 text-yellow-400 bg-gray-700 border-gray-500 rounded focus:ring-yellow-40"
+                        "0 transition"
+                    ),
                 }
             ),
             "category": forms.Select(
                 attrs={
-                    "class": "w-full px-4 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition",
+                    "class": (
+                        "w-full px-4 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:"
+                        "outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transiti"
+                        "on"
+                    ),
                 }
             ),
         }
@@ -89,7 +115,10 @@ class CommentForm(forms.ModelForm):
             {
                 "rows": 4,
                 "placeholder": "Leave a comment...",
-                "class": "w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition",
+                ("class"): (
+                    "w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white focus:"
+                    "outline-none focus:ring-2 focus:ring-indigo-500 transition"
+                ),
             }
         )
 

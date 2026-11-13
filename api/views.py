@@ -114,7 +114,7 @@ class GenerateAPIKeyAPIView(AdminRequiredMixin, APIView):
         new_key = secrets.token_hex(20)
         expiry = now() + timedelta(days=30)
 
-        api_key_obj = APIKey.objects.create(
+        APIKey.objects.create(
             user=user,
             key=new_key,
             expires_at=expiry,

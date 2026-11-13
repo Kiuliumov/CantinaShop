@@ -44,9 +44,13 @@ class OrderAdmin(admin.ModelAdmin):
 
         html = '<div style="padding-top: 1rem;">'
         for item in obj.order_data:
-            image_html = f'<img src="{item["image_url"]}" width="50" height="50" style="border-radius:6px; object-fit:cover; margin-right: 10px;" />'
+            image_html = (
+                f'<img src="{item["image_url"]}" width="50" height="50" '
+                'style="border-radius:6px; object-fit:cover; margin-right: 10px;" />'
+            )
             html += f"""
-            <div style="display: flex; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #ddd; padding-bottom: 8px;">
+            <div style="display: flex; align-items: center; margin-bottom: 12px;
+                        border-bottom: 1px solid #ddd; padding-bottom: 8px;">
                 {image_html}
                 <div>
                     <strong>{item["name"]}</strong><br />
