@@ -22,7 +22,18 @@ The platform supports essential e-commerce features such as product management, 
 
 ## .env Configuration
 
-You should configure the `.env` file:
+Without a project-root `.env`, the app defaults to local development: SQLite,
+console email, in-memory caching and chat, and Celery tasks executed immediately
+in the web process. No Redis server or Celery worker is needed. Debug mode and
+localhost access are enabled by default. Install `requirements-dev.txt`, run
+`python manage.py migrate`, then `python manage.py runserver`.
+
+Set `DJANGO_ENV=production` in the deployment environment to disable this automatic
+fallback even when configuration is supplied entirely through environment variables.
+Existing environment variables take precedence over `.env` values. Cloudinary uploads
+still require credentials.
+
+For external services, configure the `.env` file:
 
 
 ```env
