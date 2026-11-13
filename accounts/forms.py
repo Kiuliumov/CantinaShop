@@ -1,11 +1,11 @@
+from django import forms
 from django.contrib.auth import authenticate
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
-from common.image_cloud_storage import upload_to_cloud_storage, get_public_id_from_url, delete_cloudinary_image
-from .models import UserModel, Account, Address
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django import forms
+from common.image_cloud_storage import delete_cloudinary_image, get_public_id_from_url, upload_to_cloud_storage
 
+from .models import Account, Address, UserModel
 from .validators import NoProfanityValidator
 
 

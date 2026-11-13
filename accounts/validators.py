@@ -1,7 +1,8 @@
+import re
+
+from better_profanity import profanity
 from django.core.exceptions import ValidationError
 from django.utils.deconstruct import deconstructible
-from better_profanity import profanity
-import re
 
 profanity.load_censor_words()
 

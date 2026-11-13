@@ -1,19 +1,20 @@
-from django.urls import reverse
+from django.contrib import messages
+from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView
 from django.shortcuts import redirect
-from django.urls import reverse_lazy
-from django.utils.encoding import force_str, force_bytes
+from django.urls import reverse, reverse_lazy
+from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views import View
 from django.views.generic.edit import FormView, UpdateView
-from django.contrib import messages
+
 from common.mixins import ProfileProhibitedMixin
-from .forms import RegistrationForm, LoginForm, AccountForm
-from .models import Account
 from common.tasks import send_confirmation_email_task, send_password_reset_email_task
+
+from .forms import AccountForm, LoginForm, RegistrationForm
+from .models import Account
 
 User = get_user_model()
 

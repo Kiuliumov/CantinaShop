@@ -1,5 +1,6 @@
-import requests
 import argparse
+
+import requests
 
 parser = argparse.ArgumentParser(description="Test CantinaShop API")
 parser.add_argument("--api-key", help="API key for authentication", default="d9abb381d21216998c2c6095302b350a9efef079")

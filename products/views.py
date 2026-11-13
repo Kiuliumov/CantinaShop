@@ -1,20 +1,22 @@
 import json
 import urllib.parse
 
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from django.urls import reverse_lazy, reverse
+
 from common.mixins import AdminRequiredMixin
-from .forms import ProductForm, CommentForm, CategoryForm
-from products.models import Product, Category, Comment, Rating
-from django.contrib import messages
+from products.models import Category, Comment, Product, Rating
+
+from .forms import CategoryForm, CommentForm, ProductForm
 
 
 class ProductListView(ListView):

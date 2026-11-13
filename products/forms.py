@@ -1,7 +1,7 @@
 from django import forms
 
-from common.image_cloud_storage import get_public_id_from_url, delete_cloudinary_image, upload_to_cloud_storage
-from products.models import Product, Comment, Category
+from common.image_cloud_storage import delete_cloudinary_image, get_public_id_from_url, upload_to_cloud_storage
+from products.models import Category, Comment, Product
 
 
 class ProductForm(forms.ModelForm):

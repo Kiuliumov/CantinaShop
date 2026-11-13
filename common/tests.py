@@ -1,12 +1,12 @@
 from django.test import TestCase
+from django.urls import reverse
+
+from common.forms import ContactMessageForm
+from common.models import ContactMessage
 
 # Create your tests here.
 
 
-from django.test import TestCase
-from django.urls import reverse
-from common.forms import ContactMessageForm
-from common.models import ContactMessage
 
 
 # Unit Tests

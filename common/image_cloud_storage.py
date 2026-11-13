@@ -1,7 +1,8 @@
-import cloudinary.uploader
-from typing import Union
-from django.core.files.uploadedfile import UploadedFile
 import re
+from typing import Union
+
+import cloudinary.uploader
+from django.core.files.uploadedfile import UploadedFile
 
 
 def upload_to_cloud_storage(file: Union[UploadedFile, bytes], folder: str = "profile_pictures") -> str:

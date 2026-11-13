@@ -1,7 +1,7 @@
 from django.urls import path
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
-from api.views import ProductListCreateAPIView, GenerateAPIKeyAPIView, ProductDetailAPIView
+from api.views import GenerateAPIKeyAPIView, ProductDetailAPIView, ProductListCreateAPIView
 
 drf_spectacular = [
     path("schema/", SpectacularAPIView.as_view(), name="schema"),

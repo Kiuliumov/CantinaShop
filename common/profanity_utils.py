@@ -1,4 +1,5 @@
 import re
+
 from better_profanity import profanity
 
 profanity.load_censor_words()

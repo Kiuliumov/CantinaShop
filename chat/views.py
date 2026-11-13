@@ -1,17 +1,19 @@
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
-from django.db.models import Count, Q, Max
+from django.db.models import Count, Max, Q
 from django.db.models.functions import Greatest
 from django.shortcuts import get_object_or_404
 from django.templatetags.static import static
 from django.urls import reverse
 from django.views.generic import TemplateView
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from common.mixins import AdminRequiredMixin
+
 from .models import ChatMessage
 from .serializers import ChatMessageSerializer
-from common.mixins import AdminRequiredMixin
 
 UserModel = get_user_model()
 

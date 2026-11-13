@@ -1,7 +1,8 @@
 from django.contrib.auth import get_user_model
-from django.test import TestCase, Client
+from django.test import Client, TestCase
 from django.urls import reverse
-from products.models import Product, Category, Comment, Rating
+
+from products.models import Category, Comment, Product, Rating
 
 # ----------------------
 # UNIT TESTS

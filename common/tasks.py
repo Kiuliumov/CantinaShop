@@ -1,6 +1,7 @@
 from celery import shared_task
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
+
 from CantinaShop import settings
 
 EMAIL_SENDER = settings.DEFAULT_FROM_EMAIL
@@ -28,6 +29,7 @@ def send_confirmation_email_task(user_id, domain, activation_link, subject):
 @shared_task
 def send_order_confirmation_email_task(user_id, order_id):
     from django.contrib.auth import get_user_model
+
     from orders.models import Order
 
     User = get_user_model()
@@ -51,8 +53,9 @@ def send_order_confirmation_email_task(user_id, order_id):
 @shared_task
 def send_password_reset_email_task(user_id, domain, reset_link, subject="Password Reset Request"):
     from django.contrib.auth import get_user_model
-    from django.template.loader import render_to_string
     from django.core.mail import EmailMultiAlternatives
+    from django.template.loader import render_to_string
+
     from CantinaShop import settings
 
     User = get_user_model()

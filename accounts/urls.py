@@ -1,15 +1,15 @@
-from django.urls import path, include, reverse_lazy
-from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
+from django.urls import include, path, reverse_lazy
+from django.views.generic import TemplateView
 
 from .views import (
-    RegisterView,
+    AccountDeactivateView,
+    AccountUpdateView,
     ActivateAccount,
+    CustomPasswordResetView,
     Login,
     Logout,
-    AccountUpdateView,
-    AccountDeactivateView,
-    CustomPasswordResetView,
+    RegisterView,
 )
 
 urlpatterns = [

@@ -1,11 +1,13 @@
 import os
+
 import django
 
 # Setup Django environment
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "CantinaShop.settings")
 django.setup()
-import requests
 import time
+
+import requests
 
 API_KEY = "cf47d26efc1ef29f74545fc956f1f75747186918"
 API_URL = "http://localhost:8000/api/products"

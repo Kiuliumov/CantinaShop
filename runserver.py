@@ -1,10 +1,7 @@
 import logging
 import os
 import sys
-from daphne.cli import CommandLineInterface
 
-import os
-import sys
 from daphne.cli import CommandLineInterface
 
 if __name__ == "__main__":

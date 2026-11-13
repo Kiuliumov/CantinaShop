@@ -1,12 +1,14 @@
-from django.test import TestCase, Client
-from django.contrib.auth import get_user_model
-from accounts.models import Account
-from products.models import Product, Category
-from orders.models import Order
-from decimal import Decimal
-from django.urls import reverse
 import json
 import urllib.parse
+from decimal import Decimal
+
+from django.contrib.auth import get_user_model
+from django.test import Client, TestCase
+from django.urls import reverse
+
+from accounts.models import Account
+from orders.models import Order
+from products.models import Category, Product
 
 User = get_user_model()
 

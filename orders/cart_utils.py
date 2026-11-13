@@ -1,7 +1,8 @@
 import json
 import urllib.parse
-from products.models import Product
 from decimal import Decimal
+
+from products.models import Product
 
 
 def get_cart_items_and_total(request):

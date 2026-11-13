@@ -2,10 +2,10 @@ import os
 from pathlib import Path
 
 import cloudinary
-import cloudinary.uploader
 import cloudinary.api
-from dotenv import load_dotenv
+import cloudinary.uploader
 from django.template.context_processors import static
+from dotenv import load_dotenv
 
 if os.getenv("DJANGO_ENV") != "production":
     from dotenv import load_dotenv

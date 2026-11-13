@@ -1,9 +1,10 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from pyexpat.errors import messages
+
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, CreateView
-from pyexpat.errors import messages
-from django.contrib import messages
+from django.views.generic import CreateView, TemplateView
 
 from api.models import APIKey
 from common.forms import ContactMessageForm

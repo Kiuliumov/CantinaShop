@@ -1,5 +1,6 @@
 from django.urls import path
-from chat.views import AdminChatHubView, ChatFrontendConfigAPIView, MarkMessagesReadView, ChatMessagesAPIView
+
+from chat.views import AdminChatHubView, ChatFrontendConfigAPIView, ChatMessagesAPIView, MarkMessagesReadView
 
 urlpatterns = [
     path("admin/", AdminChatHubView.as_view(), name="admin_chat_hub"),
