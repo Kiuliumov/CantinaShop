@@ -4,7 +4,6 @@ from pathlib import Path
 import cloudinary
 import cloudinary.api
 import cloudinary.uploader
-from django.template.context_processors import static
 from dotenv import load_dotenv
 
 if os.getenv("DJANGO_ENV") != "production":
