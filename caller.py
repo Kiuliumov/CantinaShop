@@ -8,7 +8,7 @@ import requests
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "CantinaShop.settings")
 django.setup()
 
-API_KEY = "cf47d26efc1ef29f74545fc956f1f75747186918"
+API_KEY = "GENERATE-AN-API-KEY-HERE"
 API_URL = "http://localhost:8000/api/products"
 HEADERS = {"Authorization": f"Api-Key {API_KEY}", "Content-Type": "application/json"}
 
