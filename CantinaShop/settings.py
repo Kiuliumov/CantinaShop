@@ -6,13 +6,15 @@ import cloudinary.api
 import cloudinary.uploader
 from dotenv import load_dotenv
 
-if os.getenv("DJANGO_ENV") != "production":
-    load_dotenv()
-
 BASE_DIR = Path(__file__).resolve().parent.parent
+ENV_FILE = BASE_DIR / ".env"
+LOCAL_DEVELOPMENT = not ENV_FILE.is_file() and os.getenv("DJANGO_ENV") != "production"
+
+if os.getenv("DJANGO_ENV") != "production":
+    load_dotenv(ENV_FILE)
 
 SECRET_KEY = os.getenv("SECRET_KEY", "unsafe-dev-secret")
-DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = os.getenv("DEBUG", "True" if LOCAL_DEVELOPMENT else "False") == "True"
 
 cloudinary.config(
     cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
@@ -26,6 +28,8 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfilesSh"
 
 ALLOWED_HOSTS = ["cantinashop.onrender.com", "https://bb38f91a-fcb0-4506-abc2-7b43a3558867.railway.app/", "localhost"]
+if LOCAL_DEVELOPMENT:
+    ALLOWED_HOSTS += ["127.0.0.1", "[::1]"]
 
 THIRD_PARTY_APPS = ["rest_framework", "drf_spectacular", "tailwind", "theme"]
 
@@ -60,9 +64,19 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
 EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"
 EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "False") == "True"
-DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER or "webmaster@localhost")
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_BACKEND = os.getenv(
+    "EMAIL_BACKEND",
+    (
+        "django.core.mail.backends.console.EmailBackend"
+        if LOCAL_DEVELOPMENT
+        else "django.core.mail.backends.smtp.EmailBackend"
+    ),
+)
+
+# Local memory caching needs no Redis service and keeps throttling functional.
+CACHES = {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"}}
 
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
@@ -199,8 +213,13 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 NPM_BIN_PATH = os.getenv("NODE_LOCATION")
 
-CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://localhost:6379/0")
-CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", "redis://localhost:6379/0")
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "memory://" if LOCAL_DEVELOPMENT else "redis://localhost:6379/0")
+CELERY_RESULT_BACKEND = os.getenv(
+    "CELERY_RESULT_BACKEND", "cache+memory://" if LOCAL_DEVELOPMENT else "redis://localhost:6379/0"
+)
+# Execute queued email jobs in the web process during local development.
+CELERY_TASK_ALWAYS_EAGER = LOCAL_DEVELOPMENT
+CELERY_TASK_EAGER_PROPAGATES = LOCAL_DEVELOPMENT
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_TIMEZONE = TIME_ZONE
