@@ -19,6 +19,13 @@ class TestAuthenticationViews:
         assert not django_user_model.objects.get(username="newbuyer").is_active
         queued_emails["send_confirmation_email_task"].assert_called_once()
 
+    def test__register_without_worker__sends_confirmation_email(self, client, registration_data, mailoutbox):
+        response = client.post(reverse("register"), registration_data)
+        assertRedirects(response, reverse("email_confirmation_sent"))
+        assert len(mailoutbox) == 1
+        assert mailoutbox[0].to == [registration_data["email"]]
+        assert mailoutbox[0].subject == "Activate your account"
+
     def test__activate_valid_token__activates_and_logs_in(self, client, user, activation_args):
         response = client.get(reverse("activate", args=activation_args))
         user.refresh_from_db()
