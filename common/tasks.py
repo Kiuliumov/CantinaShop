@@ -2,7 +2,7 @@ from celery import shared_task
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
-from CantinaShop import settings
+from server import settings
 
 EMAIL_SENDER = settings.DEFAULT_FROM_EMAIL
 
@@ -56,7 +56,7 @@ def send_password_reset_email_task(user_id, domain, reset_link, subject="Passwor
     from django.core.mail import EmailMultiAlternatives
     from django.template.loader import render_to_string
 
-    from CantinaShop import settings
+    from server import settings
 
     User = get_user_model()
     user = User.objects.get(pk=user_id)

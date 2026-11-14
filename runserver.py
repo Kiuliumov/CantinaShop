@@ -5,7 +5,7 @@ import sys
 from daphne.cli import CommandLineInterface
 
 if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "CantinaShop.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "server.settings")
 
     sys.argv = [
         "daphne",
@@ -13,7 +13,7 @@ if __name__ == "__main__":
         "127.0.0.1",
         "-p",
         "8000",
-        "CantinaShop.asgi:application",
+        "server.asgi:application",
     ]
 
     CommandLineInterface.entrypoint()

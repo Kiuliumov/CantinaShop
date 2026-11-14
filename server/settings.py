@@ -90,24 +90,24 @@ REST_FRAMEWORK = {
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    "CantinaShop.middlewares.request_log.RequestLoggingMiddleware",
+    "server.middlewares.request_log.RequestLoggingMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "CantinaShop.middlewares.login_protecter.LoginDefenderMiddleware",
-    "CantinaShop.middlewares.rate_limit.RateLimitMiddleware",
+    "server.middlewares.login_protecter.LoginDefenderMiddleware",
+    "server.middlewares.rate_limit.RateLimitMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "CantinaShop.urls"
+ROOT_URLCONF = "server.urls"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-ASGI_APPLICATION = "CantinaShop.asgi.application"
+ASGI_APPLICATION = "server.asgi.application"
 
-WSGI_APPLICATION = "CantinaShop.wsgi.application"
+WSGI_APPLICATION = "server.wsgi.application"
 
 # CHANNEL_LAYERS = {
 #     'default': {

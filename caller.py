@@ -5,7 +5,7 @@ import django
 import requests
 
 # Setup Django environment
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "CantinaShop.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "server.settings")
 django.setup()
 
 API_KEY = "GENERATE-AN-API-KEY-HERE"
